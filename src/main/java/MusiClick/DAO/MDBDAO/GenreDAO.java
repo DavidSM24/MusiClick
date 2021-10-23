@@ -1,0 +1,183 @@
+package MusiClick.DAO.MDBDAO;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import MusiClick.models.Genre;
+import MusiClick.utils.MDBConexion;
+
+public class GenreDAO extends Genre { // extends Sede implements SedeDAO
+
+	private static List<Genre> genres = new ArrayList();
+
+	private static Connection con = null;
+
+	private static final String GETALL = "SELECT id, name FROM genre;";
+	private static final String GETBYID = "SELECT id, name FROM genre WHERE id=?;";
+	private static final String GETBYNAME = "SELECT id, name FROM genre WHERE name LIKE ?;";
+	private final static String INSERT_UPDATE="INSERT INTO genre (id, name) "
+			+ "VALUES (?,?) "
+			+ "ON DUPLICATE KEY UPDATE name=?;";
+	private final static String DELETE ="DELETE FROM genre WHERE id=?";
+
+	public static List<Genre> getAll() {
+		// TODO Auto-generated method stub
+		genres = new ArrayList<Genre>();
+
+		con = MDBConexion.getConexion();
+		if (con != null) {
+			PreparedStatement ps = null;
+			ResultSet rs = null;
+			try {
+				ps = con.prepareStatement(GETALL);
+				rs = ps.executeQuery();
+				while (rs.next()) {
+					genres.add(new Genre(rs.getInt("id"), rs.getString("name")));
+				}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} finally {
+				try {
+					ps.close();
+					rs.close();
+				} catch (SQLException e) {
+					// TODO: handle exception
+				}
+			}
+		}
+		return genres;
+	}
+
+	public static Genre getById(int id) {
+		Genre result = new Genre();
+
+		con = MDBConexion.getConexion();
+		if (con != null) {
+			PreparedStatement ps = null;
+			ResultSet rs = null;
+			try {
+				ps = con.prepareStatement(GETBYID);
+				ps.setInt(1, id);
+				rs = ps.executeQuery();
+				if (rs.next()) {
+					result = new Genre(rs.getInt("id"), rs.getString("name"));
+				}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} finally {
+				try {
+					ps.close();
+					rs.close();
+				} catch (SQLException e) {
+					// TODO: handle exception
+				}
+			}
+		}
+		return result;
+	}
+
+	// exclusive methods
+
+	public static List<Genre> getByName(String name) {
+		// TODO Auto-generated method stub
+		List<Genre> result = new ArrayList();
+
+		con = MDBConexion.getConexion();
+		if (con != null) {
+			PreparedStatement ps = null;
+			ResultSet rs = null;
+			try {
+				ps = con.prepareStatement(GETBYNAME);
+				ps.setString(1, name);
+				rs = ps.executeQuery();
+				while (rs.next()) {
+					result.add(new Genre(rs.getInt("id"), rs.getString("name")));
+				}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} finally {
+				try {
+					ps.close();
+					rs.close();
+				} catch (SQLException e) {
+					// TODO: handle exception
+				}
+			}
+		}
+		return result;
+	}
+	
+	public static void save(Genre g) {
+		// INSERT o UPDATE
+				//INSERT -> si no existe OK
+				//En caso de ERROR -> hago un update
+				int rs=0;
+				PreparedStatement ps=null;
+				Connection con = MDBConexion.getConexion();
+				
+				if (con != null) {
+					try {
+						ps=con.prepareStatement(INSERT_UPDATE);
+						ps.setInt(1, g.getId());
+						ps.setString(2, g.getName());
+						
+						ps.setString(3, g.getName());
+						
+						rs =ps.executeUpdate();	
+						if(genres!=null&&genres.size()>0&&genres.contains(g)) {
+							int i=genres.indexOf(g);
+							genres.set(i, g);
+						}
+						else {
+							genres.add(g);
+						}
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
+					finally {
+						try {
+							ps.close();
+						} catch (SQLException e) {
+							// TODO: handle exception
+						}
+					}
+					
+				}
+	}
+	
+	public static void delete(Genre g) {
+		int rs=0;
+		Connection con = MDBConexion.getConexion();
+		PreparedStatement ps=null;
+		if (con != null) {
+			try {
+				
+				ps=con.prepareStatement(DELETE);
+				ps.setInt(1, g.getId());
+				rs =ps.executeUpdate();
+				if(genres!=null&&genres.size()>0&&genres.contains(g)) {
+					genres.remove(g);
+				}
+				
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			finally {
+				try {
+					ps.close();
+				} catch (SQLException e) {
+					// TODO: handle exception
+				}
+			}
+		}
+	}
+}
