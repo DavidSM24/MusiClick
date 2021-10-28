@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.Text?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="446.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="MusiClick.ManagmentController">
+   <children>
+      <TabPane layoutY="24.0" prefHeight="377.0" prefWidth="446.0" tabClosingPolicy="UNAVAILABLE">
+        <tabs>
+            <Tab text="Géneros">
+               <content>
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="234.0" prefWidth="458.0">
+                     <children>
+                        <TableView fx:id="table_genre" layoutY="2.0" onKeyReleased="#select_Genre" onMouseClicked="#select_Genre" prefHeight="304.0" prefWidth="254.0">
+                           <columns>
+                              <TableColumn fx:id="col_genre_id" prefWidth="75.0" text="Id" />
+                              <TableColumn fx:id="col_genre_name" prefWidth="75.0" text="Nombre" />
+                           </columns>
+                        </TableView>
+                        <GridPane layoutX="254.0" layoutY="166.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="183.0" AnchorPane.bottomAnchor="6.0" AnchorPane.rightAnchor="-1.3333333333333712">
+                           <columnConstraints>
+                              <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                              <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                              <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                           </columnConstraints>
+                           <rowConstraints>
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                           </rowConstraints>
+                           <children>
+                              <Button fx:id="btn_delete_Genre" disable="true" mnemonicParsing="false" onAction="#delete_Genre" text="Eliminar" GridPane.columnIndex="2" />
+                              <Button fx:id="btn_edit_Genre" disable="true" mnemonicParsing="false" onAction="#edit_Genre" text="Editar" GridPane.columnIndex="1" />
+                              <Button fx:id="btn_add_Genre" disable="true" mnemonicParsing="false" onAction="#add_Genre" prefHeight="25.0" prefWidth="87.0" text="Añadir" />
+                           </children>
+                        </GridPane>
+                        <GridPane layoutX="261.0" layoutY="14.0" prefHeight="90.0" prefWidth="169.0" AnchorPane.rightAnchor="5.666666666666629">
+                           <columnConstraints>
+                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                           </columnConstraints>
+                           <rowConstraints>
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                           </rowConstraints>
+                           <children>
+                              <TextField fx:id="txt_genre_id" GridPane.rowIndex="1" />
+                              <TextField fx:id="txt_genre_name" GridPane.rowIndex="3" />
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Id" />
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Nombre" GridPane.rowIndex="2" />
+                           </children>
+                        </GridPane>
+                        <TextField layoutX="10.0" layoutY="314.0" prefHeight="25.0" prefWidth="233.0" />
+                     </children>
+                  </AnchorPane>
+               </content>
+            </Tab>
+            <Tab text="Artistas">
+               <content>
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="234.0" prefWidth="458.0">
+                     <children>
+                        <TableView fx:id="table_artist" layoutY="2.0" onKeyReleased="#select_Artist" onMouseClicked="#select_Artist" prefHeight="304.0" prefWidth="254.0">
+                           <columns>
+                              <TableColumn fx:id="col_artist_id" prefWidth="75.0" text="Id" />
+                              <TableColumn fx:id="col_artist_name" prefWidth="75.0" text="Nombre" />
+                              <TableColumn fx:id="col_artist_photo" prefWidth="75.0" text="Imagen" />
+                           </columns>
+                        </TableView>
+                        <GridPane layoutX="254.0" layoutY="166.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="183.0" AnchorPane.bottomAnchor="6.0" AnchorPane.rightAnchor="-1.3333333333333712">
+                           <columnConstraints>
+                              <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                              <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                              <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                           </columnConstraints>
+                           <rowConstraints>
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                           </rowConstraints>
+                           <children>
+                              <Button fx:id="btn_delete_Artist" disable="true" mnemonicParsing="false" onAction="#delete_Artist" text="Eliminar" GridPane.columnIndex="2" />
+                              <Button fx:id="btn_edit_Artist" disable="true" mnemonicParsing="false" onAction="#edit_Artist" text="Editar" GridPane.columnIndex="1" />
+                              <Button fx:id="btn_add_Artist" disable="true" mnemonicParsing="false" onAction="#add_Artist" prefHeight="25.0" prefWidth="87.0" text="Añadir" />
+                           </children>
+                        </GridPane>
+                        <GridPane layoutX="261.0" layoutY="14.0" prefHeight="136.0" prefWidth="169.0">
+                           <columnConstraints>
+                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                           </columnConstraints>
+                           <rowConstraints>
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                           </rowConstraints>
+                           <children>
+                              <TextField fx:id="txt_artist_id" GridPane.rowIndex="1" />
+                              <TextField fx:id="txt_artist_name" GridPane.rowIndex="3" />
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Id" />
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Nombre" GridPane.rowIndex="2" />
+                              <TextField fx:id="txt_artist_photo" GridPane.rowIndex="5" />
+                              <Text layoutX="10.0" layoutY="70.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Imagen" GridPane.rowIndex="4" />
+                           </children>
+                        </GridPane>
+                        <TextField layoutX="10.0" layoutY="314.0" prefHeight="25.0" prefWidth="233.0" />
+                     </children>
+                  </AnchorPane>
+               </content>
+            </Tab>
+            <Tab text="Canciones">
+               <content>
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="234.0" prefWidth="458.0">
+                     <children>
+                        <TableView fx:id="table_song" layoutY="2.0" onKeyReleased="#select_Song" onMouseClicked="#select_Song" prefHeight="194.0" prefWidth="254.0">
+                           <columns>
+                              <TableColumn fx:id="col_song_id" prefWidth="75.0" text="Id" />
+                              <TableColumn fx:id="col_song_name" prefWidth="75.0" text="Nombre" />
+                              <TableColumn fx:id="col_song_artist" prefWidth="75.0" text="Artista" />
+                           </columns>
+                        </TableView>
+                        <GridPane layoutX="254.0" layoutY="166.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="183.0" AnchorPane.bottomAnchor="6.0" AnchorPane.rightAnchor="-1.3333333333333712">
+                           <columnConstraints>
+                              <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                              <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                              <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                           </columnConstraints>
+                           <rowConstraints>
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                           </rowConstraints>
+                           <children>
+                              <Button fx:id="btn_delete_Song" disable="true" mnemonicParsing="false" onAction="#delete_Song" text="Eliminar" GridPane.columnIndex="2" />
+                              <Button fx:id="btn_edit_Song" disable="true" mnemonicParsing="false" onAction="#edit_Song" text="Editar" GridPane.columnIndex="1" />
+                              <Button fx:id="btn_add_Song" disable="true" mnemonicParsing="false" onAction="#add_Song" prefHeight="25.0" prefWidth="87.0" text="Añadir" />
+                           </children>
+                        </GridPane>
+                        <GridPane layoutX="14.0" layoutY="207.0" prefHeight="98.0" prefWidth="130.0">
+                           <columnConstraints>
+                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                           </columnConstraints>
+                           <rowConstraints>
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                           </rowConstraints>
+                           <children>
+                              <TextField fx:id="txt_song_photo" GridPane.rowIndex="1" />
+                              <TextField fx:id="txt_song_duration" GridPane.rowIndex="3" />
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Imagen" />
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Duración" GridPane.rowIndex="2" />
+                           </children>
+                        </GridPane>
+                        <GridPane layoutX="261.0" layoutY="14.0" prefHeight="133.0" prefWidth="169.0">
+                           <columnConstraints>
+                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                           </columnConstraints>
+                           <rowConstraints>
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                           </rowConstraints>
+                           <children>
+                              <TextField fx:id="txt_song_id" GridPane.rowIndex="1" />
+                              <TextField fx:id="txt_song_name" GridPane.rowIndex="3" />
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Id" />
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Nombre" GridPane.rowIndex="2" />
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Artista" GridPane.rowIndex="4" />
+                              <ComboBox fx:id="com_song_artist" prefWidth="150.0" GridPane.rowIndex="5" />
+                           </children>
+                        </GridPane>
+                        <GridPane layoutX="153.0" layoutY="207.0" prefHeight="98.0" prefWidth="130.0">
+                           <columnConstraints>
+                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                           </columnConstraints>
+                           <rowConstraints>
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                           </rowConstraints>
+                           <children>
+                              <TextField fx:id="txt_song_media" GridPane.rowIndex="1" />
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Media" />
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Género" GridPane.rowIndex="2" />
+                              <ComboBox fx:id="com_song_genre" prefWidth="150.0" GridPane.rowIndex="3" />
+                           </children>
+                        </GridPane>
+                        <GridPane layoutX="292.0" layoutY="207.0" prefHeight="98.0" prefWidth="130.0">
+                           <columnConstraints>
+                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                           </columnConstraints>
+                           <rowConstraints>
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                           </rowConstraints>
+                           <children>
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Disco" />
+                              <ComboBox fx:id="com_song_disc" prefWidth="150.0" GridPane.rowIndex="1" />
+                           </children>
+                        </GridPane>
+                        <TextField layoutX="10.0" layoutY="314.0" prefHeight="25.0" prefWidth="233.0" />
+                     </children>
+                  </AnchorPane>
+               </content>
+            </Tab>
+        </tabs>
+         <padding>
+            <Insets left="5.0" right="5.0" />
+         </padding>
+      </TabPane>
+      <MenuBar layoutY="-1.0" prefHeight="27.0" prefWidth="398.0">
+        <menus>
+          <Menu mnemonicParsing="false" text="File">
+            <items>
+              <MenuItem fx:id="opt_charge" mnemonicParsing="false" onAction="#setController" text="Cargar DB" />
+                  <MenuItem mnemonicParsing="false" onAction="#save_to_BD" text="Guardar a la DB" />
+                  <MenuItem mnemonicParsing="false" text="Cerrar el Manager" />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+   </children>
+</Pane>

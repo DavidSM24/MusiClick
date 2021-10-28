@@ -4,35 +4,42 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+
 public class Disc {
 	
+	//id,name,date,photo,reproductions,main_artist,songs
 	private int id;
 	private String name;
 	private LocalDate date;
 	private String photo;
 	private int reproductions;
-	private List<Song> songs;
+	private Artist main_artist;
+	private ObservableList<Song> songs;
 	
 	public Disc() {
-		this(-1,"",LocalDate.now(),"",0,new ArrayList());
+		this(-1,"",LocalDate.now(),"",0,new Artist(),FXCollections.observableArrayList());
 	}
 	
-	public Disc(int id, String name, LocalDate date, String photo,  int reproductions,List<Song> songs) {
+	public Disc(int id, String name, LocalDate date, String photo,  int reproductions,Artist main_artist,ObservableList<Song> songs) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.date = date;
 		this.photo = photo;
 		this.songs = songs;
+		this.main_artist=main_artist;
 		this.reproductions = reproductions;
 	}
 
-	public Disc (String name, LocalDate date, String photo,  int reproductions,List<Song> songs) {
+	public Disc (String name, LocalDate date, String photo,  int reproductions,Artist main_artist,ObservableList<Song> songs) {
 		super();
 		this.name = name;
 		this.date = date;
 		this.photo = photo;
 		this.songs = songs;
+		this.main_artist=main_artist;
 		this.reproductions = reproductions;
 	}
 
@@ -68,20 +75,28 @@ public class Disc {
 		this.photo = photo;
 	}
 
-	public List<Song> getSongs() {
-		return songs;
-	}
-
-	public void setArtists(List<Song> songs) {
-		this.songs = songs;
-	}
-
 	public int getReproductions() {
 		return reproductions;
 	}
 
 	public void setReproductions(int reproductions) {
 		this.reproductions = reproductions;
+	}
+
+	public Artist getMain_artist() {
+		return main_artist;
+	}
+
+	public void setMain_artist(Artist main_artist) {
+		this.main_artist = main_artist;
+	}
+
+	public ObservableList<Song> getSongs() {
+		return songs;
+	}
+
+	public void setSongs(ObservableList<Song> songs) {
+		this.songs = songs;
 	}
 
 	@Override
@@ -106,7 +121,6 @@ public class Disc {
 
 	@Override
 	public String toString() {
-		return "Disc [id=" + id + ", name=" + name + ", date=" + date + ", photo=" + photo + ", songs=" + songs
-				+ ", reproductions=" + reproductions + "]";
+		return this.getName();
 	}
 }

@@ -2,7 +2,7 @@ package tests;
 
 import java.util.List;
 
-import MusiClick.DAO.MDBDAO.GenreDAO;
+import MusiClick.MDBDAO.GenreDAO;
 import MusiClick.models.Genre;
 import MusiClick.utils.MDBConexion;
 

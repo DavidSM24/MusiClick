@@ -8,32 +8,54 @@ public class Song {
 	
 	private int id;
 	private String name;
+	private Artist artist;
 	private String photo;
-	private List<Artist> artists;
+	private String media;
+	private double duration;	
 	private int reproductions;
 	private Genre genre;
+	private Disc disc;
 	
 	public Song() {
-		this(-1,"","",new ArrayList(),0,new Genre());
+		this(-1,"",new Artist(),"","",0f,0,new Genre());
 	}
 
-	public Song(int id, String name, String photo, List<Artist> artists, int reproductions, Genre genre) {
+	public Song(int id, String name,Artist artists, String photo,String media,double duration,  int reproductions, Genre genre) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.photo = photo;
-		this.artists = artists;
+		this.media=media;
+		this.duration=duration;
+		this.artist = artists;
 		this.reproductions = reproductions;
 		this.genre = genre;
+		this.disc=new Disc();
 	}
 
-	public Song(String name, String photo, List<Artist> artists, int reproductions, Genre genre) {
+	public Song(String name, String photo,String media, Artist artists,double duration, int reproductions, Genre genre) {
 		super();
 		this.name = name;
 		this.photo = photo;
-		this.artists = artists;
+		this.media=media;
+		this.duration=duration;
+		this.artist = artists;
 		this.reproductions = reproductions;
 		this.genre = genre;
+		this.disc=new Disc();
+	}
+	
+	public Song(int id,String name, String photo,String media, Artist artists,double duration, int reproductions, Genre genre, Disc disc) {
+		super();
+		this.id=id;
+		this.name = name;
+		this.photo = photo;
+		this.media=media;
+		this.duration=duration;
+		this.artist = artists;
+		this.reproductions = reproductions;
+		this.genre = genre;
+		this.disc=disc;
 	}
 
 	public int getId() {
@@ -57,15 +79,31 @@ public class Song {
 	}
 
 	public void setPhoto(String photo) {
-		this.photo = photo;
+		this.photo = photo;		
 	}
 
-	public List<Artist> getArtists() {
-		return artists;
+	public String getMedia() {
+		return media;
 	}
 
-	public void setArtists(List<Artist> artists) {
-		this.artists = artists;
+	public void setMedia(String media) {
+		this.media = media;
+	}
+
+	public double getDuration() {
+		return duration;
+	}
+
+	public void setDuration(double duration) {
+		this.duration = duration;
+	}
+
+	public Artist getArtist() {
+		return artist;
+	}
+
+	public void setArtist(Artist artists) {
+		this.artist = artists;
 	}
 
 	public int getReproductions() {
@@ -82,6 +120,14 @@ public class Song {
 
 	public void setGenre(Genre genre) {
 		this.genre = genre;
+	}
+	
+	public Disc getDisc() {
+		return disc;
+	}
+
+	public void setDisc(Disc disc) {
+		this.disc = disc;
 	}
 
 	@Override
@@ -106,8 +152,7 @@ public class Song {
 
 	@Override
 	public String toString() {
-		return "Song [id=" + id + ", name=" + name + ", photo=" + photo + ", artists=" + artists + ", reproductions="
-				+ reproductions + ", genre=" + genre.getName() + "]";
+		return "Song ["+name + "--> " +getDisc().getName() + "]";
 	}
 	
 	

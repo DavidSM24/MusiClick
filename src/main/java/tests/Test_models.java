@@ -33,13 +33,13 @@ public class Test_models {
 
 		List<Song> songs = new ArrayList<Song>() {
 			{
-				add(new Song(1, "Slide Away", "photo1", artists, 0, genres.get(0)));
+				add(new Song(1,"Oasis",artists.get(0),"photo1","url1",0f,0,genres.get(0)));
 			}
 		};
 
 		List<Disc> disc = new ArrayList<Disc>() {
 			{
-				add(new Disc(1, "Morning Glory", LocalDate.now(), "photo1", 0, songs));
+				//add(new Disc(1, "Morning Glory", LocalDate.now(), "photo1", 0, null, songs));
 			}
 		};
 		
