@@ -1,7 +1,10 @@
 package MusiClick;
 
 import java.io.IOException;
+import java.sql.Timestamp;
 
+import MusiClick.MDBDAO.SesionDAO;
+import MusiClick.models.Sesion;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -12,6 +15,8 @@ import javafx.stage.Stage;
 
 public class PrimaryController {
 
+	protected static Sesion ss=null;
+	
 	@FXML
 	private Button btn_managment;
 	
@@ -41,4 +46,28 @@ public class PrimaryController {
         } catch (Exception e) {
         }
     }
+    
+    public void sendSession() {
+		System.out.println("entro a sendSession?");
+		Thread t=new Thread(new Runnable() {
+			
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				while(true) {
+					try {
+						Timestamp ts=new Timestamp(System.currentTimeMillis());
+						ss.setTime(ts);
+						SesionDAO.guardar(ss);
+						Thread.sleep(1000);
+						System.out.println("hola");
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			}
+		});
+		t.start();
+	}
 }
