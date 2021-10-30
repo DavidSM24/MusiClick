@@ -33,7 +33,7 @@ public class SongDAO {
 			+ "id_genre,id_disc) "
 			+ "VALUES (?,?,?,?,?,?,?,?,?) "
 			+ "ON DUPLICATE KEY UPDATE name=?,id_artist=?,photo=?,url=?,duration=?,reproductions=?,id_genre=?,id_disc=?;";
-	private final static String DELETE ="DELETE FROM song WHERE id=?";
+	private final static String DELETE ="DELETE FROM song WHERE id IN ";
 	private final static String DELETEALL ="DELETE FROM song;";
 	
 	public static ObservableList<Song> getAll() {
@@ -304,19 +304,25 @@ public class SongDAO {
 	}
 
 	
-	public static void delete(Song s) {
+	public static void delete(ObservableList<Song> toDrop) {
+		
+		String s="(";
+		for(int i=0;i<toDrop.size();i++) {
+			s+=toDrop.get(i).getId();
+			if(i!=toDrop.size()-1) {
+				s+=",";
+			}
+		}
+		s+=");";
+		
 		int rs=0;
 		Connection con = MDBConexion.getConexion();
 		PreparedStatement ps=null;
 		if (con != null) {
 			try {
 				
-				ps=con.prepareStatement(DELETE);
-				ps.setInt(1, s.getId());
+				ps=con.prepareStatement(DELETE+s);
 				rs =ps.executeUpdate();
-				if(songs!=null&&songs.size()>0&&songs.contains(s)) {
-					songs.remove(s);
-				}
 				
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block

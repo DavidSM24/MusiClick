@@ -16,7 +16,7 @@ public class Test_DAO_Artist {
 		ObservableList<Artist> artists=ArtistDAO.getAll();;
 		
 		System.out.println(artists);
-		ArtistDAO.delete(new Artist(3,"Fito y Fitipaldis","photo3"));
+		//ArtistDAO.delete(new Artist(3,"Fito y Fitipaldis","photo3"));
 		ArtistDAO.deleteAll();
 		System.out.println("done");
 		

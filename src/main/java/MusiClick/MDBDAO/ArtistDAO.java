@@ -23,7 +23,8 @@ public class ArtistDAO {
 	private final static String INSERT_UPDATE="INSERT INTO artist (id, name, photo) "
 			+ "VALUES (?,?, ?) "
 			+ "ON DUPLICATE KEY UPDATE name=?, photo=?;";
-	private final static String DELETE ="DELETE FROM artist WHERE id=?";
+	private final static String DELETE ="DELETE FROM artist WHERE id IN ";
+	//DELETE FROM `artist` WHERE id NOT LIKE (0);
 	private final static String DELETEALL ="DELETE FROM artist;";
 	
 	public static ObservableList<Artist> getAll() {
@@ -157,19 +158,27 @@ public class ArtistDAO {
 				}
 	}
 	
-	public static void delete(Artist a) {
+	public static void delete(ObservableList<Artist> toDrop) {
+		
+		String s="(";
+		for(int i=0;i<toDrop.size();i++) {
+			s+=toDrop.get(i).getId();
+			if(i!=toDrop.size()-1) {
+				s+=",";
+			}
+		}
+		s+=") AND id NOT LIKE (0);";
+		
+		System.out.println(DELETE+s);
+		
 		int rs=0;
 		Connection con = MDBConexion.getConexion();
 		PreparedStatement ps=null;
 		if (con != null) {
 			try {
 				
-				ps=con.prepareStatement(DELETE);
-				ps.setInt(1, a.getId());
+				ps=con.prepareStatement(DELETE+s);
 				rs =ps.executeUpdate();
-				if(artists!=null&&artists.size()>0&&artists.contains(a)) {
-					artists.remove(a);
-				}
 				
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block

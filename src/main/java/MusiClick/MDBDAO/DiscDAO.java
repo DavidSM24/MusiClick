@@ -1,6 +1,7 @@
 package MusiClick.MDBDAO;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -26,14 +27,15 @@ public class DiscDAO {
 			+ "WHERE id=?;";
 //	private static final String GETBYNAME = "SELECT id, name, id_artist,photo, url , duration, reproductions, id_genre "
 //			+ "FROM song WHERE name LIKE ?;";
-//	private final static String INSERT_UPDATE="INSERT INTO song (id, name,id_artist,photo, url, duration, reproductions,"
-//			+ "id_genre) "
-//			+ "VALUES (?,?,?,?,?,?,?,?) "
-//			+ "ON DUPLICATE KEY UPDATE name=?,id_artist=?,photo=?,url=?,duration=?,reproductions=?,id_genre=?;";
-//	private final static String DELETE ="DELETE FROM song WHERE id=?";
-//	private final static String DELETEALL ="DELETE FROM song;";
+	private final static String INSERT_UPDATE="INSERT INTO disc (id, name, date, photo, reproductions, id_artist) "
+			+ "VALUES (?, ?, ?, ?, ?, ?) "
+			+ "ON DUPLICATE KEY UPDATE name=?,date=?,photo=?,reproductions=?,id_artist=?;";
+	private final static String DELETE ="DELETE FROM disc WHERE id IN ";
+	private final static String DELETEALL ="DELETE FROM disc;";
 	
 	public static ObservableList<Disc> getAll() { //los devuelve vacios
+		
+		discs=FXCollections.observableArrayList();
 		
 		con = MDBConexion.getConexion();
 		if (con != null) {
@@ -119,4 +121,109 @@ public class DiscDAO {
 		}
 	}
 	
+	public static void save(Disc d) {
+		// INSERT o UPDATE
+				//INSERT -> si no existe OK
+				//En caso de ERROR -> hago un update
+				int rs=0;
+				PreparedStatement ps=null;
+				Connection con = MDBConexion.getConexion();
+				
+				if (con != null) {
+					try {
+						ps=con.prepareStatement(INSERT_UPDATE);
+						ps.setInt(1, d.getId());
+						ps.setString(2, d.getName());						
+						ps.setDate(3, Date.valueOf(d.getDate()));
+						ps.setString(4, d.getPhoto());
+						ps.setInt(5, d.getReproductions());
+						ps.setInt(6,d.getMain_artist().getId());
+						
+						ps.setString(7, d.getName());						
+						ps.setDate(8, Date.valueOf(d.getDate()));
+						ps.setString(9, d.getPhoto());
+						ps.setInt(10, d.getReproductions());
+						ps.setInt(11,d.getMain_artist().getId());
+						
+						rs =ps.executeUpdate();	
+						if(discs!=null&&discs.size()>0&&discs.contains(d)) {
+							int i=discs.indexOf(d);
+							discs.set(i, d);
+						}
+						else {
+							discs.add(d);
+						}
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
+					finally {
+						try {
+							ps.close();
+						} catch (SQLException e) {
+							// TODO: handle exception
+						}
+					}
+					
+				}
+	}
+	
+	public static void delete(ObservableList<Disc> toDrop) {
+		
+		String s="(";
+		for(int i=0;i<toDrop.size();i++) {
+			s+=toDrop.get(i).getId();
+			if(i!=toDrop.size()-1) {
+				s+=",";
+			}
+		}
+		s+=");";
+		
+		int rs=0;
+		Connection con = MDBConexion.getConexion();
+		PreparedStatement ps=null;
+		if (con != null) {
+			try {
+				
+				ps=con.prepareStatement(DELETE+s);
+				rs =ps.executeUpdate();
+				
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			finally {
+				try {
+					ps.close();
+				} catch (SQLException e) {
+					// TODO: handle exception
+				}
+			}
+		}
+	}
+	
+	public static void deleteAll() {
+		int rs=0;
+		Connection con = MDBConexion.getConexion();
+		PreparedStatement ps=null;
+		if (con != null) {
+			try {
+				
+				ps=con.prepareStatement(DELETEALL);
+				rs =ps.executeUpdate();
+				
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			finally {
+				try {
+					ps.close();
+				} catch (SQLException e) {
+					// TODO: handle exception
+				}
+			}
+		}
+	}
 }

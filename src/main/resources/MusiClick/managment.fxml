@@ -3,6 +3,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
@@ -222,6 +223,67 @@
                   </AnchorPane>
                </content>
             </Tab>
+            <Tab text="Discos">
+               <content>
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="234.0" prefWidth="458.0">
+                     <children>
+                        <TableView fx:id="table_disc" layoutY="2.0" onKeyReleased="#select_Disc" onMouseClicked="#select_Disc" prefHeight="304.0" prefWidth="254.0">
+                           <columns>
+                              <TableColumn fx:id="col_disc_id" prefWidth="75.0" text="Id" />
+                              <TableColumn fx:id="col_disc_name" prefWidth="75.0" text="Nombre" />
+                              <TableColumn fx:id="col_disc_artist" prefWidth="75.0" text="Artista" />
+                           </columns>
+                        </TableView>
+                        <GridPane layoutX="254.0" layoutY="166.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="183.0" AnchorPane.bottomAnchor="6.0" AnchorPane.rightAnchor="-1.3333333333333712">
+                           <columnConstraints>
+                              <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                              <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                              <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                           </columnConstraints>
+                           <rowConstraints>
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                           </rowConstraints>
+                           <children>
+                              <Button fx:id="btn_delete_Disc" disable="true" mnemonicParsing="false" onAction="#delte_Disc" text="Eliminar" GridPane.columnIndex="2" />
+                              <Button fx:id="btn_edit_Disc" disable="true" mnemonicParsing="false" onAction="#edit_Disc" text="Editar" GridPane.columnIndex="1" />
+                              <Button fx:id="btn_add_Disc" disable="true" mnemonicParsing="false" onAction="#add_Disc" prefHeight="25.0" prefWidth="87.0" text="Añadir" />
+                           </children>
+                        </GridPane>
+                        <GridPane layoutX="261.0" layoutY="14.0" prefHeight="217.0" prefWidth="169.0">
+                           <columnConstraints>
+                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                           </columnConstraints>
+                           <rowConstraints>
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                           </rowConstraints>
+                           <children>
+                              <TextField fx:id="txt_disc_id" GridPane.rowIndex="1" />
+                              <TextField fx:id="txt_disc_name" GridPane.rowIndex="3" />
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Id" />
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Nombre" GridPane.rowIndex="2" />
+                              <TextField fx:id="txt_disc_photo" GridPane.rowIndex="5" />
+                              <Text layoutX="10.0" layoutY="70.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Imagen" GridPane.rowIndex="4" />
+                              <ComboBox fx:id="com_disc_artist" prefWidth="150.0" GridPane.rowIndex="7" />
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Artista principal" GridPane.rowIndex="6" />
+                              <DatePicker fx:id="dat_disc_date" GridPane.rowIndex="9" />
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Fecha" GridPane.rowIndex="8" />
+                           </children>
+                        </GridPane>
+                        <TextField layoutX="10.0" layoutY="314.0" prefHeight="25.0" prefWidth="233.0" />
+                        <Pane layoutX="257.0" layoutY="205.0" prefHeight="34.0" prefWidth="150.0" />
+                     </children>
+                  </AnchorPane>
+               </content>
+            </Tab>
         </tabs>
          <padding>
             <Insets left="5.0" right="5.0" />
@@ -229,7 +291,7 @@
       </TabPane>
       <MenuBar layoutY="-1.0" prefHeight="27.0" prefWidth="398.0">
         <menus>
-          <Menu mnemonicParsing="false" text="File">
+          <Menu mnemonicParsing="false" text="Conexión">
             <items>
               <MenuItem fx:id="opt_charge" mnemonicParsing="false" onAction="#setController" text="Cargar DB" />
                   <MenuItem mnemonicParsing="false" onAction="#save_to_BD" text="Guardar a la DB" />

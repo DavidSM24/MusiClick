@@ -23,7 +23,7 @@ public class GenreDAO extends Genre { // extends Sede implements SedeDAO
 	private final static String INSERT_UPDATE="INSERT INTO genre (id, name) "
 			+ "VALUES (?,?) "
 			+ "ON DUPLICATE KEY UPDATE name=?;";
-	private final static String DELETE ="DELETE FROM genre WHERE id=?";
+	private final static String DELETE ="DELETE FROM genre WHERE id IN ";
 	private final static String DELETEALL ="DELETE FROM genre;";
 
 	public static ObservableList<Genre> getAll() {
@@ -143,6 +143,7 @@ public class GenreDAO extends Genre { // extends Sede implements SedeDAO
 					} catch (SQLException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
+						System.out.println("entro en el catch de delete_genre????");
 					}
 					
 					finally {
@@ -156,19 +157,24 @@ public class GenreDAO extends Genre { // extends Sede implements SedeDAO
 				}
 	}
 	
-	public static void delete(Genre g) {
+	public static void delete(ObservableList<Genre> toDrop) {
+		String s="(";
+		for(int i=0;i<toDrop.size();i++) {
+			s+=toDrop.get(i).getId();
+			if(i!=toDrop.size()-1) {
+				s+=",";
+			}
+		}
+		s+=");";
+		
 		int rs=0;
 		Connection con = MDBConexion.getConexion();
 		PreparedStatement ps=null;
 		if (con != null) {
 			try {
 				
-				ps=con.prepareStatement(DELETE);
-				ps.setInt(1, g.getId());
+				ps=con.prepareStatement(DELETE+s);
 				rs =ps.executeUpdate();
-				if(genres!=null&&genres.size()>0&&genres.contains(g)) {
-					genres.remove(g);
-				}
 				
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
