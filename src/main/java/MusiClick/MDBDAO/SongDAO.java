@@ -4,6 +4,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
 import MusiClick.models.Artist;
 import MusiClick.models.Disc;
 import MusiClick.models.Genre;
@@ -14,7 +17,7 @@ import javafx.collections.ObservableList;
 
 public class SongDAO {
 
-	public static ObservableList<Song> songs = FXCollections.observableArrayList();
+	public static List<Song> songs = new ArrayList<Song>();
 
 	private static Connection con = null;
 
@@ -36,9 +39,9 @@ public class SongDAO {
 	private final static String DELETE ="DELETE FROM song WHERE id IN ";
 	private final static String DELETEALL ="DELETE FROM song;";
 	
-	public static ObservableList<Song> getAll() {
+	public static List<Song> getAll() {
 		// TODO Auto-generated method stub
-		songs = FXCollections.observableArrayList();
+		songs = new ArrayList<Song>();
 
 		con = MDBConexion.getConexion();
 		if (con != null) {
@@ -136,8 +139,8 @@ public class SongDAO {
 		return result;
 	}
 	
-	public static ObservableList<Song> getByArtist(Artist a){
-		ObservableList<Song> result=FXCollections.observableArrayList();
+	public static List<Song> getByArtist(Artist a){
+		List<Song> result=new ArrayList<Song>();
 		if(songs!=null&&songs.size()>0) {
 			for(Song s:songs) {
 				if(s.getArtist().equals(a)) {
@@ -149,8 +152,8 @@ public class SongDAO {
 		
 	}
 	
-	public static ObservableList<Song> getByGenre(Genre g){
-		ObservableList<Song> result=FXCollections.observableArrayList();
+	public static List<Song> getByGenre(Genre g){
+		List<Song> result=new ArrayList<Song>();
 		if(songs!=null&&songs.size()>0) {
 			for(Song s:songs) {
 				if(s.getGenre().equals(g)) {
@@ -162,9 +165,9 @@ public class SongDAO {
 		
 	}
 	
-	public static ObservableList<Song> getByName(String name) {
+	public static List<Song> getByName(String name) {
 		// TODO Auto-generated method stub
-		ObservableList<Song> result = FXCollections.observableArrayList();
+		List<Song> result = new ArrayList<Song>();
 
 		con = MDBConexion.getConexion();
 		if (con != null) {
@@ -205,9 +208,9 @@ public class SongDAO {
 		return result;
 	}
 	
-	public static ObservableList<Song> getByDisc(Disc d){
+	public static List<Song> getByDisc(Disc d){
 
-		ObservableList<Song> result = FXCollections.observableArrayList();
+		List<Song> result = new ArrayList<Song>();
 
 		con = MDBConexion.getConexion();
 		if (con != null) {

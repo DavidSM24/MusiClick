@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import MusiClick.models.Artist;
 import MusiClick.models.Genre;
@@ -13,7 +15,7 @@ import javafx.collections.ObservableList;
 
 public class ArtistDAO {
 
-	public static ObservableList<Artist> artists = FXCollections.observableArrayList();
+	public static List<Artist> artists = new ArrayList<Artist>();
 
 	private static Connection con = null;
 
@@ -27,9 +29,9 @@ public class ArtistDAO {
 	//DELETE FROM `artist` WHERE id NOT LIKE (0);
 	private final static String DELETEALL ="DELETE FROM artist;";
 	
-	public static ObservableList<Artist> getAll() {
+	public static List<Artist> getAll() {
 		// TODO Auto-generated method stub
-		artists = FXCollections.observableArrayList();
+		artists = new ArrayList<Artist>();
 
 		con = MDBConexion.getConexion();
 		if (con != null) {
@@ -85,9 +87,9 @@ public class ArtistDAO {
 		return result;
 	}
 	
-	public static ObservableList<Artist> getByName(String name) {
+	public static List<Artist> getByName(String name) {
 		// TODO Auto-generated method stub
-		ObservableList<Artist> result = FXCollections.observableArrayList();
+		List<Artist> result = new ArrayList<Artist>();
 
 		con = MDBConexion.getConexion();
 		if (con != null) {

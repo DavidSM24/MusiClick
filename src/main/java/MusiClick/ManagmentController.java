@@ -10,6 +10,7 @@ import MusiClick.models.Artist;
 import MusiClick.models.Disc;
 import MusiClick.models.Genre;
 import MusiClick.models.Song;
+import MusiClick.utils.Converter;
 import MusiClick.utils.MDBConexion;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -151,7 +152,7 @@ public class ManagmentController {
 
 		// set ARTISTS
 		
-		artists = ArtistDAO.getAll();
+		artists = Converter.artist_Converter(ArtistDAO.getAll());
 		
 		table_artist.setItems(artists);
 		setTableAndDetailsInfo();
@@ -159,18 +160,18 @@ public class ManagmentController {
 
 		// set GENRES
 
-		genres = GenreDAO.getAll();
+		genres = Converter.genre_Converter(GenreDAO.getAll());
 		table_genre.setItems(genres);
 		System.out.println("peto?");
 		setTableAndDetailsInfo();
 		btn_add_Genre.setDisable(false);
 
 		// get Empty Discs
-		discs = DiscDAO.getAll();
+		discs = Converter.disc_Converter(DiscDAO.getAll());
 
 		// set SONGS
 
-		songs = SongDAO.getAll();
+		songs = Converter.song_Converter(SongDAO.getAll());
 		table_song.setItems(songs);
 		setTableAndDetailsInfo();
 		com_song_artist.setItems(artists);
@@ -292,7 +293,7 @@ public class ManagmentController {
 				// borrar y actualizar
 
 				// borrar no existentes en gernes y sí en bd
-				ObservableList<Genre> GinDB = GenreDAO.getAll();
+				ObservableList<Genre> GinDB = Converter.genre_Converter(GenreDAO.getAll());
 				ObservableList<Genre> toDrop = FXCollections.observableArrayList();
 
 				if (GinDB.size() > 0) {
@@ -323,7 +324,7 @@ public class ManagmentController {
 				// borrar y actualizar
 
 				// borrar no existentes en la db
-				ObservableList<Artist> AinDB = ArtistDAO.getAll();
+				ObservableList<Artist> AinDB = Converter.artist_Converter(ArtistDAO.getAll());
 				ObservableList<Artist> toDrop = FXCollections.observableArrayList();
 
 				if (AinDB.size() > 0) {
@@ -353,7 +354,7 @@ public class ManagmentController {
 				// borrar y actualizar
 
 				// borrar no existentes en la db
-				ObservableList<Disc> DinDB = DiscDAO.getAll();
+				ObservableList<Disc> DinDB = Converter.disc_Converter(DiscDAO.getAll());
 				ObservableList<Disc> toDrop = FXCollections.observableArrayList();
 
 				if (DinDB.size() > 0) {
@@ -383,7 +384,7 @@ public class ManagmentController {
 			if (songs.size() > 0) {
 				// borrar y actualizar
 
-				ObservableList<Song> SinDB = SongDAO.getAll();
+				ObservableList<Song> SinDB = Converter.song_Converter(SongDAO.getAll());
 				ObservableList<Song> toDrop = FXCollections.observableArrayList();
 
 				if (SinDB.size() > 0) {
@@ -550,7 +551,7 @@ public class ManagmentController {
 
 		if (inizialize) {
 			if (artist != null) {
-				ObservableList<Song> toDrop = SongDAO.getByArtist(artist);
+				ObservableList<Song> toDrop = Converter.song_Converter(SongDAO.getAll());
 				if (toDrop.size() > 0) {
 
 					// preguntar si eliminar las canciones
@@ -689,7 +690,7 @@ public class ManagmentController {
 	private void delete_Genre() {
 
 		if (inizialize) {
-			ObservableList<Song> toDrop = SongDAO.getByGenre(genre);
+			ObservableList<Song> toDrop = Converter.song_Converter(SongDAO.getAll());
 			if (toDrop.size() <= 0) { // no hay canciones con este género
 				if (genres.size() > 1) {
 					for (Song s : songs) {

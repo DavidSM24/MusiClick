@@ -13,7 +13,8 @@ import javafx.collections.ObservableList;
 
 public class GenreDAO extends Genre { // extends Sede implements SedeDAO
 
-	public static ObservableList<Genre> genres = FXCollections.observableArrayList();
+	public static 
+	List<Genre> genres = new ArrayList<Genre>();
 
 	private static Connection con = null;
 
@@ -26,9 +27,9 @@ public class GenreDAO extends Genre { // extends Sede implements SedeDAO
 	private final static String DELETE ="DELETE FROM genre WHERE id IN ";
 	private final static String DELETEALL ="DELETE FROM genre;";
 
-	public static ObservableList<Genre> getAll() {
+	public static List<Genre> getAll() {
 		// TODO Auto-generated method stub
-		genres = FXCollections.observableArrayList();
+		genres = new ArrayList<Genre>();
 
 		con = MDBConexion.getConexion();
 		if (con != null) {
@@ -86,9 +87,9 @@ public class GenreDAO extends Genre { // extends Sede implements SedeDAO
 
 	// exclusive methods
 
-	public static ObservableList<Genre> getByName(String name) {
+	public static List<Genre> getByName(String name) {
 		// TODO Auto-generated method stub
-		ObservableList<Genre> result = FXCollections.observableArrayList();
+		List<Genre> result = new ArrayList<Genre>();
 
 		con = MDBConexion.getConexion();
 		if (con != null) {

@@ -7,6 +7,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.ArrayList;
+import java.util.List;
 
 import MusiClick.models.Artist;
 import MusiClick.models.Disc;
@@ -17,7 +19,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 public class DiscDAO {
-	public static ObservableList<Disc> discs = FXCollections.observableArrayList();
+	public static List<Disc> discs = new ArrayList<Disc>();
 
 	private static Connection con = null;
 
@@ -33,9 +35,9 @@ public class DiscDAO {
 	private final static String DELETE ="DELETE FROM disc WHERE id IN ";
 	private final static String DELETEALL ="DELETE FROM disc;";
 	
-	public static ObservableList<Disc> getAll() { //los devuelve vacios
+	public static List<Disc> getAll() { //los devuelve vacios
 		
-		discs=FXCollections.observableArrayList();
+		discs=new ArrayList<Disc>();
 		
 		con = MDBConexion.getConexion();
 		if (con != null) {
