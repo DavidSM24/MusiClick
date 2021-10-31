@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 import MusiClick.models.Genre;
 import MusiClick.utils.MDBConexion;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 public class GenreDAO extends Genre { // extends Sede implements SedeDAO

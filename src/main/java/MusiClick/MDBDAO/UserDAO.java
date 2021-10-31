@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-
+import MusiClick.models.ReproductionList;
 import MusiClick.models.User;
 import MusiClick.utils.MDBConexion;
 import javafx.collections.FXCollections;
@@ -15,12 +15,22 @@ import javafx.collections.ObservableList;
 
 public class UserDAO {
 
-public static ObservableList<User> users= FXCollections.observableArrayList();
+	public static ObservableList<User> users= FXCollections.observableArrayList();
+	private static Connection con = null;
 	
 	private static final String GETALL="SELECT id,mail,username,password,usercode,confirmed FROM user";
 	private final static String INSERT_UPDATE="INSERT INTO user (id, mail, username, password, usercode,confirmed) "
 			+ "VALUES (?,?,?,?,?,?) "
 			+ "ON DUPLICATE KEY UPDATE mail=?,username=?,password=?,usercode=?,confirmed=?";
+	private final static String GETBYREPROCREATOR="SELECT u.id, u.mail, u.username, u.password, u.usercode, u.confirmed "
+			+ "FROM reproductionlist r "
+			+ "INNER JOIN user u on u.id=r.id_user "
+			+ "WHERE r.id=?";
+	private final static String GETBYREPROSUBS="SELECT u.id,u.mail,u.username,u.password,u.usercode,u.confirmed "
+			+ "FROM reproductionlist_user ru "
+			+ "INNER JOIN reproductionlist r on r.id=ru.id_reproductionList "
+			+ "INNER JOIN user u on u.id=ru.id_user "
+			+ "WHERE r.id=?";
 	
 	public static void loadAllUsers() {
 		Connection con = MDBConexion.getConexion();
@@ -144,6 +154,90 @@ public static ObservableList<User> users= FXCollections.observableArrayList();
 		return result;
 	}
 	
+	public static User getUserByReproductionListCreator(ReproductionList aux) {
+
+		User result = new User();
+
+		con = MDBConexion.getConexion();
+		if (con != null) {
+			PreparedStatement ps = null;
+			ResultSet rs = null;
+			try {
+				ps = con.prepareStatement(GETBYREPROCREATOR);
+				ps.setInt(1, aux.getId());
+				rs = ps.executeQuery();
+				if (rs.next()) {
+					
+					result.setId(rs.getInt("id"));
+					result.setMail(rs.getString("mail"));
+					result.setUsername(rs.getString("username"));
+					result.setPassword(rs.getString("password"));
+					result.setUsercode(rs.getString("usercode"));
+					if(rs.getString("confirmed").matches("yes")) {
+						result.setConfirmed(true);
+					}
+					else {
+						result.setConfirmed(false);
+					}
+				}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} finally {
+				try {
+					ps.close();
+					rs.close();
+				} catch (SQLException e) {
+					// TODO: handle exception
+				}
+			}
+		}
+		return result;
+	}
+	
+	public static List<User> getByReproductionListSusbcribed(ReproductionList f) {
+
+		List<User> result = new ArrayList<User>();
+
+		con = MDBConexion.getConexion();
+		if (con != null) {
+			PreparedStatement ps = null;
+			ResultSet rs = null;
+			try {
+				ps = con.prepareStatement(GETBYREPROSUBS);
+				ps.setInt(1, f.getId());
+				rs = ps.executeQuery();
+				while (rs.next()) {
+					User aux=new User();
+					aux.setId(rs.getInt("id"));
+					aux.setMail(rs.getString("mail"));
+					aux.setUsername(rs.getString("username"));
+					aux.setPassword(rs.getString("password"));
+					aux.setUsercode(rs.getString("usercode"));
+					if(rs.getString("confirmed").matches("yes")) {
+						aux.setConfirmed(true);
+					}
+					else {
+						aux.setConfirmed(false);
+					}
+					
+					result.add(aux);
+				}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} finally {
+				try {
+					ps.close();
+					rs.close();
+				} catch (SQLException e) {
+					// TODO: handle exception
+				}
+			}
+		}
+		return result;
+	}
+	
 	public static int getNewId() {
 		//calcula el id mas alto de todos y suma 1
 		
@@ -162,5 +256,9 @@ public static ObservableList<User> users= FXCollections.observableArrayList();
 		}
 		return result;
 	}
+
+	
+
+	
 	
 }

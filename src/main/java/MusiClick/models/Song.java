@@ -1,9 +1,5 @@
 package MusiClick.models;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-
 public class Song {
 	
 	private int id;

@@ -121,9 +121,9 @@ public class Mail_Validation_Controller {
 					Scene scene= new Scene(root);
 					Stage stage2= new Stage();
 					stage2.setScene(scene);
-					Image image= new Image("file:src/main/resources/images/icons/icon_app.jpg");
+					//Image image= new Image("file:src/main/resources/images/icons/icon_app.jpg");
 					stage2.setTitle("Final Showdown");
-					stage2.getIcons().add(image);
+					//stage2.getIcons().add(image);
 					stage2.setResizable(false);
 					stage2.initModality(Modality.APPLICATION_MODAL);
 					stage2.setOnCloseRequest(new EventHandler<WindowEvent>() {

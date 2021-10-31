@@ -3,12 +3,12 @@ package MusiClick.models;
 public class User {
 
 	
-	int id;
-	String mail;
-	String username;
-	String password;
-	String usercode;
-	boolean confirmed;
+	private int id;
+	private String mail;
+	private String username;
+	private String password;
+	private String usercode;
+	private boolean confirmed;
 	
 	public User(int id, String mail, String username, String password, String usercode, boolean confirmed) {
 		super();

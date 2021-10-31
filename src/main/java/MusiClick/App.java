@@ -31,9 +31,9 @@ public void start(Stage stage) throws IOException {
 		Scene scene= new Scene(root);
 		Stage stage2= new Stage();
 		stage2.setScene(scene);
-		//Image image= new Image("file:src/main/resources/images/icons/icon_app.jpg");
+		Image image= new Image("file:src/main/resources/images/user.png");
 		stage2.setTitle("Inicio de Sesión");
-		//stage2.getIcons().add(image);
+		stage2.getIcons().add(image);
 		stage2.setResizable(false);;
 		stage2.initModality(Modality.APPLICATION_MODAL);
 		
