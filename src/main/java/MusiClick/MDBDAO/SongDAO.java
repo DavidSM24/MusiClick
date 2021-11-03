@@ -27,7 +27,7 @@ public class SongDAO {
 	private static final String GETBYID = "SELECT id, name, id_artist,photo, url , duration, reproductions, id_genre, id_disc "
 			+ "FROM song WHERE id=?;";
 	private static final String GETBYNAME = "SELECT id, name, id_artist,photo, url , duration, reproductions, id_genre, id_disc "
-			+ "FROM song WHERE name LIKE ?;";	
+			+ "FROM song WHERE LOWER(name) LIKE ?;";	
 	private static final String GETBYDISC ="SELECT s.id, s.name, s.id_artist, s.photo, s.url, s.duration, s.reproductions, s.id_genre , s.id_disc"
 			+ "FROM disc_song ds "
 			+ "INNER JOIN song s on ds.id_song=s.id "
@@ -78,8 +78,8 @@ public class SongDAO {
 					Song aux=new Song(
 							rs.getInt("id"), 
 							rs.getString("name"),
-							rs.getString("url"),
 							rs.getString("photo"),
+							rs.getString("url"),
 							aaux,
 							rs.getDouble("duration"),
 							rs.getInt("reproductions"),
@@ -122,8 +122,8 @@ public class SongDAO {
 					result= new Song(
 							rs.getInt("id"), 
 							rs.getString("name"),
-							rs.getString("url"),
 							rs.getString("photo"),
+							rs.getString("url"),
 							aaux,
 							rs.getDouble("duration"),
 							rs.getInt("reproductions"),
@@ -145,11 +145,24 @@ public class SongDAO {
 		return result;
 	}
 	
-	public static List<Song> getByArtist(Artist a){
+	public static List<Song> getByArtistId(Artist a){
 		List<Song> result=new ArrayList<Song>();
 		if(songs!=null&&songs.size()>0) {
 			for(Song s:songs) {
 				if(s.getArtist().equals(a)) {
+					result.add(s);
+				}
+			}
+		}
+		return result;
+		
+	}
+	
+	public static List<Song> getByArtistName(String name){
+		List<Song> result=new ArrayList<Song>();
+		if(songs!=null&&songs.size()>0) {
+			for(Song s:songs) {
+				if(s.getArtist().getName().toLowerCase().contains(name.toLowerCase())) {
 					result.add(s);
 				}
 			}
@@ -181,7 +194,7 @@ public class SongDAO {
 			ResultSet rs = null;
 			try {
 				ps = con.prepareStatement(GETBYNAME);
-				ps.setString(1, name);
+				ps.setString(1, "%"+name.toLowerCase()+"%");
 				rs = ps.executeQuery();
 
 				while (rs.next()) {
@@ -191,8 +204,8 @@ public class SongDAO {
 					result.add(new Song(
 							rs.getInt("id"), 
 							rs.getString("name"),
-							rs.getString("url"),
 							rs.getString("photo"),
+							rs.getString("url"),
 							aaux,
 							rs.getDouble("duration"),
 							rs.getInt("reproductions"),
@@ -234,8 +247,8 @@ public class SongDAO {
 					result.add(new Song(
 							rs.getInt("id"), 
 							rs.getString("name"),
-							rs.getString("url"),
 							rs.getString("photo"),
+							rs.getString("url"),
 							aaux,
 							rs.getDouble("duration"),
 							rs.getInt("reproductions"),
@@ -277,8 +290,8 @@ public class SongDAO {
 					result.add(new Song(
 							rs.getInt("id"), 
 							rs.getString("name"),
-							rs.getString("url"),
 							rs.getString("photo"),
+							rs.getString("url"),
 							aaux,
 							rs.getDouble("duration"),
 							rs.getInt("reproductions"),

@@ -98,7 +98,8 @@
                         </GridPane>
                         <GridPane layoutX="261.0" layoutY="14.0" prefHeight="136.0" prefWidth="169.0">
                            <columnConstraints>
-                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="143.0" minWidth="10.0" prefWidth="136.0" />
+                              <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="79.66668701171875" minWidth="10.0" prefWidth="34.0" />
                            </columnConstraints>
                            <rowConstraints>
                               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -113,8 +114,9 @@
                               <TextField fx:id="txt_artist_name" GridPane.rowIndex="3" />
                               <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Id" />
                               <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Nombre" GridPane.rowIndex="2" />
-                              <TextField fx:id="txt_artist_photo" GridPane.rowIndex="5" />
+                              <TextField fx:id="txt_artist_photo" editable="false" onAction="#set_artist_Photo" GridPane.rowIndex="5" />
                               <Text layoutX="10.0" layoutY="70.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Imagen" GridPane.rowIndex="4" />
+                              <Button mnemonicParsing="false" onAction="#set_artist_Photo" text="..." GridPane.columnIndex="1" GridPane.rowIndex="5" />
                            </children>
                         </GridPane>
                         <TextField layoutX="10.0" layoutY="314.0" prefHeight="25.0" prefWidth="233.0" />
@@ -159,10 +161,10 @@
                               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                            </rowConstraints>
                            <children>
-                              <TextField fx:id="txt_song_photo" GridPane.rowIndex="1" />
-                              <TextField fx:id="txt_song_duration" GridPane.rowIndex="3" />
-                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Imagen" />
-                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Duración" GridPane.rowIndex="2" />
+                              <TextField fx:id="txt_song_duration" GridPane.rowIndex="1" />
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Duración" />
+                              <ComboBox fx:id="com_song_genre" prefWidth="150.0" GridPane.rowIndex="3" />
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Género" GridPane.rowIndex="2" />
                            </children>
                         </GridPane>
                         <GridPane layoutX="261.0" layoutY="14.0" prefHeight="133.0" prefWidth="169.0">
@@ -188,7 +190,8 @@
                         </GridPane>
                         <GridPane layoutX="153.0" layoutY="207.0" prefHeight="98.0" prefWidth="130.0">
                            <columnConstraints>
-                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="95.66668701171875" minWidth="10.0" prefWidth="95.66668701171875" />
+                              <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="60.33331298828125" minWidth="10.0" prefWidth="34.33331298828125" />
                            </columnConstraints>
                            <rowConstraints>
                               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -197,10 +200,12 @@
                               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                            </rowConstraints>
                            <children>
-                              <TextField fx:id="txt_song_media" GridPane.rowIndex="1" />
-                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Media" />
-                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Género" GridPane.rowIndex="2" />
-                              <ComboBox fx:id="com_song_genre" prefWidth="150.0" GridPane.rowIndex="3" />
+                              <TextField fx:id="txt_song_media" editable="false" GridPane.rowIndex="3" />
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Imagen" />
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Media" GridPane.rowIndex="2" />
+                              <TextField fx:id="txt_song_photo" editable="false" GridPane.rowIndex="1" />
+                              <Button mnemonicParsing="false" onAction="#set_song_Photo" text="..." GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                              <Button mnemonicParsing="false" onAction="#set_song_Media" text="..." GridPane.columnIndex="1" GridPane.rowIndex="3" />
                            </children>
                         </GridPane>
                         <GridPane layoutX="292.0" layoutY="207.0" prefHeight="98.0" prefWidth="130.0">
@@ -251,7 +256,8 @@
                         </GridPane>
                         <GridPane layoutX="261.0" layoutY="14.0" prefHeight="217.0" prefWidth="169.0">
                            <columnConstraints>
-                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="159.33331298828125" minWidth="10.0" prefWidth="138.66668701171875" />
+                              <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="90.3333740234375" minWidth="10.0" prefWidth="31.33331298828125" />
                            </columnConstraints>
                            <rowConstraints>
                               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -270,12 +276,13 @@
                               <TextField fx:id="txt_disc_name" GridPane.rowIndex="3" />
                               <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Id" />
                               <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Nombre" GridPane.rowIndex="2" />
-                              <TextField fx:id="txt_disc_photo" GridPane.rowIndex="5" />
+                              <TextField fx:id="txt_disc_photo" editable="false" GridPane.rowIndex="5" />
                               <Text layoutX="10.0" layoutY="70.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Imagen" GridPane.rowIndex="4" />
                               <ComboBox fx:id="com_disc_artist" prefWidth="150.0" GridPane.rowIndex="7" />
                               <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Artista principal" GridPane.rowIndex="6" />
                               <DatePicker fx:id="dat_disc_date" GridPane.rowIndex="9" />
                               <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Fecha" GridPane.rowIndex="8" />
+                              <Button mnemonicParsing="false" onAction="#set_disc_Photo" text="..." GridPane.columnIndex="1" GridPane.rowIndex="5" />
                            </children>
                         </GridPane>
                         <TextField layoutX="10.0" layoutY="314.0" prefHeight="25.0" prefWidth="233.0" />

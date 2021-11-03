@@ -53,7 +53,7 @@ public class Genre {
 
 	@Override
 	public String toString() {
-		return this.getId()+"";
+		return this.getName();
 	}
 	
 	

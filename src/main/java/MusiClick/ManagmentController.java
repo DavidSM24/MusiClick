@@ -1,5 +1,6 @@
 package MusiClick;
 
+import java.io.File;
 import java.util.Optional;
 
 import MusiClick.MDBDAO.ArtistDAO;
@@ -25,6 +26,8 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.image.Image;
+import javafx.stage.FileChooser;
 
 public class ManagmentController {
 
@@ -455,6 +458,27 @@ public class ManagmentController {
 	// ARTIST METHODS
 
 	@FXML
+	public void set_artist_Photo() {
+		File file=null;
+		FileChooser filechooser= new FileChooser();
+		filechooser.setTitle("Selecionar imagen...");
+		try {
+			file=filechooser.showOpenDialog(null);
+			if(file!=null&&file.getPath().matches(".+\\.png")||file.getPath().matches(".+\\.jpg")) {
+				txt_artist_photo.setText(file.getPath());
+			}else { //extension incorrecta
+				Alert alert=new Alert(AlertType.INFORMATION);
+	    		alert.setHeaderText(null);
+	    		alert.setTitle("Información");
+	    		alert.setContentText("Formato incorrecto: Debe elegir un tipo de archivo jpg o png.");
+	    		alert.showAndWait();
+			}
+		}catch (Exception e) {
+			// TODO: handle exception;
+		}	
+	}
+	
+	@FXML
 	private void select_Artist() {
 		if (inizialize && artists.size() > 0) {
 			if (table_artist.getSelectionModel().getSelectedItem() != null) {
@@ -770,6 +794,48 @@ public class ManagmentController {
 	// SONG METHODS
 
 	@FXML
+	public void set_song_Photo() {
+		File file=null;
+		FileChooser filechooser= new FileChooser();
+		filechooser.setTitle("Selecionar imagen...");
+		try {
+			file=filechooser.showOpenDialog(null);
+			if(file!=null&&file.getPath().matches(".+\\.png")||file.getPath().matches(".+\\.jpg")) {
+				txt_song_photo.setText(file.getPath());
+			}else { //extension incorrecta
+				Alert alert=new Alert(AlertType.INFORMATION);
+	    		alert.setHeaderText(null);
+	    		alert.setTitle("Información");
+	    		alert.setContentText("Formato incorrecto: Debe elegir un tipo de archivo jpg o png.");
+	    		alert.showAndWait();
+			}
+		}catch (Exception e) {
+			// TODO: handle exception;
+		}	
+	}
+	
+	@FXML
+	public void set_song_Media() {
+		File file=null;
+		FileChooser filechooser= new FileChooser();
+		filechooser.setTitle("Selecionar archivo mp3...");
+		try {
+			file=filechooser.showOpenDialog(null);
+			if(file!=null&&file.getPath().matches(".+\\.mp3")) {
+				txt_song_media.setText(file.getPath());
+			}else { //extension incorrecta
+				Alert alert=new Alert(AlertType.INFORMATION);
+	    		alert.setHeaderText(null);
+	    		alert.setTitle("Información");
+	    		alert.setContentText("Formato incorrecto: Debe elegir archivo de tipo mp3.");
+	    		alert.showAndWait();
+			}
+		}catch (Exception e) {
+			// TODO: handle exception;
+		}	
+	}
+	
+	@FXML
 	private void select_Song() {
 		if (inizialize && songs.size() > 0) {
 			if (table_song.getSelectionModel().getSelectedItem() != null) {
@@ -949,6 +1015,27 @@ public class ManagmentController {
 
 	// DISC METHODS
 
+	@FXML
+	public void set_disc_Photo() {
+		File file=null;
+		FileChooser filechooser= new FileChooser();
+		filechooser.setTitle("Selecionar imagen...");
+		try {
+			file=filechooser.showOpenDialog(null);
+			if(file!=null&&file.getPath().matches(".+\\.png")||file.getPath().matches(".+\\.jpg")) {
+				txt_disc_photo.setText(file.getPath());
+			}else { //extension incorrecta
+				Alert alert=new Alert(AlertType.INFORMATION);
+	    		alert.setHeaderText(null);
+	    		alert.setTitle("Información");
+	    		alert.setContentText("Formato incorrecto: Debe elegir un tipo de archivo jpg o png.");
+	    		alert.showAndWait();
+			}
+		}catch (Exception e) {
+			// TODO: handle exception;
+		}	
+	}
+	
 	@FXML
 	private void select_Disc() {
 		if (inizialize && discs.size() > 0) {

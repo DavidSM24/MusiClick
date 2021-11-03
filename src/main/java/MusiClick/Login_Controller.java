@@ -167,15 +167,17 @@ public class Login_Controller {
 						try {
 							FXMLLoader loader = new FXMLLoader(getClass().getResource("primary.fxml"));
 							Parent root = loader.load();
-							PrimaryController primary= loader.getController();
+							
 							Timestamp ts=new Timestamp(System.currentTimeMillis());
 							Sesion s=new Sesion(SesionDAO.getNewId(),user.getId(),ts);
-							//primary.sendSession();
+							PrimaryController primary= loader.getController();
+							primary.setController(s);
+							primary.sendSession();
 							Scene scene= new Scene(root);
 							Stage stage2= new Stage();
 							stage2.setScene(scene);
 							//Image image= new Image("file:src/main/resources/images/icons/icon_app.jpg");
-							stage2.setTitle("Final Showdown");
+							stage2.setTitle("MusiClick");
 							//stage2.getIcons().add(image);
 							stage2.setResizable(false);;
 							stage2.initModality(Modality.APPLICATION_MODAL);
