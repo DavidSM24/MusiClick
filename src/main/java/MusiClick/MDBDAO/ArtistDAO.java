@@ -19,12 +19,12 @@ public class ArtistDAO {
 
 	private static Connection con = null;
 
-	private static final String GETALL = "SELECT id, name, photo FROM artist;";
-	private static final String GETBYID = "SELECT id, name, photo FROM artist WHERE id=?;";
-	private static final String GETBYNAME = "SELECT id, name, photo FROM artist WHERE name LIKE ?;";
-	private final static String INSERT_UPDATE="INSERT INTO artist (id, name, photo) "
-			+ "VALUES (?,?, ?) "
-			+ "ON DUPLICATE KEY UPDATE name=?, photo=?;";
+	private static final String GETALL = "SELECT id, name, description,photo FROM artist;";
+	private static final String GETBYID = "SELECT id, name,description, photo FROM artist WHERE id=?;";
+	private static final String GETBYNAME = "SELECT id, name,description, photo FROM artist WHERE name LIKE ?;";
+	private final static String INSERT_UPDATE="INSERT INTO artist (id, name,description, photo) "
+			+ "VALUES (?,?,?,?) "
+			+ "ON DUPLICATE KEY UPDATE name=?,description=?, photo=?;";
 	private final static String DELETE ="DELETE FROM artist WHERE id IN ";
 	//DELETE FROM `artist` WHERE id NOT LIKE (0);
 	private final static String DELETEALL ="DELETE FROM artist;";
@@ -41,7 +41,7 @@ public class ArtistDAO {
 				ps = con.prepareStatement(GETALL);
 				rs = ps.executeQuery();
 				while (rs.next()) {
-					artists.add(new Artist(rs.getInt("id"), rs.getString("name"), rs.getString("photo")));
+					artists.add(new Artist(rs.getInt("id"), rs.getString("name"),rs.getString("description"), rs.getString("photo")));
 				}
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
@@ -70,7 +70,7 @@ public class ArtistDAO {
 				ps.setInt(1, id);
 				rs = ps.executeQuery();
 				if (rs.next()) {
-					result = new Artist(rs.getInt("id"), rs.getString("name"), rs.getString("photo"));
+					result = new Artist(rs.getInt("id"), rs.getString("name"),rs.getString("description"), rs.getString("photo"));
 				}
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
@@ -100,7 +100,7 @@ public class ArtistDAO {
 				ps.setString(1, name);
 				rs = ps.executeQuery();
 				while (rs.next()) {
-					result.add(new Artist(rs.getInt("id"), rs.getString("name"), rs.getString("photo")));
+					result.add(new Artist(rs.getInt("id"), rs.getString("name"),rs.getString("description"), rs.getString("photo")));
 				}
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
@@ -131,10 +131,12 @@ public class ArtistDAO {
 						ps=con.prepareStatement(INSERT_UPDATE);
 						ps.setInt(1, a.getId());
 						ps.setString(2, a.getName());
-						ps.setString(3, a.getPhoto());
+						ps.setString(3, a.getDescription());
+						ps.setString(4, a.getPhoto());
 						
-						ps.setString(4, a.getName());
-						ps.setString(5, a.getPhoto());
+						ps.setString(5, a.getName());
+						ps.setString(6, a.getDescription());
+						ps.setString(7, a.getPhoto());
 						
 						rs =ps.executeUpdate();	
 						if(artists!=null&&artists.size()>0&&artists.contains(a)) {
@@ -170,8 +172,6 @@ public class ArtistDAO {
 			}
 		}
 		s+=") AND id NOT LIKE (0);";
-		
-		System.out.println(DELETE+s);
 		
 		int rs=0;
 		Connection con = MDBConexion.getConexion();

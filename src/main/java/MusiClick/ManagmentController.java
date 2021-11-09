@@ -1,6 +1,7 @@
 package MusiClick;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Optional;
 
 import MusiClick.MDBDAO.ArtistDAO;
@@ -12,6 +13,7 @@ import MusiClick.models.Disc;
 import MusiClick.models.Genre;
 import MusiClick.models.Song;
 import MusiClick.utils.Converter;
+import MusiClick.utils.FileUtilities;
 import MusiClick.utils.MDBConexion;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -24,6 +26,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
@@ -81,6 +84,10 @@ public class ManagmentController {
 	protected TextField txt_song_id;
 	@FXML
 	protected TextField txt_song_name;
+
+	@FXML
+	protected TextArea txt_description;
+
 	@FXML
 	protected TextField txt_song_media;
 	@FXML
@@ -150,13 +157,12 @@ public class ManagmentController {
 	// MANAGER METHODS
 
 	@FXML
-	public void setController() {
+	public void setController() { // <----- metodo charge
 		MDBConexion.loadServerInfo();
 
 		// set ARTISTS
-		
+
 		artists = Converter.artist_Converter(ArtistDAO.getAll());
-		
 		table_artist.setItems(artists);
 		setTableAndDetailsInfo();
 		btn_add_Artist.setDisable(false);
@@ -196,14 +202,10 @@ public class ManagmentController {
 		if (!inizialize) {
 			show_Alert(4);
 		}
-		
-		artists.remove(0);
-		
-		inizialize = true;
 
-		System.out.println("al final de setController:");
-		System.out.println(songs);
-		System.out.println(discs);
+		artists.remove(0);
+
+		inizialize = true;
 	}
 
 	private void setTableAndDetailsInfo() {
@@ -288,7 +290,7 @@ public class ManagmentController {
 	}
 
 	@FXML
-	private void save_to_BD() {
+	private void save_to_BD() throws IOException {
 		if (inizialize) {
 
 			// SAVE GENRES
@@ -340,11 +342,26 @@ public class ManagmentController {
 					}
 				}
 				if (toDrop.size() > 0) {
+
+					for (Artist a : toDrop) {
+						FileUtilities.removeFile(a.getPhoto()); // >------
+					}
+
 					ArtistDAO.delete(toDrop);
 				}
 
 				// updatear existentes
 				for (Artist a2 : artists) {
+
+					if (!a2.getPhoto().matches("[src/main/resources/images/artist/].*")) {
+						System.out.println(a2);
+						System.out.println(a2.getPhoto());
+						FileUtilities.saveFile(a2.getPhoto(),
+								"src/main/resources/images/artist/a" + a2.getId() + a2.getName() + ".jpg");
+
+						a2.setPhoto("src/main/resources/images/artist/a" + a2.getId() + a2.getName() + ".jpg");
+					}
+
 					ArtistDAO.save(a2);
 				}
 			} else { // borrar todos
@@ -371,11 +388,26 @@ public class ManagmentController {
 				}
 
 				if (toDrop.size() > 0) {
+
+					for (Disc d : toDrop) {
+						FileUtilities.removeFile(d.getPhoto()); // >------
+					}
+
 					DiscDAO.delete(toDrop);
 				}
 
 				// updatear existentes
 				for (Disc d2 : discs) {
+
+					if (d2.getId() != 1) {
+						if (!d2.getPhoto().matches("[src/main/resources/images/disc/].*")) {
+							FileUtilities.saveFile(d2.getPhoto(),
+									"src/main/resources/images/disc/d" + d2.getId() + d2.getName() + ".jpg");
+
+							d2.setPhoto("src/main/resources/images/disc/d" + d2.getId() + d2.getName() + ".jpg");
+						}
+					}
+
 					DiscDAO.save(d2);
 				}
 			} else { // borrar todos
@@ -394,6 +426,7 @@ public class ManagmentController {
 					for (Song s : songs) {
 						for (int i = 0; i < SinDB.size(); i++) {
 							if (!songs.contains(SinDB.get(i))) {
+
 								toDrop.add(SinDB.get(i));
 							}
 						}
@@ -401,13 +434,35 @@ public class ManagmentController {
 				}
 
 				if (toDrop.size() > 0) {
+					for (Song s : toDrop) {
+						FileUtilities.removeFile(s.getMedia());
+						FileUtilities.removeFile(s.getPhoto());
+					}
 					SongDAO.delete(toDrop);
 				}
 
 				for (Song s2 : songs) {
+
+					if (!s2.getMedia().matches("[src/main/resources/mp3/].*")) {
+						FileUtilities.saveFile(s2.getMedia(),
+								"src/main/resources/mp3/s" + s2.getId() + s2.getName() + ".mp3");
+						s2.setMedia("src/main/resources/mp3/s" + s2.getId() + s2.getName() + ".mp3");
+					}
+
+					if (!s2.getPhoto().matches("[src/main/resources/images/song/].*")) {
+						FileUtilities.saveFile(s2.getPhoto(),
+								"src/main/resources/images/song/s" + s2.getId() + s2.getName() + ".jpg");
+						s2.setPhoto("src/main/resources/images/song/s" + s2.getId() + s2.getName() + ".jpg");
+					}
 					SongDAO.save(s2);
+
 				}
 			} else { // borrar todos
+				ObservableList<Song> SinDB = Converter.song_Converter(SongDAO.getAll());
+				for (Song s : SinDB) {
+					FileUtilities.removeFile(s.getMedia());
+					FileUtilities.removeFile(s.getPhoto());
+				}
 				SongDAO.deleteAll();
 			}
 
@@ -459,25 +514,25 @@ public class ManagmentController {
 
 	@FXML
 	public void set_artist_Photo() {
-		File file=null;
-		FileChooser filechooser= new FileChooser();
+		File file = null;
+		FileChooser filechooser = new FileChooser();
 		filechooser.setTitle("Selecionar imagen...");
 		try {
-			file=filechooser.showOpenDialog(null);
-			if(file!=null&&file.getPath().matches(".+\\.png")||file.getPath().matches(".+\\.jpg")) {
+			file = filechooser.showOpenDialog(null);
+			if (file != null && file.getPath().matches(".+\\.png") || file.getPath().matches(".+\\.jpg")) {
 				txt_artist_photo.setText(file.getPath());
-			}else { //extension incorrecta
-				Alert alert=new Alert(AlertType.INFORMATION);
-	    		alert.setHeaderText(null);
-	    		alert.setTitle("Información");
-	    		alert.setContentText("Formato incorrecto: Debe elegir un tipo de archivo jpg o png.");
-	    		alert.showAndWait();
+			} else { // extension incorrecta
+				Alert alert = new Alert(AlertType.INFORMATION);
+				alert.setHeaderText(null);
+				alert.setTitle("Información");
+				alert.setContentText("Formato incorrecto: Debe elegir un tipo de archivo jpg o png.");
+				alert.showAndWait();
 			}
-		}catch (Exception e) {
+		} catch (Exception e) {
 			// TODO: handle exception;
-		}	
+		}
 	}
-	
+
 	@FXML
 	private void select_Artist() {
 		if (inizialize && artists.size() > 0) {
@@ -487,6 +542,7 @@ public class ManagmentController {
 				btn_delete_Artist.setDisable(false);
 				txt_artist_id.setText(table_artist.getSelectionModel().getSelectedItem().getId() + "");
 				txt_artist_name.setText(table_artist.getSelectionModel().getSelectedItem().getName());
+				txt_description.setText(table_artist.getSelectionModel().getSelectedItem().getDescription());
 				txt_artist_photo.setText(table_artist.getSelectionModel().getSelectedItem().getPhoto());
 			} else {
 				artist = null;
@@ -494,15 +550,17 @@ public class ManagmentController {
 				btn_delete_Artist.setDisable(true);
 				txt_artist_id.setText("");
 				txt_artist_name.setText("");
+				txt_description.setText("");
 				txt_artist_photo.setText("");
 			}
 
 		} else {
-			genre = null;
-			btn_edit_Genre.setDisable(true);
-			btn_delete_Genre.setDisable(true);
-			txt_genre_id.setText("");
-			txt_genre_name.setText("");
+			artist = null;
+			btn_edit_Artist.setDisable(true);
+			btn_delete_Artist.setDisable(true);
+			txt_artist_id.setText("");
+			txt_artist_name.setText("");
+			txt_description.setText("");
 			txt_artist_photo.setText("");
 
 		}
@@ -511,7 +569,8 @@ public class ManagmentController {
 	@FXML
 	private void add_Artist() {
 		if (inizialize) {
-			if (txt_artist_id.getText().matches("[0-9]+") && !txt_artist_name.getText().matches("")) {
+			if (txt_artist_id.getText().matches("[0-9]+") && !txt_artist_name.getText().matches("")
+					&& !txt_description.getText().matches("")) {
 				boolean same_Id = false;
 				for (int i = 0; i < artists.size() && !same_Id; i++) {
 					if (Integer.parseInt(txt_artist_id.getText()) == artists.get(i).getId()) {
@@ -520,7 +579,7 @@ public class ManagmentController {
 				}
 				if (!same_Id) {
 					artist = new Artist(Integer.parseInt(txt_artist_id.getText() + ""), txt_artist_name.getText(),
-							txt_artist_photo.getText());
+							txt_description.getText(), txt_artist_photo.getText());
 					artists.add(artist);
 
 					setTableAndDetailsInfo();
@@ -539,7 +598,8 @@ public class ManagmentController {
 	private void edit_Artist() {
 		try {
 			if (artist != null && !txt_artist_id.getText().matches("") && txt_artist_id.getText().matches("[0-9]+")
-					&& !txt_artist_name.getText().matches("") && !txt_artist_photo.getText().matches("")) {
+					&& !txt_artist_name.getText().matches("") && !txt_description.getText().matches("")
+					&& !txt_artist_photo.getText().matches("")) {
 
 				boolean same_Id = false;
 				for (int i = 0; i < artists.size() && !same_Id; i++) {
@@ -551,6 +611,7 @@ public class ManagmentController {
 					int index = artists.indexOf(artist);
 					table_artist.getSelectionModel().getSelectedItem().setId(Integer.parseInt(txt_artist_id.getText()));
 					table_artist.getSelectionModel().getSelectedItem().setName(txt_artist_name.getText());
+					table_artist.getSelectionModel().getSelectedItem().setDescription(txt_description.getText());
 					table_artist.getSelectionModel().getSelectedItem().setPhoto(txt_artist_photo.getText());
 
 					artist = table_artist.getSelectionModel().getSelectedItem();
@@ -795,46 +856,46 @@ public class ManagmentController {
 
 	@FXML
 	public void set_song_Photo() {
-		File file=null;
-		FileChooser filechooser= new FileChooser();
+		File file = null;
+		FileChooser filechooser = new FileChooser();
 		filechooser.setTitle("Selecionar imagen...");
 		try {
-			file=filechooser.showOpenDialog(null);
-			if(file!=null&&file.getPath().matches(".+\\.png")||file.getPath().matches(".+\\.jpg")) {
+			file = filechooser.showOpenDialog(null);
+			if (file != null && file.getPath().matches(".+\\.png") || file.getPath().matches(".+\\.jpg")) {
 				txt_song_photo.setText(file.getPath());
-			}else { //extension incorrecta
-				Alert alert=new Alert(AlertType.INFORMATION);
-	    		alert.setHeaderText(null);
-	    		alert.setTitle("Información");
-	    		alert.setContentText("Formato incorrecto: Debe elegir un tipo de archivo jpg o png.");
-	    		alert.showAndWait();
+			} else { // extension incorrecta
+				Alert alert = new Alert(AlertType.INFORMATION);
+				alert.setHeaderText(null);
+				alert.setTitle("Información");
+				alert.setContentText("Formato incorrecto: Debe elegir un tipo de archivo jpg o png.");
+				alert.showAndWait();
 			}
-		}catch (Exception e) {
+		} catch (Exception e) {
 			// TODO: handle exception;
-		}	
+		}
 	}
-	
+
 	@FXML
 	public void set_song_Media() {
-		File file=null;
-		FileChooser filechooser= new FileChooser();
+		File file = null;
+		FileChooser filechooser = new FileChooser();
 		filechooser.setTitle("Selecionar archivo mp3...");
 		try {
-			file=filechooser.showOpenDialog(null);
-			if(file!=null&&file.getPath().matches(".+\\.mp3")) {
+			file = filechooser.showOpenDialog(null);
+			if (file != null && file.getPath().matches(".+\\.mp3")) {
 				txt_song_media.setText(file.getPath());
-			}else { //extension incorrecta
-				Alert alert=new Alert(AlertType.INFORMATION);
-	    		alert.setHeaderText(null);
-	    		alert.setTitle("Información");
-	    		alert.setContentText("Formato incorrecto: Debe elegir archivo de tipo mp3.");
-	    		alert.showAndWait();
+			} else { // extension incorrecta
+				Alert alert = new Alert(AlertType.INFORMATION);
+				alert.setHeaderText(null);
+				alert.setTitle("Información");
+				alert.setContentText("Formato incorrecto: Debe elegir archivo de tipo mp3.");
+				alert.showAndWait();
 			}
-		}catch (Exception e) {
+		} catch (Exception e) {
 			// TODO: handle exception;
-		}	
+		}
 	}
-	
+
 	@FXML
 	private void select_Song() {
 		if (inizialize && songs.size() > 0) {
@@ -1017,25 +1078,25 @@ public class ManagmentController {
 
 	@FXML
 	public void set_disc_Photo() {
-		File file=null;
-		FileChooser filechooser= new FileChooser();
+		File file = null;
+		FileChooser filechooser = new FileChooser();
 		filechooser.setTitle("Selecionar imagen...");
 		try {
-			file=filechooser.showOpenDialog(null);
-			if(file!=null&&file.getPath().matches(".+\\.png")||file.getPath().matches(".+\\.jpg")) {
+			file = filechooser.showOpenDialog(null);
+			if (file != null && file.getPath().matches(".+\\.png") || file.getPath().matches(".+\\.jpg")) {
 				txt_disc_photo.setText(file.getPath());
-			}else { //extension incorrecta
-				Alert alert=new Alert(AlertType.INFORMATION);
-	    		alert.setHeaderText(null);
-	    		alert.setTitle("Información");
-	    		alert.setContentText("Formato incorrecto: Debe elegir un tipo de archivo jpg o png.");
-	    		alert.showAndWait();
+			} else { // extension incorrecta
+				Alert alert = new Alert(AlertType.INFORMATION);
+				alert.setHeaderText(null);
+				alert.setTitle("Información");
+				alert.setContentText("Formato incorrecto: Debe elegir un tipo de archivo jpg o png.");
+				alert.showAndWait();
 			}
-		}catch (Exception e) {
+		} catch (Exception e) {
 			// TODO: handle exception;
-		}	
+		}
 	}
-	
+
 	@FXML
 	private void select_Disc() {
 		if (inizialize && discs.size() > 0) {

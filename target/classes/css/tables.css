@@ -3,12 +3,11 @@
     -fx-border-color: transparent -fx-box-border transparent transparent;
     -fx-font: 13px "Arial";
     -fx-text-fill: white;
-    -fx-background-color: grey;
+    -fx-background-color: #2a2a2a;
 }
 
-.table-view .column-header .label{
--fx-text-fill: white;
--fx-alignment: CENTER;
+.table-row-cell:selected .table-cell {
+	-fx-text-fill: #88c0e3;
 }
 
 .tab-pane .tab-header-area .tab-header-background {

@@ -1,6 +1,8 @@
 package MusiClick.models;
 
 import java.time.LocalDate;
+import java.util.List;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -13,13 +15,13 @@ public class Disc {
 	private String photo;
 	private int reproductions;
 	private Artist main_artist;
-	private ObservableList<Song> songs;
+	private List<Song> songs;
 	
 	public Disc() {
 		this(-1,"",LocalDate.now(),"",0,new Artist(),FXCollections.observableArrayList());
 	}
 	
-	public Disc(int id, String name, LocalDate date, String photo,  int reproductions,Artist main_artist,ObservableList<Song> songs) {
+	public Disc(int id, String name, LocalDate date, String photo,  int reproductions,Artist main_artist,List<Song> songs) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -30,7 +32,7 @@ public class Disc {
 		this.reproductions = reproductions;
 	}
 
-	public Disc (String name, LocalDate date, String photo,  int reproductions,Artist main_artist,ObservableList<Song> songs) {
+	public Disc (String name, LocalDate date, String photo,  int reproductions,Artist main_artist,List<Song> songs) {
 		super();
 		this.name = name;
 		this.date = date;
@@ -88,7 +90,7 @@ public class Disc {
 		this.main_artist = main_artist;
 	}
 
-	public ObservableList<Song> getSongs() {
+	public List<Song> getSongs() {
 		return songs;
 	}
 

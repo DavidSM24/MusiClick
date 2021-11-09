@@ -25,9 +25,9 @@ public class Test_models {
 
 		List<Artist> artists = new ArrayList<Artist>() {
 			{
-				add(new Artist(1, "Pedro", "url1"));
-				add(new Artist(2, "Juan", "url2"));
-				add(new Artist(3, "Sara", "url3"));
+//				add(new Artist(1, "Pedro", "url1"));
+//				add(new Artist(2, "Juan", "url2"));
+//				add(new Artist(3, "Sara", "url3"));
 			}
 		};
 

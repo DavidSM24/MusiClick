@@ -37,7 +37,7 @@
          <children>
             <Slider fx:id="timeSlider" GridPane.rowIndex="5" />
             <Slider fx:id="volumeSlider" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-            <Label fx:id="playTime" prefHeight="17.0" prefWidth="477.0" text="Label" textAlignment="RIGHT" textFill="WHITE" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS">
+            <Label fx:id="playTime" prefHeight="17.0" prefWidth="477.0" text="00:00/00.00" textAlignment="RIGHT" textFill="WHITE" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS">
                <GridPane.margin>
                   <Insets left="10.0" />
                </GridPane.margin>
@@ -49,12 +49,12 @@
       </GridPane>
       <TabPane fx:id="tabpane" prefHeight="348.0" prefWidth="600.0" stylesheets="@../css/tables.css" tabClosingPolicy="UNAVAILABLE">
         <tabs>
-          <Tab text="Untitled Tab 2">
+          <Tab text="Listas de Reproducción">
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
             </content>
           </Tab>
-          <Tab text="Untitled Tab 1">
+          <Tab text="Canciones">
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="336.0" prefWidth="600.0">
                      <children>
@@ -70,15 +70,117 @@
                           </columnConstraints>
                           <rowConstraints>
                               <RowConstraints maxHeight="230.66661580403644" minHeight="10.0" prefHeight="192.66667683919272" valignment="CENTER" vgrow="SOMETIMES" />
+                              <RowConstraints maxHeight="135.9999491373698" minHeight="10.0" prefHeight="33.0" vgrow="SOMETIMES" />
                               <RowConstraints maxHeight="135.9999491373698" minHeight="0.0" prefHeight="33.0" vgrow="SOMETIMES" />
                             <RowConstraints maxHeight="135.9999491373698" minHeight="0.0" prefHeight="29.0" vgrow="SOMETIMES" />
                           </rowConstraints>
                            <children>
                               <ImageView fx:id="img_song" fitHeight="188.0" fitWidth="275.0" pickOnBounds="true" preserveRatio="true" />
                               <Label fx:id="lab_song_name" text="Label" GridPane.rowIndex="1" />
-                              <Label fx:id="lab_song_disc" text="Label" GridPane.rowIndex="2" />
+                              <Label fx:id="lab_song_disc" onMouseClicked="#open_Disc_Pane" onMouseEntered="#changeColor_disc_Info" onMouseExited="#changeColorDefault_disc_Info" text="Label" GridPane.rowIndex="3" />
+                              <Label fx:id="lab_song_artist" onMouseClicked="#open_Artist_Pane" onMouseEntered="#changeColor_Artist_Info" onMouseExited="#changeColorDefault_Artist_Info" text="Label" GridPane.rowIndex="2" />
                            </children>
                         </GridPane>
+                        <Pane fx:id="black_pane" opacity="0.85" prefHeight="319.0" prefWidth="600.0" style="-fx-background-color: black;" visible="false" />
+                        <Pane fx:id="artist_pane" layoutX="90.0" layoutY="3.0" onMouseExited="#close_Options_Pane" prefHeight="315.0" prefWidth="429.0" style="-fx-background-color: #2a2a2a; -fx-background-radius: 5; -fx-effect: dropshadow( gaussian, rgba(0, 0, 0, 0.4), 10, 0.5, 0.0, 0.0 );" visible="false">
+                           <children>
+                              <TabPane fx:id="tab_artist_info" layoutY="11.0" prefHeight="304.0" prefWidth="428.0" tabClosingPolicy="UNAVAILABLE">
+                                <tabs>
+                                  <Tab text="Detalles">
+                                    <content>
+                                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                             <children>
+                                                <GridPane layoutX="75.0" layoutY="15.0" prefHeight="255.0" prefWidth="279.0">
+                                                   <columnConstraints>
+                                                      <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                   </columnConstraints>
+                                                   <rowConstraints>
+                                                      <RowConstraints maxHeight="230.66661580403644" minHeight="10.0" prefHeight="183.33333333333334" valignment="CENTER" vgrow="SOMETIMES" />
+                                                      <RowConstraints maxHeight="135.9999491373698" minHeight="10.0" prefHeight="22.666656494140625" vgrow="SOMETIMES" />
+                                                      <RowConstraints maxHeight="135.9999491373698" minHeight="0.0" prefHeight="50.00001017252603" vgrow="SOMETIMES" />
+                                                   </rowConstraints>
+                                                   <children>
+                                                      <ImageView fx:id="img_artist_info" fitHeight="188.0" fitWidth="275.0" pickOnBounds="true" preserveRatio="true" />
+                                                      <Label fx:id="lab_artistinfo_name" text="Label" textFill="WHITE" GridPane.rowIndex="1" />
+                                                      <Label fx:id="lab_artistinfo_description" text="Label" textAlignment="JUSTIFY" textFill="WHITE" GridPane.rowIndex="2" />
+                                                   </children>
+                                                </GridPane>
+                                             </children>
+                                          </AnchorPane>
+                                    </content>
+                                  </Tab>
+                                  <Tab text="Discos">
+                                    <content>
+                                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                             <children>
+                                                <TableView fx:id="table_artist_info_disc" layoutX="45.0" layoutY="43.0" onMouseClicked="#goToDisc" prefHeight="200.0" prefWidth="337.0" stylesheets="@../css/tables.css">
+                                                  <columns>
+                                                    <TableColumn fx:id="col_artist_info_disc_name" prefWidth="106.0" text="Nombre" />
+                                                    <TableColumn fx:id="col_artist_info_disc_publication" prefWidth="125.33332824707031" text="Publicación" />
+                                                      <TableColumn fx:id="col_artist_info_disc_reproductions" prefWidth="105.33331298828125" text="Reproducciones" />
+                                                  </columns>
+                                                </TableView>
+                                             </children>
+                                          </AnchorPane>
+                                    </content>
+                                  </Tab>
+                                </tabs>
+                              </TabPane>
+                              <Button fx:id="btn_user1" layoutX="415.0" layoutY="2.0" mnemonicParsing="false" onAction="#close_Artist_Pane" style="-fx-padding: 0; -fx-background-insets: 0; -fx-background-color: none;" text="X" textFill="WHITE">
+                                 <font>
+                                    <Font name="Modern No. 20" size="20.0" />
+                                 </font>
+                              </Button>
+                           </children>
+                        </Pane>
+                        <Pane fx:id="disc_pane" layoutX="90.0" layoutY="3.0" onMouseExited="#close_Options_Pane" prefHeight="315.0" prefWidth="429.0" style="-fx-background-color: #2a2a2a; -fx-background-radius: 5; -fx-effect: dropshadow( gaussian, rgba(0, 0, 0, 0.4), 10, 0.5, 0.0, 0.0 );" visible="false">
+                           <children>
+                              <TabPane fx:id="tab_disc_info" layoutY="11.0" prefHeight="304.0" prefWidth="428.0" tabClosingPolicy="UNAVAILABLE">
+                                 <tabs>
+                                    <Tab text="Detalles">
+                                       <content>
+                                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                             <children>
+                                                <GridPane layoutX="75.0" layoutY="15.0" prefHeight="255.0" prefWidth="279.0">
+                                                   <columnConstraints>
+                                                      <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                   </columnConstraints>
+                                                   <rowConstraints>
+                                                      <RowConstraints maxHeight="230.66661580403644" minHeight="10.0" prefHeight="183.33333333333334" valignment="CENTER" vgrow="SOMETIMES" />
+                                                      <RowConstraints maxHeight="135.9999491373698" minHeight="10.0" prefHeight="22.666656494140625" vgrow="SOMETIMES" />
+                                                      <RowConstraints maxHeight="135.9999491373698" minHeight="0.0" prefHeight="50.00001017252603" vgrow="SOMETIMES" />
+                                                   </rowConstraints>
+                                                   <children>
+                                                      <ImageView fx:id="img_disc_info" fitHeight="188.0" fitWidth="275.0" pickOnBounds="true" preserveRatio="true" />
+                                                      <Label fx:id="lab_discinfo_name" text="Label" textFill="WHITE" GridPane.rowIndex="1" />
+                                                   </children>
+                                                </GridPane>
+                                             </children></AnchorPane>
+                                       </content>
+                                    </Tab>
+                                    <Tab text="Canciones">
+                                       <content>
+                                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                             <children>
+                                                <TableView fx:id="table_disc_info_song" layoutX="45.0" layoutY="43.0" onMouseClicked="#goToPlayFromDisc" prefHeight="200.0" prefWidth="337.0" stylesheets="@../css/tables.css">
+                                                   <columns>
+                                                      <TableColumn fx:id="col_disc_info_song_name" prefWidth="106.0" text="Nombre" />
+                                                      <TableColumn fx:id="col_disc_info_song_genre" prefWidth="125.33332824707031" text="Género" />
+                                                      <TableColumn fx:id="col_disc_info_song_reproductions" prefWidth="105.33331298828125" text="Reproducciones" />
+                                                   </columns>
+                                                </TableView>
+                                             </children></AnchorPane>
+                                       </content>
+                                    </Tab>
+                                 </tabs>
+                              </TabPane>
+                              <Button fx:id="btn_user11" layoutX="415.0" layoutY="2.0" mnemonicParsing="false" onAction="#close_Disc_Pane" style="-fx-padding: 0; -fx-background-insets: 0; -fx-background-color: none;" text="X" textFill="WHITE">
+                                 <font>
+                                    <Font name="Modern No. 20" size="20.0" />
+                                 </font>
+                              </Button>
+                           </children>
+                        </Pane>
                      </children></AnchorPane>
             </content>
           </Tab>
@@ -86,5 +188,51 @@
       </TabPane>
       <Button fx:id="btn_managment" layoutX="562.0" layoutY="2.0" mnemonicParsing="false" onAction="#goToManagment" text="Dev" />
       <Button fx:id="playButton" layoutX="7.0" layoutY="360.0" mnemonicParsing="false" onAction="#play_pause" prefHeight="35.0" prefWidth="72.0" stylesheets="@../css/tables.css" />
+      <GridPane layoutX="455.0" layoutY="3.0" prefHeight="25.0" prefWidth="100.0">
+        <columnConstraints>
+          <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <Button fx:id="btn_user" mnemonicParsing="false" onAction="#open_Options_Pane" onMouseEntered="#changeColorUserName" onMouseExited="#changeColorDefaultUserName" style="-fx-padding: 0; -fx-background-insets: 0; -fx-background-color: none;" text="Button" textFill="WHITE">
+               <font>
+                  <Font name="Modern No. 20" size="20.0" />
+               </font>
+            </Button>
+         </children>
+      </GridPane>
+      <Pane fx:id="options_Pane" layoutX="451.0" layoutY="2.0" onMouseExited="#close_Options_Pane" prefHeight="87.0" prefWidth="149.0" style="-fx-background-color: #2a2a2a; -fx-background-radius: 5; -fx-effect: dropshadow( gaussian, rgba(0, 0, 0, 0.4), 10, 0.5, 0.0, 0.0 );" visible="false">
+         <children>
+            <GridPane layoutX="20.0" layoutY="13.0" prefHeight="61.0" prefWidth="110.0">
+               <columnConstraints>
+                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints maxHeight="32.33332824707031" minHeight="10.0" prefHeight="18.333330154418945" valignment="CENTER" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="37.00000317891439" minHeight="10.0" prefHeight="20.666661580403645" valignment="CENTER" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="22.0" minHeight="0.0" prefHeight="18.666671752929688" valignment="CENTER" vgrow="SOMETIMES" />
+               </rowConstraints>
+               <children>
+                  <Button fx:id="btn_delete_user" mnemonicParsing="false" onMouseEntered="#changeColor_delete_user" onMouseExited="#Default_delete_user" style="-fx-padding: 0; -fx-background-insets: 0; -fx-background-color: none;" text="Eliminar Usuario" textFill="WHITE" GridPane.rowIndex="2">
+                     <font>
+                        <Font name="Modern No. 20" size="12.0" />
+                     </font>
+                  </Button>
+                  <Label text="Configuración" textFill="#52a0ff">
+                     <font>
+                        <Font name="System Bold Italic" size="14.0" />
+                     </font>
+                  </Label>
+                  <Button fx:id="btn_close_sesion" mnemonicParsing="false" onMouseEntered="#changeColor_close_Session" onMouseExited="#Default_close_session" style="-fx-padding: 0; -fx-background-insets: 0; -fx-background-color: none;" text="Ver Perfil" textFill="WHITE" GridPane.rowIndex="1">
+                     <font>
+                        <Font name="Modern No. 20" size="12.0" />
+                     </font>
+                  </Button>
+               </children>
+            </GridPane>
+         </children>
+      </Pane>
    </children>
 </Pane>

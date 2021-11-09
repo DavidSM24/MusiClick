@@ -28,11 +28,9 @@ public class SongDAO {
 			+ "FROM song WHERE id=?;";
 	private static final String GETBYNAME = "SELECT id, name, id_artist,photo, url , duration, reproductions, id_genre, id_disc "
 			+ "FROM song WHERE LOWER(name) LIKE ?;";	
-	private static final String GETBYDISC ="SELECT s.id, s.name, s.id_artist, s.photo, s.url, s.duration, s.reproductions, s.id_genre , s.id_disc"
-			+ "FROM disc_song ds "
-			+ "INNER JOIN song s on ds.id_song=s.id "
-			+ "INNER JOIN disc d on ds.id_disc=d.id "
-			+ "WHERE d.id=?";
+	private static final String GETBYDISC ="SELECT s.id, s.name, s.id_artist, s.photo, s.url, s.duration, s.reproductions, s.id_genre , s.id_disc "
+			+ "FROM song s "
+			+ "WHERE id_disc=?";
 	private final static String GETBYREPROSONGS="SELECT s.id, s.name, s.id_artist,s.photo,s.url,s.duration,s.reproductions,s.id_genre,s.id_disc "
 			+ "FROM reproductionList_song rs "
 			+ "INNER JOIN song s on s.id=rs.id_song "
@@ -412,6 +410,7 @@ public class SongDAO {
 	}
 	
 	public static void deleteAll() {
+		
 		int rs=0;
 		Connection con = MDBConexion.getConexion();
 		PreparedStatement ps=null;

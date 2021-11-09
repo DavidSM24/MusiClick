@@ -3,23 +3,26 @@ package MusiClick.models;
 public class Artist {
 	private int id;
 	private String name;
+	private String description;
 	private String photo;
 	
 	public Artist() {
-		this(-1,"","");
+		this(-1,"","","");
 	}
 	
-	public Artist(int id, String name, String photo) {
+	public Artist(int id, String name,String description, String photo) {
 		super();
 		this.id = id;
 		this.name = name;
+		this.description=description;
 		this.photo = photo;
 	}
 
-	public Artist(String name, String photo) {
+	public Artist(String name,String description, String photo) {
 		super();
 		this.id=-1;
 		this.name = name;
+		this.description=description;
 		this.photo = photo;
 	}
 
@@ -37,6 +40,14 @@ public class Artist {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+	
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 	public String getPhoto() {

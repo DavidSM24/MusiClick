@@ -116,7 +116,7 @@ public class Mail_Validation_Controller {
 					PrimaryController primary= loader.getController();
 					Timestamp ts=new Timestamp(System.currentTimeMillis());
 					Sesion s=new Sesion(SesionDAO.getNewId(),user.getId(),ts);
-					primary.setController(s);
+					primary.setController(user,s);
 					primary.sendSession();
 					Scene scene= new Scene(root);
 					Stage stage2= new Stage();

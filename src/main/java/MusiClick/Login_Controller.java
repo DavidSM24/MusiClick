@@ -171,7 +171,7 @@ public class Login_Controller {
 							Timestamp ts=new Timestamp(System.currentTimeMillis());
 							Sesion s=new Sesion(SesionDAO.getNewId(),user.getId(),ts);
 							PrimaryController primary= loader.getController();
-							primary.setController(s);
+							primary.setController(user,s);
 							primary.sendSession();
 							Scene scene= new Scene(root);
 							Stage stage2= new Stage();
