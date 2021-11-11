@@ -58,13 +58,8 @@
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="336.0" prefWidth="600.0">
                      <children>
-                        <TableView fx:id="table_song" layoutY="36.0" onKeyPressed="#select_Song" onMouseClicked="#select_Song" prefHeight="283.0" prefWidth="171.0" stylesheets="@../css/tables.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="2.0" AnchorPane.topAnchor="36.0">
-                          <columns>
-                            <TableColumn fx:id="col_song_name" prefWidth="169.66666412353516" text="Canciones" />
-                          </columns>
-                        </TableView>
-                        <TextField fx:id="txt_filter" layoutX="3.0" layoutY="6.0" onKeyReleased="#filter_Songs_ByName" prefHeight="25.0" prefWidth="169.0" promptText="Filtrar..." />
-                        <GridPane layoutX="254.0" layoutY="31.0" prefHeight="255.0" prefWidth="279.0">
+                        <TextField fx:id="txt_filter" layoutX="3.0" layoutY="6.0" onKeyReleased="#filter_Songs_Discs_ByName" prefHeight="25.0" prefWidth="169.0" promptText="Filtrar..." />
+                        <GridPane layoutX="254.0" layoutY="31.0" prefHeight="277.0" prefWidth="279.0">
                           <columnConstraints>
                             <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                           </columnConstraints>
@@ -76,11 +71,33 @@
                           </rowConstraints>
                            <children>
                               <ImageView fx:id="img_song" fitHeight="188.0" fitWidth="275.0" pickOnBounds="true" preserveRatio="true" />
-                              <Label fx:id="lab_song_name" text="Label" GridPane.rowIndex="1" />
+                              <Label fx:id="lab_song_name" text="Label" GridPane.rowIndex="1">
+                                 <font>
+                                    <Font name="System Bold" size="13.0" />
+                                 </font></Label>
                               <Label fx:id="lab_song_disc" onMouseClicked="#open_Disc_Pane" onMouseEntered="#changeColor_disc_Info" onMouseExited="#changeColorDefault_disc_Info" text="Label" GridPane.rowIndex="3" />
                               <Label fx:id="lab_song_artist" onMouseClicked="#open_Artist_Pane" onMouseEntered="#changeColor_Artist_Info" onMouseExited="#changeColorDefault_Artist_Info" text="Label" GridPane.rowIndex="2" />
                            </children>
                         </GridPane>
+                        <Label layoutX="55.0" layoutY="115.0" text="Sin Canciones" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                        </Label>
+                        <Label layoutX="60.0" layoutY="260.0" text="Sin Discos" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font></Label>
+                        <TableView fx:id="table_song" layoutY="36.0" onKeyPressed="#select_Song" onMouseClicked="#select_Song" prefHeight="151.0" prefWidth="171.0" stylesheets="@../css/tables.css" AnchorPane.bottomAnchor="132.0" AnchorPane.leftAnchor="2.0" AnchorPane.topAnchor="36.0">
+                          <columns>
+                            <TableColumn fx:id="col_song_name" prefWidth="169.66666412353516" text="Canciones" />
+                          </columns>
+                        </TableView>
+                        <TableView fx:id="table_disc" layoutX="2.0" layoutY="190.0" onMouseClicked="#goToDiscFromDiscs" prefHeight="127.0" prefWidth="171.0" stylesheets="@../css/tables.css">
+                           <columns>
+                              <TableColumn fx:id="col_disc_name" prefWidth="169.66666412353516" text="Discos" />
+                           </columns>
+                        </TableView>
                         <Pane fx:id="black_pane" opacity="0.85" prefHeight="319.0" prefWidth="600.0" style="-fx-background-color: black;" visible="false" />
                         <Pane fx:id="artist_pane" layoutX="90.0" layoutY="3.0" onMouseExited="#close_Options_Pane" prefHeight="315.0" prefWidth="429.0" style="-fx-background-color: #2a2a2a; -fx-background-radius: 5; -fx-effect: dropshadow( gaussian, rgba(0, 0, 0, 0.4), 10, 0.5, 0.0, 0.0 );" visible="false">
                            <children>
@@ -100,8 +117,11 @@
                                                       <RowConstraints maxHeight="135.9999491373698" minHeight="0.0" prefHeight="50.00001017252603" vgrow="SOMETIMES" />
                                                    </rowConstraints>
                                                    <children>
-                                                      <ImageView fx:id="img_artist_info" fitHeight="188.0" fitWidth="275.0" pickOnBounds="true" preserveRatio="true" />
-                                                      <Label fx:id="lab_artistinfo_name" text="Label" textFill="WHITE" GridPane.rowIndex="1" />
+                                                      <ImageView fx:id="img_artist_info" fitHeight="164.0" fitWidth="249.0" pickOnBounds="true" preserveRatio="true" />
+                                                      <Label fx:id="lab_artistinfo_name" text="Label" textFill="WHITE" GridPane.rowIndex="1">
+                                                         <font>
+                                                            <Font name="System Bold" size="13.0" />
+                                                         </font></Label>
                                                       <Label fx:id="lab_artistinfo_description" text="Label" textAlignment="JUSTIFY" textFill="WHITE" GridPane.rowIndex="2" />
                                                    </children>
                                                 </GridPane>
@@ -113,6 +133,11 @@
                                     <content>
                                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                              <children>
+                                                <Label layoutX="186.0" layoutY="128.0" text="Sin Discos" textFill="WHITE">
+                                                   <font>
+                                                      <Font name="System Bold" size="12.0" />
+                                                   </font>
+                                                </Label>
                                                 <TableView fx:id="table_artist_info_disc" layoutX="45.0" layoutY="43.0" onMouseClicked="#goToDisc" prefHeight="200.0" prefWidth="337.0" stylesheets="@../css/tables.css">
                                                   <columns>
                                                     <TableColumn fx:id="col_artist_info_disc_name" prefWidth="106.0" text="Nombre" />
@@ -141,18 +166,22 @@
                                        <content>
                                           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                              <children>
-                                                <GridPane layoutX="75.0" layoutY="15.0" prefHeight="255.0" prefWidth="279.0">
+                                                <GridPane layoutX="75.0" layoutY="15.0" prefHeight="231.0" prefWidth="279.0">
                                                    <columnConstraints>
                                                       <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                                    </columnConstraints>
                                                    <rowConstraints>
-                                                      <RowConstraints maxHeight="230.66661580403644" minHeight="10.0" prefHeight="183.33333333333334" valignment="CENTER" vgrow="SOMETIMES" />
-                                                      <RowConstraints maxHeight="135.9999491373698" minHeight="10.0" prefHeight="22.666656494140625" vgrow="SOMETIMES" />
-                                                      <RowConstraints maxHeight="135.9999491373698" minHeight="0.0" prefHeight="50.00001017252603" vgrow="SOMETIMES" />
+                                                      <RowConstraints maxHeight="230.66661580403644" minHeight="10.0" prefHeight="190.3333485921224" valignment="CENTER" vgrow="SOMETIMES" />
+                                                      <RowConstraints maxHeight="135.9999491373698" minHeight="10.0" prefHeight="25.999974568684905" vgrow="SOMETIMES" />
+                                                      <RowConstraints maxHeight="135.9999491373698" minHeight="10.0" prefHeight="30.66669209798178" vgrow="SOMETIMES" />
                                                    </rowConstraints>
                                                    <children>
-                                                      <ImageView fx:id="img_disc_info" fitHeight="188.0" fitWidth="275.0" pickOnBounds="true" preserveRatio="true" />
-                                                      <Label fx:id="lab_discinfo_name" text="Label" textFill="WHITE" GridPane.rowIndex="1" />
+                                                      <ImageView fx:id="img_disc_info" fitHeight="162.0" fitWidth="275.0" pickOnBounds="true" preserveRatio="true" />
+                                                      <Label fx:id="lab_discinfo_name" text="Label" textFill="WHITE" GridPane.rowIndex="1">
+                                                         <font>
+                                                            <Font name="System Bold" size="13.0" />
+                                                         </font></Label>
+                                                      <Label fx:id="lab_discinfo_artist" onMouseClicked="#goToArtistFromDiscInPane" onMouseEntered="#changeColor_Disc_Info_Artist" onMouseExited="#changeColorDefault_Disc_Info_Artist" text="Label" textFill="WHITE" GridPane.rowIndex="2" />
                                                    </children>
                                                 </GridPane>
                                              </children></AnchorPane>

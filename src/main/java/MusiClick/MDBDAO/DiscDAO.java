@@ -9,33 +9,38 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
-
 import MusiClick.models.Artist;
 import MusiClick.models.Disc;
 import MusiClick.models.Genre;
 import MusiClick.models.Song;
+import MusiClick.utils.Converter;
 import MusiClick.utils.MDBConexion;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 public class DiscDAO {
-	public static List<Disc> discs = new ArrayList<Disc>();
-
-	private static Connection con = null;
 
 	private static final String GETALL = "SELECT id, name, date,photo, reproductions, id_artist FROM disc;";
 	private static final String GETBYID = "SELECT id, name, date,photo, reproductions, id_artist " + "FROM disc "
 			+ "WHERE id=?;";
-	private final static String GETBYARTIST = "SELECT id, name, date,photo, reproductions, id_artist "
-			+ "FROM disc "
+	private final static String GETBYARTIST = "SELECT id, name, date,photo, reproductions, id_artist " + "FROM disc "
 			+ "WHERE id_artist=?";
-//	private static final String GETBYNAME = "SELECT id, name, id_artist,photo, url , duration, reproductions, id_genre "
-//			+ "FROM song WHERE name LIKE ?;";
+	private static final String GETBYNAME = "SELECT id, name, date,photo,reproductions,id_artist " + "FROM disc "
+			+ "WHERE LOWER(name) LIKE ? " + "AND id NOT LIKE(1);";
+	private static final String GETBYARTISTNAME = "SELECT d.id,d.name,d.date,d.photo,d.reproductions,d.id_artist "
+			+ "FROM disc d " + "INNER JOIN artist a on a.id=d.id_artist " + "WHERE LOWER(a.name) LIKE ? "
+			+ "AND d.id NOT LIKE(1);";
 	private final static String INSERT_UPDATE = "INSERT INTO disc (id, name, date, photo, reproductions, id_artist) "
 			+ "VALUES (?, ?, ?, ?, ?, ?) "
 			+ "ON DUPLICATE KEY UPDATE name=?,date=?,photo=?,reproductions=?,id_artist=?;";
 	private final static String DELETE = "DELETE FROM disc WHERE id IN ";
 	private final static String DELETEALL = "DELETE FROM disc;";
+	private final static String UPLOADVIEWS = "UPDATE disc " + "SET reproductions= reproductions+1 "
+			+ "WHERE disc.id=?;";
+
+	public static List<Disc> discs = new ArrayList<Disc>();
+
+	private static Connection con = null;
 
 	public static List<Disc> getAll() { // los devuelve vacios
 
@@ -51,7 +56,7 @@ public class DiscDAO {
 				while (rs.next()) {
 					// int id, String name, LocalDate date, String photo, int reproductions,Artist
 					// main_artist,ObservableList<Song> song
-					
+
 					Artist aaux = ArtistDAO.getById(rs.getInt("id_artist"));
 					if (ArtistDAO.artists.contains(aaux)) {
 						int index = ArtistDAO.artists.indexOf(aaux);
@@ -112,32 +117,27 @@ public class DiscDAO {
 		return result;
 	}
 
-	public static List<Disc> getByArtist(Artist a) {
-		List<Disc>result=FXCollections.observableArrayList();
+	public static List<Disc> getByName(String name) {
+		List<Disc> result = new ArrayList<Disc>();
 
 		con = MDBConexion.getConexion();
 		if (con != null) {
 			PreparedStatement ps = null;
 			ResultSet rs = null;
 			try {
-				ps = con.prepareStatement(GETBYARTIST);
-				ps.setInt(1, a.getId());
+				ps = con.prepareStatement(GETBYNAME);
+				ps.setString(1, "%" + name.toLowerCase() + "%");
 				rs = ps.executeQuery();
+
 				while (rs.next()) {
-					
+
+					Disc aux = new Disc();
+					aux.setId(rs.getInt("id"));
 					Artist aaux = ArtistDAO.getById(rs.getInt("id_artist"));
-					if (ArtistDAO.artists.contains(aaux)) {
-						int index = ArtistDAO.artists.indexOf(aaux);
-						aaux = ArtistDAO.artists.get(index);
-					}
-					
-					Disc d=new Disc();
-					d.setId(rs.getInt("id"));
-					List<Song> saux=SongDAO.getByDisc(d);
+					List<Song> saux = Converter.song_Converter(SongDAO.getByDisc(aux));
 
 					result.add(new Disc(rs.getInt("id"), rs.getString("name"), (rs.getDate("date")).toLocalDate(),
-							rs.getString("photo"), rs.getInt("reproductions"), aaux,
-							saux));
+							rs.getString("photo"), rs.getInt("reproductions"), aaux, saux));
 				}
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
@@ -151,7 +151,85 @@ public class DiscDAO {
 				}
 			}
 		}
-		
+		return result;
+	}
+
+	public static List<Disc> getByArtist(Artist a) {
+		List<Disc> result = FXCollections.observableArrayList();
+
+		con = MDBConexion.getConexion();
+		if (con != null) {
+			PreparedStatement ps = null;
+			ResultSet rs = null;
+			try {
+				ps = con.prepareStatement(GETBYARTIST);
+				ps.setInt(1, a.getId());
+				rs = ps.executeQuery();
+				while (rs.next()) {
+
+					Artist aaux = ArtistDAO.getById(rs.getInt("id_artist"));
+					if (ArtistDAO.artists.contains(aaux)) {
+						int index = ArtistDAO.artists.indexOf(aaux);
+						aaux = ArtistDAO.artists.get(index);
+					}
+
+					Disc d = new Disc();
+					d.setId(rs.getInt("id"));
+					List<Song> saux = SongDAO.getByDisc(d);
+
+					result.add(new Disc(rs.getInt("id"), rs.getString("name"), (rs.getDate("date")).toLocalDate(),
+							rs.getString("photo"), rs.getInt("reproductions"), aaux, saux));
+				}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} finally {
+				try {
+					ps.close();
+					rs.close();
+				} catch (SQLException e) {
+					// TODO: handle exception
+				}
+			}
+		}
+
+		return result;
+	}
+
+	public static List<Disc> getByArtistName(String name) {
+		List<Disc> result = new ArrayList<Disc>();
+
+		con = MDBConexion.getConexion();
+		if (con != null) {
+			PreparedStatement ps = null;
+			ResultSet rs = null;
+			try {
+				ps = con.prepareStatement(GETBYARTISTNAME);
+				ps.setString(1, "%" + name.toLowerCase() + "%");
+				rs = ps.executeQuery();
+
+				while (rs.next()) {
+
+					Disc aux = new Disc();
+					aux.setId(rs.getInt("id"));
+					Artist aaux = ArtistDAO.getById(rs.getInt("id_artist"));
+					List<Song> saux = Converter.song_Converter(SongDAO.getByDisc(aux));
+
+					result.add(new Disc(rs.getInt("id"), rs.getString("name"), (rs.getDate("date")).toLocalDate(),
+							rs.getString("photo"), rs.getInt("reproductions"), aaux, saux));
+				}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} finally {
+				try {
+					ps.close();
+					rs.close();
+				} catch (SQLException e) {
+					// TODO: handle exception
+				}
+			}
+		}
 		return result;
 	}
 
@@ -249,6 +327,30 @@ public class DiscDAO {
 			try {
 
 				ps = con.prepareStatement(DELETEALL);
+				rs = ps.executeUpdate();
+
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} finally {
+				try {
+					ps.close();
+				} catch (SQLException e) {
+					// TODO: handle exception
+				}
+			}
+		}
+	}
+
+	public static void upload_Views(Disc d) {
+		int rs = 0;
+		Connection con = MDBConexion.getConexion();
+		PreparedStatement ps = null;
+		if (con != null) {
+			try {
+
+				ps = con.prepareStatement(UPLOADVIEWS);
+				ps.setInt(1, d.getId());
 				rs = ps.executeUpdate();
 
 			} catch (SQLException e) {

@@ -291,7 +291,7 @@
                            </children>
                         </GridPane>
                         <TextField layoutX="10.0" layoutY="314.0" prefHeight="25.0" prefWidth="233.0" />
-                        <Pane layoutX="257.0" layoutY="205.0" prefHeight="34.0" prefWidth="150.0" />
+                        <Pane layoutX="257.0" layoutY="205.0" prefHeight="34.0" prefWidth="123.0" />
                      </children>
                   </AnchorPane>
                </content>

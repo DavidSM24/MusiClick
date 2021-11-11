@@ -7,6 +7,7 @@ import java.sql.Timestamp;
 import MusiClick.MDBDAO.DiscDAO;
 import MusiClick.MDBDAO.SesionDAO;
 import MusiClick.MDBDAO.SongDAO;
+import MusiClick.models.Artist;
 import MusiClick.models.Disc;
 import MusiClick.models.Sesion;
 import MusiClick.models.Song;
@@ -45,8 +46,15 @@ public class PrimaryController {
 
 	// PRIMARY
 
+	ObservableList<Song> listened;
+	
 	ObservableList<Song> songs;
+	ObservableList<Disc> discs;
+
 	Song song = new Song();
+	Disc disc = new Disc();
+	Disc discInPane=new Disc();
+
 	User u = null;
 
 	@FXML
@@ -57,7 +65,7 @@ public class PrimaryController {
 	@FXML
 	private Pane options_Pane;
 
-	// SONG TAB
+	// SEARCHER TAB
 
 	@FXML
 	private Pane black_pane;
@@ -71,8 +79,18 @@ public class PrimaryController {
 	@FXML
 	private Pane disc_pane;
 	@FXML
-
 	private ImageView img_song;
+
+	@FXML
+	private TableView<Song> table_song;
+	@FXML
+	private TableColumn<Song, String> col_song_name;
+
+	@FXML
+	private TableView<Disc> table_disc;
+	@FXML
+	private TableColumn<Disc, String> col_disc_name;
+
 	@FXML
 	private Label lab_song_name;
 	@FXML
@@ -107,6 +125,8 @@ public class PrimaryController {
 	@FXML
 	private Label lab_discinfo_name;
 	@FXML
+	private Label lab_discinfo_artist;
+	@FXML
 	private TableView<Song> table_disc_info_song;
 	@FXML
 	private TableColumn<Song, String> col_disc_info_song_name;
@@ -116,12 +136,6 @@ public class PrimaryController {
 	private TableColumn<Song, String> col_disc_info_song_reproductions;
 
 	// REPRODUCTOR
-
-	@FXML
-
-	private TableView<Song> table_song;
-	@FXML
-	private TableColumn<Song, String> col_song_name;
 
 	private MediaPlayer mp;
 	@FXML
@@ -153,6 +167,8 @@ public class PrimaryController {
 		this.u = u;
 		btn_user.setText(u.getUsername());
 
+		listened=FXCollections.observableArrayList();
+		
 		playButton.setText("►");
 
 		lab_song_name.setText("");
@@ -163,8 +179,11 @@ public class PrimaryController {
 		lab_song_artist.setStyle("-fx-text-fill:white;");
 		lab_song_disc.setStyle("-fx-text-fill:white;");
 
+		discs = Converter.disc_Converter(DiscDAO.getAll());
+		discs.remove(0);
 		songs = Converter.song_Converter(SongDAO.getAll());
 		table_song.setItems(songs);
+		table_disc.setItems(discs);
 
 		setTableAndDetailsInfo();
 	}
@@ -246,6 +265,14 @@ public class PrimaryController {
 			v.setValue(eachsong.getValue().getArtist().getName() + " - " + eachsong.getValue().getName());
 			return v;
 		});
+
+		if (discs != null && discs.size() > 0) {
+			col_disc_name.setCellValueFactory(eachdisc -> {
+				SimpleStringProperty v = new SimpleStringProperty();
+				v.setValue(eachdisc.getValue().getMain_artist().getName() + " - " + eachdisc.getValue().getName());
+				return v;
+			});
+		}
 
 	}
 
@@ -448,13 +475,25 @@ public class PrimaryController {
 			} catch (Exception e) {
 				// TODO: handle exception
 			}
+			
+			if(!listened.contains(song)) {
+				listened.add(song);
+				SongDAO.upload_Views(song);
+				if(song.getDisc()!=null && song.getDisc().getId()!=1) {
+					Disc aux=song.getDisc();
+					DiscDAO.upload_Views(aux);
+				}
+				
+				
+			}
+			
 			setSongInPlayer(song.getMedia());
 		}
 	}
-	
+
 	@FXML
 	private void select_Song(Song s) {
-		if (s!=null) {
+		if (s != null) {
 			song = s;
 
 			File f = new File(song.getPhoto());
@@ -479,25 +518,60 @@ public class PrimaryController {
 	}
 
 	@FXML
-	public void filter_Songs_ByName() {
+	public void filter_Songs_Discs_ByName() {
 		if (!txt_filter.getText().matches("")) {
 			ObservableList<Song> filter = FXCollections.observableArrayList();
 			ObservableList<Song> filter2 = FXCollections.observableArrayList();
+			ObservableList<Song> filter3 =FXCollections.observableArrayList();
+		
+			ObservableList<Disc> filter4=FXCollections.observableArrayList();
+			ObservableList<Disc> filter5=FXCollections.observableArrayList();
+			
 			filter = Converter.song_Converter(SongDAO.getByName(txt_filter.getText()));
 			filter2 = Converter.song_Converter(SongDAO.getByArtistName(txt_filter.getText()));
+			filter3= Converter.song_Converter(SongDAO.getByDisc(txt_filter.getText()));
 			filter.addAll(filter2);
+			filter.addAll(filter3);
+			
+			filter4=Converter.disc_Converter(DiscDAO.getByName(txt_filter.getText()));
+			filter5=Converter.disc_Converter(DiscDAO.getByArtistName(txt_filter.getText()));
+			filter4.addAll(filter5);
+			
 			table_song.setItems(filter);
+			
+			
+			table_disc.setItems(filter4);
+			
+			if(filter.size()<1) {
+				table_song.setVisible(false);
+			}
+			else {
+				table_song.setVisible(true);
+			}
+			
+			if(filter4.size()<1) {
+				table_disc.setVisible(false);
+			}
+			else {
+				table_disc.setVisible(true);
+			}
+			
 			setTableAndDetailsInfo();
 		} else {
 			table_song.setItems(songs);
+			table_disc.setItems(discs);
+			table_song.setVisible(true);
+			table_disc.setVisible(true);
 			setTableAndDetailsInfo();
 		}
 	}
-
+	
 	@FXML
 	private void open_Artist_Pane() {
 		if (song != null) {
 
+			table_artist_info_disc.setVisible(true);
+			
 			File f2 = new File(song.getArtist().getPhoto());
 			Image artist_song = new Image("file:" + f2.getPath());
 			img_artist_info.setImage(artist_song);
@@ -508,6 +582,10 @@ public class PrimaryController {
 			setDetailsAndTableInfoArtist();
 			table_artist_info_disc.getSelectionModel().select(null);
 
+			if(disc_by_artist.size()<1) {
+				table_artist_info_disc.setVisible(false);
+			}
+			
 			tab_artist_info.getSelectionModel().select(0);
 			black_pane.setVisible(true);
 			artist_pane.setVisible(true);
@@ -515,6 +593,32 @@ public class PrimaryController {
 
 	}
 
+	@FXML
+	private void open_Artist_Pane(Artist a) { //from discs
+		
+		close_Disc_Pane();
+		
+		table_artist_info_disc.setVisible(true);
+		
+		File f2 = new File(a.getPhoto());
+		Image artist_song = new Image("file:" + f2.getPath());
+		img_artist_info.setImage(artist_song);
+		lab_artistinfo_name.setText((a.getName()));
+		lab_artistinfo_description.setText(a.getDescription());
+		ObservableList<Disc> disc_by_artist = Converter.disc_Converter(DiscDAO.getByArtist(a));
+		table_artist_info_disc.setItems(disc_by_artist);
+		setDetailsAndTableInfoArtist();
+		table_artist_info_disc.getSelectionModel().select(null);
+
+		if(disc_by_artist.size()<1) {
+			table_artist_info_disc.setVisible(false);
+		}
+		
+		tab_artist_info.getSelectionModel().select(0);
+		black_pane.setVisible(true);
+		artist_pane.setVisible(true);
+	}
+	
 	@FXML
 	private void close_Artist_Pane() {
 		artist_pane.setVisible(false);
@@ -527,29 +631,36 @@ public class PrimaryController {
 	private void open_Disc_Pane() {
 		if (song != null) {
 
+			discInPane=song.getDisc();
+			
 			File f2 = new File(song.getDisc().getPhoto());
 			Image disc_song = new Image("file:" + f2.getPath());
 			img_disc_info.setImage(disc_song);
 			lab_discinfo_name.setText((song.getDisc().getName()));
+			lab_discinfo_artist.setText((song.getDisc().getMain_artist().getName()));
 			ObservableList<Song> songs_by_disc = Converter.song_Converter(SongDAO.getByDisc(song.getDisc()));
 			table_disc_info_song.setItems(songs_by_disc);
-			setDetailsAndTableInfoDisc();			
+			setDetailsAndTableInfoDisc();
 			table_disc_info_song.getSelectionModel().select(null);
-			
+
 			tab_disc_info.getSelectionModel().select(0);
 			black_pane.setVisible(true);
 			disc_pane.setVisible(true);
 		}
 	}
 
-
 	@FXML
 	private void open_Disc_Pane(Disc d) {
+
+		discInPane=d;
+		
+		disc=d;
 		
 		File f2 = new File(d.getPhoto());
 		Image disc_song = new Image("file:" + f2.getPath());
 		img_disc_info.setImage(disc_song);
 		lab_discinfo_name.setText(d.getName());
+		lab_discinfo_artist.setText(d.getMain_artist().getName());
 		ObservableList<Song> songs_by_disc = Converter.song_Converter(d.getSongs());
 		table_disc_info_song.setItems(songs_by_disc);
 		setDetailsAndTableInfoDisc();
@@ -562,6 +673,7 @@ public class PrimaryController {
 
 	@FXML
 	private void close_Disc_Pane() {
+		table_disc.getSelectionModel().select(null);
 		disc_pane.setVisible(false);
 		lab_song_artist.setTextFill(Color.WHITE);
 		lab_song_disc.setTextFill(Color.WHITE);
@@ -572,19 +684,37 @@ public class PrimaryController {
 	private void goToDisc() {
 		close_Artist_Pane();
 		Disc aux = table_artist_info_disc.getSelectionModel().getSelectedItem();
-		if(aux!=null) {
+		if (aux != null) {
 			open_Disc_Pane(aux);
 		}
-		
 
+	}
+
+	@FXML
+	private void goToDiscFromDiscs() {
+		Disc aux = table_disc.getSelectionModel().getSelectedItem();
+		if (aux != null) {
+			open_Disc_Pane(aux);
+		}
+	}
+	
+	@FXML
+	private void goToArtistFromDiscs() {
+		open_Artist_Pane(disc.getMain_artist());
+		
+	}
+	
+	@FXML
+	private void goToArtistFromDiscInPane() {
+		open_Artist_Pane(discInPane.getMain_artist());
 	}
 	
 	@FXML
 	private void goToPlayFromDisc() {
-		Song aux=table_disc_info_song.getSelectionModel().getSelectedItem();
+		Song aux = table_disc_info_song.getSelectionModel().getSelectedItem();
 		if (!song.equals(aux)) {
 			song = aux;
-			
+
 			table_song.getSelectionModel().select(aux);
 			select_Song(aux);
 			close_Disc_Pane();
@@ -654,6 +784,16 @@ public class PrimaryController {
 		lab_song_artist.setTextFill(Color.WHITE);
 	}
 
+	@FXML
+	private void changeColor_Disc_Info_Artist() {
+		lab_discinfo_artist.setTextFill(Color.CORNFLOWERBLUE);
+	}
+	
+	@FXML
+	private void changeColorDefault_Disc_Info_Artist() {
+		lab_discinfo_artist.setTextFill(Color.WHITE);
+	}
+	
 	@FXML
 	private Button btn_close_sesion;
 	@FXML
