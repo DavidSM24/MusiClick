@@ -3,6 +3,9 @@ package MusiClick;
 import java.io.File;
 import java.io.IOException;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 
 import MusiClick.MDBDAO.DiscDAO;
 import MusiClick.MDBDAO.SesionDAO;
@@ -45,7 +48,7 @@ import javafx.util.Duration;
 public class PrimaryController {
 
 	// PRIMARY
-
+	ObservableList<Song> songsToReproduce;
 	ObservableList<Song> listened;
 	
 	ObservableList<Song> songs;
@@ -58,7 +61,11 @@ public class PrimaryController {
 	User u = null;
 
 	@FXML
-	Button btn_delete_User;
+	private Button btn_close_sesion;
+	@FXML
+	private Button btn_delete_user;
+	@FXML
+	private Button btn_delete_User;
 
 	@FXML
 	private Button btn_user;
@@ -188,73 +195,113 @@ public class PrimaryController {
 		setTableAndDetailsInfo();
 	}
 
-	public void setSongInPlayer(String url) {
+	public void setSongInPlayer(ObservableList<Song> saux) {
 
-		File filestring = new File(url);
-		Media media = new Media(filestring.toURI().toString());
-		mp = new MediaPlayer(media);
-		mp.stop();
-		mediaView.setMediaPlayer(mp);
-		mp.setAutoPlay(true);
-
-		mp.currentTimeProperty().addListener(new InvalidationListener() {
-			public void invalidated(Observable ov) {
-				updateValues();
+		try {
+			
+			File filestring = new File(saux.get(0).getMedia());
+			Media media = new Media(filestring.toURI().toString());
+			mp = new MediaPlayer(media);
+			mp.stop();
+			
+			song=saux.get(0);
+			
+			if(!listened.contains(song)) {
+				listened.add(song);
+				SongDAO.upload_Views(song);
+				if(song.getDisc()!=null && song.getDisc().getId()!=1) {
+					Disc aux=song.getDisc();
+					DiscDAO.upload_Views(aux);
+				}	
 			}
-		});
+			
+			if(table_song.getItems().contains(song)) {
+				table_song.getSelectionModel().select(song);
+			}
+			
+			show_Song_Info(song);
+			saux.remove(0);
+			
+			mediaView.setMediaPlayer(mp);
+			mp.setAutoPlay(true);
 
-		mp.setOnPlaying(new Runnable() {
-			public void run() {
-				if (stopRequested) {
-					mp.pause();
-					stopRequested = false;
-				} else {
-					playButton.setText("||");
+			mp.currentTimeProperty().addListener(new InvalidationListener() {
+				public void invalidated(Observable ov) {
+					updateValues();
 				}
-			}
-		});
+			});
 
-		mp.setOnPaused(new Runnable() {
-			public void run() {
-				System.out.println("onPaused");
-				playButton.setText("►");
-			}
-		});
+			mp.setOnPlaying(new Runnable() {
+				public void run() {
+					if (stopRequested) {
+						mp.pause();
+						stopRequested = false;
+					} else {
+						playButton.setText("||");
+					}
+				}
+			});
 
-		mp.setOnReady(new Runnable() {
-			public void run() {
-				duration = mp.getMedia().getDuration();
-				updateValues();
-			}
-		});
-
-		mp.setCycleCount(repeat ? MediaPlayer.INDEFINITE : 1);
-		mp.setOnEndOfMedia(new Runnable() {
-			public void run() {
-				if (!repeat) {
+			mp.setOnPaused(new Runnable() {
+				public void run() {
+					System.out.println("onPaused");
 					playButton.setText("►");
-					stopRequested = true;
-					atEndOfMedia = true;
 				}
-			}
-		});
+			});
 
-		timeSlider.valueProperty().addListener(new InvalidationListener() {
-			public void invalidated(Observable ov) {
-				if (timeSlider.isValueChanging()) {
-					// multiply duration by percentage calculated by slider position
-					mp.seek(duration.multiply(timeSlider.getValue() / 100.0));
+			mp.setOnReady(new Runnable() {
+				public void run() {
+					duration = mp.getMedia().getDuration();
+					updateValues();
 				}
-			}
-		});
+			});
 
-		volumeSlider.valueProperty().addListener(new InvalidationListener() {
-			public void invalidated(Observable ov) {
-				if (volumeSlider.isValueChanging()) {
-					mp.setVolume(volumeSlider.getValue() / 100.0);
+			mp.setCycleCount(repeat ? MediaPlayer.INDEFINITE : 1);
+			mp.setOnEndOfMedia(new Runnable() {
+				public void run() {
+					if (!repeat) {
+						playButton.setText("►");
+						stopRequested = true;
+						atEndOfMedia = true;
+					}
 				}
-			}
-		});
+			});
+
+			timeSlider.valueProperty().addListener(new InvalidationListener() {
+				public void invalidated(Observable ov) {
+					if (timeSlider.isValueChanging()) {
+						// multiply duration by percentage calculated by slider position
+						mp.seek(duration.multiply(timeSlider.getValue() / 100.0));
+					}
+				}
+			});
+
+			volumeSlider.valueProperty().addListener(new InvalidationListener() {
+				public void invalidated(Observable ov) {
+					if (volumeSlider.isValueChanging()) {
+						mp.setVolume(volumeSlider.getValue() / 100.0);
+					}
+				}
+			});
+			
+			mp.setOnEndOfMedia(new Runnable() {
+				
+				@Override
+				public void run() {
+					// TODO Auto-generated method stub
+					
+					if(saux.size()>0) {
+						setSongInPlayer(saux);
+					}
+					
+					
+				}
+			});
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		
+		
 	}
 
 	public void setTableAndDetailsInfo() {
@@ -458,17 +505,7 @@ public class PrimaryController {
 				&& !song.equals(table_song.getSelectionModel().getSelectedItem())) {
 			song = table_song.getSelectionModel().getSelectedItem();
 
-			File f = new File(song.getPhoto());
-			Image face = new Image("file:" + f.getPath());
-			img_song.setImage(face);
-
-			lab_song_name.setText(song.getName());
-			lab_song_artist.setText("Artista: " + song.getArtist().getName());
-			if (song.getDisc().getId() != 1) {
-				lab_song_disc.setText("Disco: " + song.getDisc().getName());
-			} else {
-				lab_song_disc.setText("");
-			}
+			show_Song_Info(song);
 
 			try {
 				mp.stop();
@@ -476,18 +513,38 @@ public class PrimaryController {
 				// TODO: handle exception
 			}
 			
-			if(!listened.contains(song)) {
-				listened.add(song);
-				SongDAO.upload_Views(song);
-				if(song.getDisc()!=null && song.getDisc().getId()!=1) {
-					Disc aux=song.getDisc();
-					DiscDAO.upload_Views(aux);
-				}
-				
-				
+			songsToReproduce=FXCollections.observableArrayList();
+			
+			List<Song> filter_1=SongDAO.getByDisc(song.getDisc());
+			List<Song> filter_2=SongDAO.getByArtistId(song.getArtist());
+			List<Song> filter_3=SongDAO.getByGenre(song.getGenre());
+			songsToReproduce=FXCollections.observableArrayList();
+			
+			List<Song> duplicated_filter= new ArrayList<Song>();
+			duplicated_filter.addAll(filter_1);
+			duplicated_filter.addAll(filter_2);
+			duplicated_filter.addAll(filter_3);
+			
+			duplicated_filter=new ArrayList<>(
+				      new HashSet<>(duplicated_filter));
+			
+			if(filter_1.size()>0) {
+				songsToReproduce.addAll(filter_1);
+			}
+			if(filter_2.size()>0) {
+				songsToReproduce.addAll(filter_2);
+			}
+			if(filter_3.size()>0) {
+				songsToReproduce.addAll(filter_3);
 			}
 			
-			setSongInPlayer(song.getMedia());
+			songsToReproduce=Converter.song_Converter(duplicated_filter);	
+			if(songsToReproduce.contains(song)) {
+				songsToReproduce.remove(song);
+			}
+			songsToReproduce.add(0, song);
+			
+			setSongInPlayer(songsToReproduce);
 		}
 	}
 
@@ -496,27 +553,66 @@ public class PrimaryController {
 		if (s != null) {
 			song = s;
 
-			File f = new File(song.getPhoto());
-			Image face = new Image("file:" + f.getPath());
-			img_song.setImage(face);
-
-			lab_song_name.setText(song.getName());
-			lab_song_artist.setText("Artista: " + song.getArtist().getName());
-			if (song.getDisc().getId() != 1) {
-				lab_song_disc.setText("Disco: " + song.getDisc().getName());
-			} else {
-				lab_song_disc.setText("");
-			}
+			show_Song_Info(song);
 
 			try {
 				mp.stop();
+				mp=null;
 			} catch (Exception e) {
 				// TODO: handle exception
 			}
-			setSongInPlayer(song.getMedia());
+			
+			songsToReproduce=FXCollections.observableArrayList();
+			
+			List<Song> filter_1=SongDAO.getByDisc(song.getDisc());
+			List<Song> filter_2=SongDAO.getByArtistId(song.getArtist());
+			List<Song> filter_3=SongDAO.getByGenre(song.getGenre());
+			songsToReproduce=FXCollections.observableArrayList();
+			
+			List<Song> duplicated_filter= new ArrayList<Song>();
+
+			duplicated_filter.addAll(filter_1);
+			duplicated_filter.addAll(filter_2);
+			duplicated_filter.addAll(filter_3);
+			
+			duplicated_filter=new ArrayList<>(
+				      new HashSet<>(duplicated_filter));
+			
+			if(filter_1.size()>0) {
+				songsToReproduce.addAll(filter_1);
+			}
+			if(filter_2.size()>0) {
+				songsToReproduce.addAll(filter_2);
+			}
+			if(filter_3.size()>0) {
+				songsToReproduce.addAll(filter_3);
+			}
+			
+			songsToReproduce=Converter.song_Converter(duplicated_filter);	
+			
+			if(songsToReproduce.contains(song)) {
+				songsToReproduce.remove(song);
+			}
+			songsToReproduce.add(0, song);
+			
+			setSongInPlayer(songsToReproduce);
 		}
 	}
 
+	private void show_Song_Info(Song s) {
+		File f = new File(song.getPhoto());
+		Image face = new Image("file:" + f.getPath());
+		img_song.setImage(face);
+
+		lab_song_name.setText(song.getName());
+		lab_song_artist.setText("Artista: " + song.getArtist().getName());
+		if (song.getDisc().getId() != 1) {
+			lab_song_disc.setText("Disco: " + song.getDisc().getName());
+		} else {
+			lab_song_disc.setText("");
+		}
+	}
+	
 	@FXML
 	public void filter_Songs_Discs_ByName() {
 		if (!txt_filter.getText().matches("")) {
@@ -793,9 +889,4 @@ public class PrimaryController {
 	private void changeColorDefault_Disc_Info_Artist() {
 		lab_discinfo_artist.setTextFill(Color.WHITE);
 	}
-	
-	@FXML
-	private Button btn_close_sesion;
-	@FXML
-	private Button btn_delete_user;
 }
