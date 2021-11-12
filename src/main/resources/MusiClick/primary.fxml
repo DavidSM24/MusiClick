@@ -21,7 +21,7 @@
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-image: url('file:src/main/resources/images/primary_background.jpg');" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="MusiClick.PrimaryController">
    <children>
       <MediaView fx:id="mediaView" fitHeight="200.0" fitWidth="200.0" layoutX="200.0" layoutY="100.0" />
-      <GridPane layoutX="83.0" layoutY="355.0" prefHeight="38.0" prefWidth="506.0">
+      <GridPane layoutX="170.0" layoutY="355.0" prefHeight="38.0" prefWidth="419.0">
          <columnConstraints>
             <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="448.00000381469727" minWidth="10.0" prefWidth="349.3333193461101" />
             <ColumnConstraints hgrow="SOMETIMES" maxWidth="164.00000000000006" minWidth="10.0" prefWidth="161.33337402343756" />
@@ -216,7 +216,7 @@
         </tabs>
       </TabPane>
       <Button fx:id="btn_managment" layoutX="562.0" layoutY="2.0" mnemonicParsing="false" onAction="#goToManagment" text="Dev" />
-      <Button fx:id="playButton" layoutX="7.0" layoutY="360.0" mnemonicParsing="false" onAction="#play_pause" prefHeight="35.0" prefWidth="72.0" stylesheets="@../css/tables.css" />
+      <Button fx:id="playButton" layoutX="57.0" layoutY="360.0" mnemonicParsing="false" onAction="#play_pause" prefHeight="35.0" prefWidth="57.0" stylesheets="@../css/tables.css" />
       <GridPane layoutX="455.0" layoutY="3.0" prefHeight="25.0" prefWidth="100.0">
         <columnConstraints>
           <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -263,5 +263,15 @@
             </GridPane>
          </children>
       </Pane>
+      <Button fx:id="playButton11" layoutX="119.0" layoutY="360.0" mnemonicParsing="false" onAction="#goNext" prefHeight="35.0" prefWidth="36.0" stylesheets="@../css/tables.css" text="»">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+      </Button>
+      <Button fx:id="playButton111" layoutX="5.0" layoutY="360.0" mnemonicParsing="false" onAction="#goPrev" prefHeight="35.0" prefWidth="36.0" stylesheets="@../css/tables.css" text="«">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+      </Button>
    </children>
 </Pane>

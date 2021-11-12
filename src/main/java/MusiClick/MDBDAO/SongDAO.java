@@ -35,6 +35,10 @@ public class SongDAO {
 	private final static String GETBYREPROSONGS = "SELECT s.id, s.name, s.id_artist,s.photo,s.url,s.duration,s.reproductions,s.id_genre,s.id_disc "
 			+ "FROM reproductionList_song rs " + "INNER JOIN song s on s.id=rs.id_song "
 			+ "INNER JOIN reproductionList r on r.id=rs.id_reproductionList " + "WHERE r.id=?";
+	private final static String GETRANDOMLY ="SELECT id,name,id_artist,photo,url,duration,reproductions,id_genre,id_disc "
+			+ "FROM song "
+			+ "ORDER BY RAND() "
+			+ "LIMIT 10;";
 	private final static String INSERT_UPDATE = "INSERT INTO song (id, name,id_artist,photo, url, duration, reproductions,"
 			+ "id_genre,id_disc) " + "VALUES (?,?,?,?,?,?,?,?,?) "
 			+ "ON DUPLICATE KEY UPDATE name=?,id_artist=?,photo=?,url=?,duration=?,reproductions=?,id_genre=?,id_disc=?;";
@@ -311,6 +315,41 @@ public class SongDAO {
 		return result;
 	}
 
+	public static List<Song> getRandomly() {
+		List<Song> result = new ArrayList<Song>();
+
+		con = MDBConexion.getConexion();
+		if (con != null) {
+			PreparedStatement ps = null;
+			ResultSet rs = null;
+			try {
+				ps = con.prepareStatement(GETRANDOMLY);
+				rs = ps.executeQuery();
+
+				while (rs.next()) {
+					Genre gaux = GenreDAO.getById(rs.getInt("id_genre"));
+					Artist aaux = ArtistDAO.getById(rs.getInt("id_artist"));
+					Disc daux = DiscDAO.getById(rs.getInt("id_disc"));
+					result.add(
+							new Song(rs.getInt("id"), rs.getString("name"), rs.getString("photo"), rs.getString("url"),
+									aaux, rs.getDouble("duration"), rs.getInt("reproductions"), gaux, daux));
+				}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} finally {
+				try {
+					ps.close();
+					rs.close();
+				} catch (SQLException e) {
+					// TODO: handle exception
+				}
+			}
+		}
+
+		return result;
+	}
+	
 	public static void save(Song s) {
 		// INSERT o UPDATE
 		// INSERT -> si no existe OK

@@ -48,15 +48,17 @@ import javafx.util.Duration;
 public class PrimaryController {
 
 	// PRIMARY
+	int istr;
 	ObservableList<Song> songsToReproduce;
+	ObservableList<Song> songsToReproduceListened;
 	ObservableList<Song> listened;
-	
+
 	ObservableList<Song> songs;
 	ObservableList<Disc> discs;
 
 	Song song = new Song();
 	Disc disc = new Disc();
-	Disc discInPane=new Disc();
+	Disc discInPane = new Disc();
 
 	User u = null;
 
@@ -174,8 +176,8 @@ public class PrimaryController {
 		this.u = u;
 		btn_user.setText(u.getUsername());
 
-		listened=FXCollections.observableArrayList();
-		
+		listened = FXCollections.observableArrayList();
+
 		playButton.setText("►");
 
 		lab_song_name.setText("");
@@ -195,33 +197,37 @@ public class PrimaryController {
 		setTableAndDetailsInfo();
 	}
 
-	public void setSongInPlayer(ObservableList<Song> saux) {
+	public void setSongInPlayer() {
 
 		try {
-			
-			File filestring = new File(saux.get(0).getMedia());
+
+			File filestring = new File(songsToReproduce.get(0).getMedia());
 			Media media = new Media(filestring.toURI().toString());
 			mp = new MediaPlayer(media);
 			mp.stop();
-			
-			song=saux.get(0);
-			
-			if(!listened.contains(song)) {
+
+			song = songsToReproduce.get(istr);
+
+			if (!listened.contains(song)) {
 				listened.add(song);
 				SongDAO.upload_Views(song);
-				if(song.getDisc()!=null && song.getDisc().getId()!=1) {
-					Disc aux=song.getDisc();
+				if (song.getDisc() != null && song.getDisc().getId() != 1) {
+					Disc aux = song.getDisc();
 					DiscDAO.upload_Views(aux);
-				}	
+				}
 			}
-			
-			if(table_song.getItems().contains(song)) {
+
+			if (table_song.getItems().contains(song)) {
 				table_song.getSelectionModel().select(song);
 			}
-			
+
 			show_Song_Info(song);
-			saux.remove(0);
-			
+
+			songsToReproduceListened.remove(song);
+
+			System.out.println(songsToReproduce);
+			System.out.println(songsToReproduceListened);
+
 			mediaView.setMediaPlayer(mp);
 			mp.setAutoPlay(true);
 
@@ -283,25 +289,24 @@ public class PrimaryController {
 					}
 				}
 			});
-			
+
 			mp.setOnEndOfMedia(new Runnable() {
-				
+
 				@Override
 				public void run() {
 					// TODO Auto-generated method stub
-					
-					if(saux.size()>0) {
-						setSongInPlayer(saux);
+
+					if (songsToReproduce.size() > 0) {
+						istr++;
+						setSongInPlayer();
 					}
-					
-					
+
 				}
 			});
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
-		
-		
+
 	}
 
 	public void setTableAndDetailsInfo() {
@@ -512,39 +517,41 @@ public class PrimaryController {
 			} catch (Exception e) {
 				// TODO: handle exception
 			}
-			
-			songsToReproduce=FXCollections.observableArrayList();
-			
-			List<Song> filter_1=SongDAO.getByDisc(song.getDisc());
-			List<Song> filter_2=SongDAO.getByArtistId(song.getArtist());
-			List<Song> filter_3=SongDAO.getByGenre(song.getGenre());
-			songsToReproduce=FXCollections.observableArrayList();
-			
-			List<Song> duplicated_filter= new ArrayList<Song>();
+
+			songsToReproduce = FXCollections.observableArrayList();
+
+			List<Song> filter_1 = SongDAO.getByDisc(song.getDisc());
+			List<Song> filter_2 = SongDAO.getByArtistId(song.getArtist());
+			List<Song> filter_3 = SongDAO.getByGenre(song.getGenre());
+			songsToReproduce = FXCollections.observableArrayList();
+
+			List<Song> duplicated_filter = new ArrayList<Song>();
 			duplicated_filter.addAll(filter_1);
 			duplicated_filter.addAll(filter_2);
 			duplicated_filter.addAll(filter_3);
-			
-			duplicated_filter=new ArrayList<>(
-				      new HashSet<>(duplicated_filter));
-			
-			if(filter_1.size()>0) {
+
+			duplicated_filter = new ArrayList<>(new HashSet<>(duplicated_filter));
+
+			if (filter_1.size() > 0) {
 				songsToReproduce.addAll(filter_1);
 			}
-			if(filter_2.size()>0) {
+			if (filter_2.size() > 0) {
 				songsToReproduce.addAll(filter_2);
 			}
-			if(filter_3.size()>0) {
+			if (filter_3.size() > 0) {
 				songsToReproduce.addAll(filter_3);
 			}
-			
-			songsToReproduce=Converter.song_Converter(duplicated_filter);	
-			if(songsToReproduce.contains(song)) {
+
+			songsToReproduce = Converter.song_Converter(duplicated_filter);
+			if (songsToReproduce.contains(song)) {
 				songsToReproduce.remove(song);
 			}
 			songsToReproduce.add(0, song);
-			
-			setSongInPlayer(songsToReproduce);
+			songsToReproduceListened = FXCollections.observableArrayList();
+			songsToReproduceListened.addAll(songsToReproduce);
+
+			istr=0;
+			setSongInPlayer();
 		}
 	}
 
@@ -557,45 +564,47 @@ public class PrimaryController {
 
 			try {
 				mp.stop();
-				mp=null;
+				mp = null;
 			} catch (Exception e) {
 				// TODO: handle exception
 			}
-			
-			songsToReproduce=FXCollections.observableArrayList();
-			
-			List<Song> filter_1=SongDAO.getByDisc(song.getDisc());
-			List<Song> filter_2=SongDAO.getByArtistId(song.getArtist());
-			List<Song> filter_3=SongDAO.getByGenre(song.getGenre());
-			songsToReproduce=FXCollections.observableArrayList();
-			
-			List<Song> duplicated_filter= new ArrayList<Song>();
+
+			songsToReproduce = FXCollections.observableArrayList();
+
+			List<Song> filter_1 = SongDAO.getByDisc(song.getDisc());
+			List<Song> filter_2 = SongDAO.getByArtistId(song.getArtist());
+			List<Song> filter_3 = SongDAO.getByGenre(song.getGenre());
+			songsToReproduce = FXCollections.observableArrayList();
+
+			List<Song> duplicated_filter = new ArrayList<Song>();
 
 			duplicated_filter.addAll(filter_1);
 			duplicated_filter.addAll(filter_2);
 			duplicated_filter.addAll(filter_3);
-			
-			duplicated_filter=new ArrayList<>(
-				      new HashSet<>(duplicated_filter));
-			
-			if(filter_1.size()>0) {
+
+			duplicated_filter = new ArrayList<>(new HashSet<>(duplicated_filter));
+
+			if (filter_1.size() > 0) {
 				songsToReproduce.addAll(filter_1);
 			}
-			if(filter_2.size()>0) {
+			if (filter_2.size() > 0) {
 				songsToReproduce.addAll(filter_2);
 			}
-			if(filter_3.size()>0) {
+			if (filter_3.size() > 0) {
 				songsToReproduce.addAll(filter_3);
 			}
-			
-			songsToReproduce=Converter.song_Converter(duplicated_filter);	
-			
-			if(songsToReproduce.contains(song)) {
+
+			songsToReproduce = Converter.song_Converter(duplicated_filter);
+
+			if (songsToReproduce.contains(song)) {
 				songsToReproduce.remove(song);
 			}
 			songsToReproduce.add(0, song);
-			
-			setSongInPlayer(songsToReproduce);
+			songsToReproduceListened = FXCollections.observableArrayList();
+			songsToReproduceListened.addAll(songsToReproduce);
+
+			istr=0;
+			setSongInPlayer();
 		}
 	}
 
@@ -612,46 +621,43 @@ public class PrimaryController {
 			lab_song_disc.setText("");
 		}
 	}
-	
+
 	@FXML
 	public void filter_Songs_Discs_ByName() {
 		if (!txt_filter.getText().matches("")) {
 			ObservableList<Song> filter = FXCollections.observableArrayList();
 			ObservableList<Song> filter2 = FXCollections.observableArrayList();
-			ObservableList<Song> filter3 =FXCollections.observableArrayList();
-		
-			ObservableList<Disc> filter4=FXCollections.observableArrayList();
-			ObservableList<Disc> filter5=FXCollections.observableArrayList();
-			
+			ObservableList<Song> filter3 = FXCollections.observableArrayList();
+
+			ObservableList<Disc> filter4 = FXCollections.observableArrayList();
+			ObservableList<Disc> filter5 = FXCollections.observableArrayList();
+
 			filter = Converter.song_Converter(SongDAO.getByName(txt_filter.getText()));
 			filter2 = Converter.song_Converter(SongDAO.getByArtistName(txt_filter.getText()));
-			filter3= Converter.song_Converter(SongDAO.getByDisc(txt_filter.getText()));
+			filter3 = Converter.song_Converter(SongDAO.getByDisc(txt_filter.getText()));
 			filter.addAll(filter2);
 			filter.addAll(filter3);
-			
-			filter4=Converter.disc_Converter(DiscDAO.getByName(txt_filter.getText()));
-			filter5=Converter.disc_Converter(DiscDAO.getByArtistName(txt_filter.getText()));
+
+			filter4 = Converter.disc_Converter(DiscDAO.getByName(txt_filter.getText()));
+			filter5 = Converter.disc_Converter(DiscDAO.getByArtistName(txt_filter.getText()));
 			filter4.addAll(filter5);
-			
+
 			table_song.setItems(filter);
-			
-			
+
 			table_disc.setItems(filter4);
-			
-			if(filter.size()<1) {
+
+			if (filter.size() < 1) {
 				table_song.setVisible(false);
-			}
-			else {
+			} else {
 				table_song.setVisible(true);
 			}
-			
-			if(filter4.size()<1) {
+
+			if (filter4.size() < 1) {
 				table_disc.setVisible(false);
-			}
-			else {
+			} else {
 				table_disc.setVisible(true);
 			}
-			
+
 			setTableAndDetailsInfo();
 		} else {
 			table_song.setItems(songs);
@@ -661,13 +667,13 @@ public class PrimaryController {
 			setTableAndDetailsInfo();
 		}
 	}
-	
+
 	@FXML
 	private void open_Artist_Pane() {
 		if (song != null) {
 
 			table_artist_info_disc.setVisible(true);
-			
+
 			File f2 = new File(song.getArtist().getPhoto());
 			Image artist_song = new Image("file:" + f2.getPath());
 			img_artist_info.setImage(artist_song);
@@ -678,10 +684,10 @@ public class PrimaryController {
 			setDetailsAndTableInfoArtist();
 			table_artist_info_disc.getSelectionModel().select(null);
 
-			if(disc_by_artist.size()<1) {
+			if (disc_by_artist.size() < 1) {
 				table_artist_info_disc.setVisible(false);
 			}
-			
+
 			tab_artist_info.getSelectionModel().select(0);
 			black_pane.setVisible(true);
 			artist_pane.setVisible(true);
@@ -690,12 +696,12 @@ public class PrimaryController {
 	}
 
 	@FXML
-	private void open_Artist_Pane(Artist a) { //from discs
-		
+	private void open_Artist_Pane(Artist a) { // from discs
+
 		close_Disc_Pane();
-		
+
 		table_artist_info_disc.setVisible(true);
-		
+
 		File f2 = new File(a.getPhoto());
 		Image artist_song = new Image("file:" + f2.getPath());
 		img_artist_info.setImage(artist_song);
@@ -706,15 +712,15 @@ public class PrimaryController {
 		setDetailsAndTableInfoArtist();
 		table_artist_info_disc.getSelectionModel().select(null);
 
-		if(disc_by_artist.size()<1) {
+		if (disc_by_artist.size() < 1) {
 			table_artist_info_disc.setVisible(false);
 		}
-		
+
 		tab_artist_info.getSelectionModel().select(0);
 		black_pane.setVisible(true);
 		artist_pane.setVisible(true);
 	}
-	
+
 	@FXML
 	private void close_Artist_Pane() {
 		artist_pane.setVisible(false);
@@ -727,8 +733,8 @@ public class PrimaryController {
 	private void open_Disc_Pane() {
 		if (song != null) {
 
-			discInPane=song.getDisc();
-			
+			discInPane = song.getDisc();
+
 			File f2 = new File(song.getDisc().getPhoto());
 			Image disc_song = new Image("file:" + f2.getPath());
 			img_disc_info.setImage(disc_song);
@@ -748,10 +754,10 @@ public class PrimaryController {
 	@FXML
 	private void open_Disc_Pane(Disc d) {
 
-		discInPane=d;
-		
-		disc=d;
-		
+		discInPane = d;
+
+		disc = d;
+
 		File f2 = new File(d.getPhoto());
 		Image disc_song = new Image("file:" + f2.getPath());
 		img_disc_info.setImage(disc_song);
@@ -793,18 +799,18 @@ public class PrimaryController {
 			open_Disc_Pane(aux);
 		}
 	}
-	
+
 	@FXML
 	private void goToArtistFromDiscs() {
 		open_Artist_Pane(disc.getMain_artist());
-		
+
 	}
-	
+
 	@FXML
 	private void goToArtistFromDiscInPane() {
 		open_Artist_Pane(discInPane.getMain_artist());
 	}
-	
+
 	@FXML
 	private void goToPlayFromDisc() {
 		Song aux = table_disc_info_song.getSelectionModel().getSelectedItem();
@@ -884,9 +890,58 @@ public class PrimaryController {
 	private void changeColor_Disc_Info_Artist() {
 		lab_discinfo_artist.setTextFill(Color.CORNFLOWERBLUE);
 	}
-	
+
 	@FXML
 	private void changeColorDefault_Disc_Info_Artist() {
 		lab_discinfo_artist.setTextFill(Color.WHITE);
+	}
+
+	@FXML
+	private void goNext() {
+
+		if (songsToReproduceListened.size() < 1) {
+			mp.stop();
+			mp = null;
+			songsToReproduce = Converter.song_Converter(SongDAO.getRandomly());
+			songsToReproduceListened.addAll(songsToReproduce);
+			istr=0;
+			setSongInPlayer();
+		}
+
+		else {
+			
+			istr++;
+			if(istr>=songsToReproduce.size()) {
+				istr=0;
+			}
+			mp.stop();
+			mp = null;
+			setSongInPlayer();
+		}
+	}
+
+	@FXML
+	private void goPrev() {
+
+		if (songsToReproduceListened.size() < 1) {
+			mp.stop();
+			mp = null;
+			songsToReproduce = Converter.song_Converter(SongDAO.getRandomly());
+			songsToReproduceListened.addAll(songsToReproduce);
+			istr=0;
+			setSongInPlayer();
+		}
+
+		else {
+			System.out.println("entro?");
+			
+			istr--;
+			if(istr<0) {
+				istr=songsToReproduce.size()-1;
+			}
+			mp.stop();
+			mp = null;
+			setSongInPlayer();
+		}
 	}
 }

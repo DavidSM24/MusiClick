@@ -148,7 +148,7 @@ public class Song {
 
 	@Override
 	public String toString() {
-		return "Song ["+name + "--> " +getDisc().getName() + "]";
+		return name;
 	}
 	
 	
