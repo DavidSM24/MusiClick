@@ -51,7 +51,120 @@
         <tabs>
           <Tab text="Listas de Reproducción">
             <content>
-              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <Label layoutX="429.0" layoutY="259.0" text="No tienes Listas" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                        </Label>
+                        <Label layoutX="106.0" layoutY="259.0" text="Sin Listas" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font></Label>
+                        <GridPane gridLinesVisible="true" layoutX="50.0" layoutY="6.0" prefHeight="101.0" prefWidth="500.0">
+                          <columnConstraints>
+                            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                              <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                              <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                              <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                          </columnConstraints>
+                          <rowConstraints>
+                            <RowConstraints maxHeight="60.333343505859375" minHeight="10.0" prefHeight="23.000003814697266" valignment="CENTER" vgrow="SOMETIMES" />
+                            <RowConstraints maxHeight="80.33332443237305" minHeight="10.0" prefHeight="78.99999618530273" valignment="CENTER" vgrow="SOMETIMES" />
+                          </rowConstraints>
+                           <children>
+                              <Label fx:id="lab_lt_1" text="Rock" textFill="WHITE">
+                                 <font>
+                                    <Font name="System Bold" size="12.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="lab_lt_2" text="Pop" textFill="WHITE" GridPane.columnIndex="1">
+                                 <font>
+                                    <Font name="System Bold" size="12.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="lab_lt_3" text="Britpop" textFill="WHITE" GridPane.columnIndex="2">
+                                 <font>
+                                    <Font name="System Bold" size="12.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="lab_lt_4" text="Reggaeton" textFill="WHITE" GridPane.columnIndex="3">
+                                 <font>
+                                    <Font name="System Bold" size="12.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="lab_lt_5" text="Latina" textFill="WHITE" GridPane.columnIndex="4">
+                                 <font>
+                                    <Font name="System Bold" size="12.0" />
+                                 </font>
+                              </Label>
+                              <ImageView fx:id="img_lt_1" fitHeight="75.0" fitWidth="100.0" pickOnBounds="true" GridPane.rowIndex="1" />
+                              <ImageView fx:id="img_lt_2" fitHeight="75.0" fitWidth="100.0" pickOnBounds="true" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                              <ImageView fx:id="img_lt_4" fitHeight="75.0" fitWidth="100.0" pickOnBounds="true" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                              <ImageView fx:id="img_lt_5" fitHeight="75.0" fitWidth="100.0" pickOnBounds="true" GridPane.columnIndex="4" GridPane.rowIndex="1" />
+                              <ImageView fx:id="img_lt_3" fitHeight="75.0" fitWidth="100.0" pickOnBounds="true" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                           </children>
+                        </GridPane>
+                        <GridPane gridLinesVisible="true" layoutX="50.0" layoutY="116.0" prefHeight="101.0" prefWidth="500.0">
+                           <columnConstraints>
+                              <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                              <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                              <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                              <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                              <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                           </columnConstraints>
+                           <rowConstraints>
+                              <RowConstraints maxHeight="60.333343505859375" minHeight="10.0" prefHeight="23.000003814697266" valignment="CENTER" vgrow="SOMETIMES" />
+                              <RowConstraints maxHeight="80.33332443237305" minHeight="10.0" prefHeight="78.99999618530273" valignment="CENTER" vgrow="SOMETIMES" />
+                           </rowConstraints>
+                           <children>
+                              <Label fx:id="lab_lt_6" text="Éxitos España" textFill="WHITE">
+                                 <font>
+                                    <Font name="System Bold" size="12.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="lab_lt_7" text="Éxitos Mundial" textFill="WHITE" GridPane.columnIndex="1">
+                                 <font>
+                                    <Font name="System Bold" size="12.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="lab_lt_8" text="40 Principales" textFill="WHITE" GridPane.columnIndex="2">
+                                 <font>
+                                    <Font name="System Bold" size="12.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="lab_lt_9" text="Los 90" textFill="WHITE" GridPane.columnIndex="3">
+                                 <font>
+                                    <Font name="System Bold" size="12.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="lab_lt_10" text="Disco" textFill="WHITE" GridPane.columnIndex="4">
+                                 <font>
+                                    <Font name="System Bold" size="12.0" />
+                                 </font>
+                              </Label>
+                              <ImageView fx:id="img_lt_6" fitHeight="75.0" fitWidth="100.0" pickOnBounds="true" GridPane.rowIndex="1" />
+                              <ImageView fx:id="img_lt_7" fitHeight="75.0" fitWidth="100.0" pickOnBounds="true" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                              <ImageView fx:id="img_lt_9" fitHeight="75.0" fitWidth="100.0" pickOnBounds="true" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                              <ImageView fx:id="img_lt_10" fitHeight="75.0" fitWidth="100.0" pickOnBounds="true" GridPane.columnIndex="4" GridPane.rowIndex="1" />
+                              <ImageView fx:id="img_lt_8" fitHeight="75.0" fitWidth="100.0" pickOnBounds="true" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                           </children>
+                        </GridPane>
+                        <TableView fx:id="table_repros" layoutX="31.0" layoutY="220.0" prefHeight="95.0" prefWidth="200.0">
+                          <columns>
+                            <TableColumn fx:id="col_repros_name" prefWidth="198.66666793823242" text="Listas de Reproducción" />
+                          </columns>
+                        </TableView>
+                        <TableView fx:id="table_userRepros" layoutX="373.0" layoutY="220.0" prefHeight="95.0" prefWidth="200.0">
+                           <columns>
+                              <TableColumn fx:id="col_userRepros_name" prefWidth="198.66666793823242" text="Tus Listas" />
+                           </columns>
+                        </TableView>
+                        <TextField layoutX="250.0" layoutY="235.0" prefHeight="25.0" prefWidth="100.0" />
+                        <Button layoutX="261.0" layoutY="268.0" mnemonicParsing="false" text="Añadir " />
+                     </children></AnchorPane>
             </content>
           </Tab>
           <Tab text="Canciones">

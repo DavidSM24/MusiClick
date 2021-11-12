@@ -10,25 +10,31 @@ public class ReproductionList {
 	private List<Song> songs;
 	private User creator;
 	private List<User> subscribed_users;
+	private int type;
+	private String image;
 	
 	public ReproductionList() {
-		this(-1,"",new ArrayList<Song>(),new User(),new ArrayList<User>());
+		this(-1,"",new ArrayList<Song>(),new User(),new ArrayList<User>(),0,"");
 	}
 	
-	public ReproductionList(String name, List<Song> songs, User creator, List<User> subscribed_users) {
+	public ReproductionList(String name, List<Song> songs, User creator, List<User> subscribed_users,int type, String image) {
 		super();
 		this.name = name;
 		this.songs = songs;
 		this.creator = creator;
 		this.subscribed_users=subscribed_users;
+		this.type=type;
+		this.image=image;
 	}
-	public ReproductionList(int id, String name, List<Song> songs, User creator,List<User> subscribed_users) {
+	public ReproductionList(int id, String name, List<Song> songs, User creator,List<User> subscribed_users,int type,String image) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.songs = songs;
 		this.creator = creator;
 		this.subscribed_users=subscribed_users;
+		this.type=type;
+		this.image=image;
 	}
 	public int getId() {
 		return id;
@@ -63,6 +69,22 @@ public class ReproductionList {
 		this.subscribed_users = subscribed_users;
 	}
 
+	public int getType() {
+		return type;
+	}
+
+	public void setType(int type) {
+		this.type = type;
+	}
+
+	public String getImage() {
+		return image;
+	}
+
+	public void setImage(String image) {
+		this.image = image;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -85,8 +107,11 @@ public class ReproductionList {
 
 	@Override
 	public String toString() {
-		return "ReproductionList [id=" + id + ", name=" + name + ", songs=" + songs + ", creator=" + creator.getUsername() + ", subscribed_users=" + subscribed_users + "]";
+		return "ReproductionList [id=" + id + ", name=" + name + ", songs=" + songs + ", creator=" + creator
+				+ ", subscribed_users=" + subscribed_users + ", type=" + type + ", image=" + image + "]";
 	}
+
+	
 	
 	
 	

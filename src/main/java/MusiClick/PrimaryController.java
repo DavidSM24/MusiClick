@@ -8,10 +8,12 @@ import java.util.HashSet;
 import java.util.List;
 
 import MusiClick.MDBDAO.DiscDAO;
+import MusiClick.MDBDAO.ReproductionListDAO;
 import MusiClick.MDBDAO.SesionDAO;
 import MusiClick.MDBDAO.SongDAO;
 import MusiClick.models.Artist;
 import MusiClick.models.Disc;
+import MusiClick.models.ReproductionList;
 import MusiClick.models.Sesion;
 import MusiClick.models.Song;
 import MusiClick.models.User;
@@ -74,6 +76,63 @@ public class PrimaryController {
 	@FXML
 	private Pane options_Pane;
 
+	// LIST TAB
+
+	ObservableList<ReproductionList> repros;
+	ObservableList<ReproductionList> userRepros;
+
+	@FXML
+	private Label lab_lt_1;
+	@FXML
+	private Label lab_lt_2;
+	@FXML
+	private Label lab_lt_3;
+	@FXML
+	private Label lab_lt_4;
+	@FXML
+	private Label lab_lt_5;
+	@FXML
+	private Label lab_lt_6;
+	@FXML
+	private Label lab_lt_7;
+	@FXML
+	private Label lab_lt_8;
+	@FXML
+	private Label lab_lt_9;
+	@FXML
+	private Label lab_lt_10;
+
+	@FXML
+	private ImageView img_lt_1;
+	@FXML
+	private ImageView img_lt_2;
+	@FXML
+	private ImageView img_lt_3;
+	@FXML
+	private ImageView img_lt_4;
+	@FXML
+	private ImageView img_lt_5;
+	@FXML
+	private ImageView img_lt_6;
+	@FXML
+	private ImageView img_lt_7;
+	@FXML
+	private ImageView img_lt_8;
+	@FXML
+	private ImageView img_lt_9;
+	@FXML
+	private ImageView img_lt_10;
+	
+	@FXML
+	private TableView<ReproductionList> table_repros;
+	@FXML
+	private TableColumn<ReproductionList,String> col_repros_name;
+	
+	@FXML
+	private TableView<ReproductionList> table_userRepros;
+	@FXML
+	private TableColumn<ReproductionList,String> col_userRepros_name;
+	
 	// SEARCHER TAB
 
 	@FXML
@@ -176,6 +235,8 @@ public class PrimaryController {
 		this.u = u;
 		btn_user.setText(u.getUsername());
 
+		//set SONG TAB
+		
 		listened = FXCollections.observableArrayList();
 
 		playButton.setText("►");
@@ -194,19 +255,109 @@ public class PrimaryController {
 		table_song.setItems(songs);
 		table_disc.setItems(discs);
 
+		//set LIST TAB
+		
+		repros = Converter.repro_Converter(ReproductionListDAO.getAll());
+		userRepros = Converter.repro_Converter(ReproductionListDAO.getByUserSubscriptions(u));
+
+		table_repros.setItems(repros);
+		table_userRepros.setItems(userRepros);
+		
 		setTableAndDetailsInfo();
+		
+		if(repros.size()<1) {
+			table_repros.setVisible(false);
+		}
+		if(userRepros.size()<1) {
+			table_userRepros.setVisible(false);
+		}
+		
+		for (int i = 0; i < 10; i++) {
+			switch (i) {
+			case 0: {
+				lab_lt_1.setText(repros.get(i).getName());
+				File f = new File(repros.get(i).getImage());
+				Image img = new Image("file:" + f.getPath());
+				img_lt_1.setImage(img);
+			}
+				break;
+			case 1: {
+				lab_lt_2.setText(repros.get(i).getName());
+				File f = new File(repros.get(i).getImage());
+				Image img = new Image("file:" + f.getPath());
+				img_lt_2.setImage(img);
+			}
+				break;
+			case 2: {
+				lab_lt_3.setText(repros.get(i).getName());
+				File f = new File(repros.get(i).getImage());
+				Image img = new Image("file:" + f.getPath());
+				img_lt_3.setImage(img);
+			}
+				break;
+			case 3: {
+				lab_lt_4.setText(repros.get(i).getName());
+				File f = new File(repros.get(i).getImage());
+				Image img = new Image("file:" + f.getPath());
+				img_lt_4.setImage(img);
+			}
+				break;
+			case 4: {
+				lab_lt_5.setText(repros.get(i).getName());
+				File f = new File(repros.get(i).getImage());
+				Image img = new Image("file:" + f.getPath());
+				img_lt_5.setImage(img);
+			}
+				break;
+			case 5: {
+				lab_lt_6.setText(repros.get(i).getName());
+				File f = new File(repros.get(i).getImage());
+				Image img = new Image("file:" + f.getPath());
+				img_lt_6.setImage(img);
+			}
+				break;
+			case 6: {
+				lab_lt_7.setText(repros.get(i).getName());
+				File f = new File(repros.get(i).getImage());
+				Image img = new Image("file:" + f.getPath());
+				img_lt_7.setImage(img);
+			}
+				break;
+			case 7: {
+				lab_lt_8.setText(repros.get(i).getName());
+				File f = new File(repros.get(i).getImage());
+				Image img = new Image("file:" + f.getPath());
+				img_lt_8.setImage(img);
+			}
+				break;
+			case 8: {
+				lab_lt_9.setText(repros.get(i).getName());
+				File f = new File(repros.get(i).getImage());
+				Image img = new Image("file:" + f.getPath());
+				img_lt_9.setImage(img);
+			}
+				break;
+			case 9: {
+				lab_lt_10.setText(repros.get(i).getName());
+				File f = new File(repros.get(i).getImage());
+				Image img = new Image("file:" + f.getPath());
+				img_lt_10.setImage(img);
+			}
+				break;
+			}
+		}
 	}
 
 	public void setSongInPlayer() {
 
 		try {
 
-			File filestring = new File(songsToReproduce.get(0).getMedia());
+			song = songsToReproduce.get(istr);
+			
+			File filestring = new File(song.getMedia());
 			Media media = new Media(filestring.toURI().toString());
 			mp = new MediaPlayer(media);
 			mp.stop();
-
-			song = songsToReproduce.get(istr);
 
 			if (!listened.contains(song)) {
 				listened.add(song);
@@ -224,9 +375,6 @@ public class PrimaryController {
 			show_Song_Info(song);
 
 			songsToReproduceListened.remove(song);
-
-			System.out.println(songsToReproduce);
-			System.out.println(songsToReproduceListened);
 
 			mediaView.setMediaPlayer(mp);
 			mp.setAutoPlay(true);
@@ -317,11 +465,33 @@ public class PrimaryController {
 			v.setValue(eachsong.getValue().getArtist().getName() + " - " + eachsong.getValue().getName());
 			return v;
 		});
-
+		
+		//discs
+		
 		if (discs != null && discs.size() > 0) {
 			col_disc_name.setCellValueFactory(eachdisc -> {
 				SimpleStringProperty v = new SimpleStringProperty();
 				v.setValue(eachdisc.getValue().getMain_artist().getName() + " - " + eachdisc.getValue().getName());
+				return v;
+			});
+		}
+		
+		//repros
+		
+		if(repros!=null&&repros.size()>0) {
+			col_repros_name.setCellValueFactory(eachrepro -> {
+				SimpleStringProperty v = new SimpleStringProperty();
+				v.setValue(eachrepro.getValue().getName());
+				return v;
+			});
+		}
+		
+		//userRepros
+		
+		if(userRepros!=null&&userRepros.size()>0) {
+			col_userRepros_name.setCellValueFactory(eachUseRepro -> {
+				SimpleStringProperty v = new SimpleStringProperty();
+				v.setValue(eachUseRepro.getValue().getName());
 				return v;
 			});
 		}
@@ -550,7 +720,7 @@ public class PrimaryController {
 			songsToReproduceListened = FXCollections.observableArrayList();
 			songsToReproduceListened.addAll(songsToReproduce);
 
-			istr=0;
+			istr = 0;
 			setSongInPlayer();
 		}
 	}
@@ -603,7 +773,7 @@ public class PrimaryController {
 			songsToReproduceListened = FXCollections.observableArrayList();
 			songsToReproduceListened.addAll(songsToReproduce);
 
-			istr=0;
+			istr = 0;
 			setSongInPlayer();
 		}
 	}
@@ -623,7 +793,7 @@ public class PrimaryController {
 	}
 
 	@FXML
-	public void filter_Songs_Discs_ByName() {
+	private void filter_Songs_Discs_ByName() {
 		if (!txt_filter.getText().matches("")) {
 			ObservableList<Song> filter = FXCollections.observableArrayList();
 			ObservableList<Song> filter2 = FXCollections.observableArrayList();
@@ -904,15 +1074,15 @@ public class PrimaryController {
 			mp = null;
 			songsToReproduce = Converter.song_Converter(SongDAO.getRandomly());
 			songsToReproduceListened.addAll(songsToReproduce);
-			istr=0;
+			istr = 0;
 			setSongInPlayer();
 		}
 
 		else {
-			
+
 			istr++;
-			if(istr>=songsToReproduce.size()) {
-				istr=0;
+			if (istr >= songsToReproduce.size()) {
+				istr = 0;
 			}
 			mp.stop();
 			mp = null;
@@ -928,16 +1098,16 @@ public class PrimaryController {
 			mp = null;
 			songsToReproduce = Converter.song_Converter(SongDAO.getRandomly());
 			songsToReproduceListened.addAll(songsToReproduce);
-			istr=0;
+			istr = 0;
 			setSongInPlayer();
 		}
 
 		else {
 			System.out.println("entro?");
-			
+
 			istr--;
-			if(istr<0) {
-				istr=songsToReproduce.size()-1;
+			if (istr < 0) {
+				istr = songsToReproduce.size() - 1;
 			}
 			mp.stop();
 			mp = null;

@@ -18,15 +18,15 @@ public class ReproductionListDAO {
 
 	private static Connection con = null;
 
-	private static final String GETALL = "SELECT id, name, id_user FROM reproductionList;";
-	private static final String GETBYID = "SELECT id, name, photo FROM artist WHERE id=?;";
-	private static final String GETBYNAME = "SELECT id, name, photo FROM artist WHERE name LIKE ?;";
-	private final static String INSERT_UPDATE="INSERT INTO artist (id, name, photo) "
-			+ "VALUES (?,?, ?) "
-			+ "ON DUPLICATE KEY UPDATE name=?, photo=?;";
-	private final static String DELETE ="DELETE FROM artist WHERE id IN ";
-	//DELETE FROM `artist` WHERE id NOT LIKE (0);
-	private final static String DELETEALL ="DELETE FROM artist;";
+	private static final String GETALL = "SELECT id, name, id_user,type,image FROM reproductionList;";
+//	private static final String GETBYID = "SELECT id, name, photo FROM artist WHERE id=?;";
+//	private static final String GETBYNAME = "SELECT id, name, photo FROM artist WHERE name LIKE ?;";
+//	private final static String INSERT_UPDATE="INSERT INTO artist (id, name, photo) "
+//			+ "VALUES (?,?, ?) "
+//			+ "ON DUPLICATE KEY UPDATE name=?, photo=?;";
+//	private final static String DELETE ="DELETE FROM artist WHERE id IN ";
+//	//DELETE FROM `artist` WHERE id NOT LIKE (0);
+//	private final static String DELETEALL ="DELETE FROM artist;";
 	
 	public static List<ReproductionList> getAll(){
 		
@@ -53,7 +53,9 @@ public class ReproductionListDAO {
 							rs.getString("name"),
 							saux,
 							uaux,
-							lsaux);
+							lsaux,
+							rs.getInt("type"),
+							rs.getString("image"));
 					
 					repro.add(aux);
 				}
@@ -71,6 +73,18 @@ public class ReproductionListDAO {
 		}
 		
 		return repro;
+	}
+	
+	public static List<ReproductionList> getByUserSubscriptions(User u) { //<-- return rls if user is subcribed
+		List<ReproductionList> result=new ArrayList<ReproductionList>();
+		
+		for(ReproductionList r:repro) {
+			if(r.getSubscribed_users().contains(u)) {
+				result.add(r);
+			}
+		}
+		
+		return result;
 	}
 	
 }

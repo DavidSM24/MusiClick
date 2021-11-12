@@ -5,6 +5,7 @@ import java.util.List;
 import MusiClick.models.Artist;
 import MusiClick.models.Disc;
 import MusiClick.models.Genre;
+import MusiClick.models.ReproductionList;
 import MusiClick.models.Song;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -60,6 +61,20 @@ public class Converter {
 		if(list!=null&&list.size()>0) {
 			for(Disc d:list) {
 				result.add(d);
+			}
+		}
+		
+		return result;
+		
+	}
+	
+	public static ObservableList<ReproductionList> repro_Converter (List<ReproductionList> list){
+		
+		ObservableList<ReproductionList> result=FXCollections.observableArrayList();
+		
+		if(list!=null&&list.size()>0) {
+			for(ReproductionList r:list) {
+				result.add(r);
 			}
 		}
 		
