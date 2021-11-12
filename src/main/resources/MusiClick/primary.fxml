@@ -100,11 +100,11 @@
                                     <Font name="System Bold" size="12.0" />
                                  </font>
                               </Label>
-                              <ImageView fx:id="img_lt_1" fitHeight="75.0" fitWidth="100.0" pickOnBounds="true" GridPane.rowIndex="1" />
-                              <ImageView fx:id="img_lt_2" fitHeight="75.0" fitWidth="100.0" pickOnBounds="true" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                              <ImageView fx:id="img_lt_4" fitHeight="75.0" fitWidth="100.0" pickOnBounds="true" GridPane.columnIndex="3" GridPane.rowIndex="1" />
-                              <ImageView fx:id="img_lt_5" fitHeight="75.0" fitWidth="100.0" pickOnBounds="true" GridPane.columnIndex="4" GridPane.rowIndex="1" />
-                              <ImageView fx:id="img_lt_3" fitHeight="75.0" fitWidth="100.0" pickOnBounds="true" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                              <ImageView fx:id="img_lt_1" fitHeight="75.0" fitWidth="100.0" onMouseClicked="#select_List_1" pickOnBounds="true" GridPane.rowIndex="1" />
+                              <ImageView fx:id="img_lt_2" fitHeight="75.0" fitWidth="100.0" onMouseClicked="#select_List_2" pickOnBounds="true" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                              <ImageView fx:id="img_lt_4" fitHeight="75.0" fitWidth="100.0" onMouseClicked="#select_List_4" pickOnBounds="true" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                              <ImageView fx:id="img_lt_5" fitHeight="75.0" fitWidth="100.0" onMouseClicked="#select_List_5" pickOnBounds="true" GridPane.columnIndex="4" GridPane.rowIndex="1" />
+                              <ImageView fx:id="img_lt_3" fitHeight="75.0" fitWidth="100.0" onMouseClicked="#select_List_3" pickOnBounds="true" GridPane.columnIndex="2" GridPane.rowIndex="1" />
                            </children>
                         </GridPane>
                         <GridPane gridLinesVisible="true" layoutX="50.0" layoutY="116.0" prefHeight="101.0" prefWidth="500.0">
@@ -145,25 +145,66 @@
                                     <Font name="System Bold" size="12.0" />
                                  </font>
                               </Label>
-                              <ImageView fx:id="img_lt_6" fitHeight="75.0" fitWidth="100.0" pickOnBounds="true" GridPane.rowIndex="1" />
-                              <ImageView fx:id="img_lt_7" fitHeight="75.0" fitWidth="100.0" pickOnBounds="true" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                              <ImageView fx:id="img_lt_9" fitHeight="75.0" fitWidth="100.0" pickOnBounds="true" GridPane.columnIndex="3" GridPane.rowIndex="1" />
-                              <ImageView fx:id="img_lt_10" fitHeight="75.0" fitWidth="100.0" pickOnBounds="true" GridPane.columnIndex="4" GridPane.rowIndex="1" />
-                              <ImageView fx:id="img_lt_8" fitHeight="75.0" fitWidth="100.0" pickOnBounds="true" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                              <ImageView fx:id="img_lt_6" fitHeight="75.0" fitWidth="100.0" onMouseClicked="#select_List_6" pickOnBounds="true" GridPane.rowIndex="1" />
+                              <ImageView fx:id="img_lt_7" fitHeight="75.0" fitWidth="100.0" onMouseClicked="#select_List_7" pickOnBounds="true" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                              <ImageView fx:id="img_lt_9" fitHeight="75.0" fitWidth="100.0" onMouseClicked="#select_List_9" pickOnBounds="true" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                              <ImageView fx:id="img_lt_10" fitHeight="75.0" fitWidth="100.0" onMouseClicked="#select_List_10" pickOnBounds="true" GridPane.columnIndex="4" GridPane.rowIndex="1" />
+                              <ImageView fx:id="img_lt_8" fitHeight="75.0" fitWidth="100.0" onMouseClicked="#select_List_8" pickOnBounds="true" GridPane.columnIndex="2" GridPane.rowIndex="1" />
                            </children>
                         </GridPane>
-                        <TableView fx:id="table_repros" layoutX="31.0" layoutY="220.0" prefHeight="95.0" prefWidth="200.0">
+                        <TableView fx:id="table_repros" layoutX="31.0" layoutY="220.0" onMouseClicked="#select_List_of_All" prefHeight="95.0" prefWidth="200.0" stylesheets="@../css/tables.css">
                           <columns>
                             <TableColumn fx:id="col_repros_name" prefWidth="198.66666793823242" text="Listas de Reproducción" />
                           </columns>
                         </TableView>
-                        <TableView fx:id="table_userRepros" layoutX="373.0" layoutY="220.0" prefHeight="95.0" prefWidth="200.0">
+                        <TableView fx:id="table_userRepros" layoutX="373.0" layoutY="220.0" prefHeight="95.0" prefWidth="200.0" stylesheets="@../css/tables.css">
                            <columns>
-                              <TableColumn fx:id="col_userRepros_name" prefWidth="198.66666793823242" text="Tus Listas" />
+                              <TableColumn fx:id="col_userRepros_name" prefWidth="198.66666793823242" text="Subscripciones" />
                            </columns>
                         </TableView>
                         <TextField layoutX="250.0" layoutY="235.0" prefHeight="25.0" prefWidth="100.0" />
-                        <Button layoutX="261.0" layoutY="268.0" mnemonicParsing="false" text="Añadir " />
+                        <Button layoutX="250.0" layoutY="270.0" mnemonicParsing="false" text="Crear Lista" />
+                        <Pane fx:id="black_pane2" opacity="0.85" prefHeight="319.0" prefWidth="600.0" style="-fx-background-color: black;" visible="false" />
+                        <Pane fx:id="list_pane" layoutX="90.0" layoutY="3.0" onMouseExited="#close_Options_Pane" prefHeight="315.0" prefWidth="429.0" style="-fx-background-color: #2a2a2a; -fx-background-radius: 5; -fx-effect: dropshadow( gaussian, rgba(0, 0, 0, 0.4), 10, 0.5, 0.0, 0.0 );" visible="false">
+                           <children>
+                              <Label layoutX="176.0" layoutY="256.0" text="Sin Canciones" textFill="WHITE">
+                                 <font>
+                                    <Font name="System Bold" size="12.0" />
+                                 </font>
+                              </Label>
+                              <GridPane layoutX="75.0" layoutY="18.0" prefHeight="290.0" prefWidth="279.0">
+                                 <columnConstraints>
+                                    <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                 </columnConstraints>
+                                 <rowConstraints>
+                                    <RowConstraints maxHeight="230.66661580403644" minHeight="10.0" prefHeight="143.33333333333334" valignment="CENTER" vgrow="SOMETIMES" />
+                                    <RowConstraints maxHeight="135.9999491373698" minHeight="10.0" prefHeight="28.666666666666657" vgrow="SOMETIMES" />
+                                    <RowConstraints maxHeight="135.9999491373698" minHeight="10.0" prefHeight="113.33330281575522" vgrow="SOMETIMES" />
+                                 </rowConstraints>
+                                 <children>
+                                    <ImageView fx:id="img_list_info" fitHeight="162.0" fitWidth="275.0" pickOnBounds="true" preserveRatio="true" />
+                                    <Label fx:id="lab_listinfo_name" text="Label" textFill="WHITE" GridPane.rowIndex="1">
+                                       <font>
+                                          <Font name="System Bold" size="13.0" />
+                                       </font>
+                                    </Label>
+                                    <TableView fx:id="table_list_info_song" onMouseClicked="#select_Song_From_List_Pane" prefHeight="200.0" prefWidth="337.0" stylesheets="@../css/tables.css" GridPane.rowIndex="2">
+                                       <columns>
+                                          <TableColumn fx:id="col_list_song_name" prefWidth="89.99993896484375" text="Nombre" />
+                                          <TableColumn fx:id="col_list_song_genre" minWidth="0.0" prefWidth="84.00007629394531" text="Género" />
+                                          <TableColumn fx:id="col_list_song_reproductions" prefWidth="106.0" text="Reproducciones" />
+                                       </columns>
+                                    </TableView>
+                                 </children>
+                              </GridPane>
+                              <Button layoutX="367.0" layoutY="273.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="2.0" text="+" />
+                              <Button fx:id="btn_user12" layoutX="415.0" layoutY="2.0" mnemonicParsing="false" onAction="#close_List_Pane" style="-fx-padding: 0; -fx-background-insets: 0; -fx-background-color: none;" text="X" textFill="WHITE">
+                                 <font>
+                                    <Font name="Modern No. 20" size="20.0" />
+                                 </font>
+                              </Button>
+                           </children>
+                        </Pane>
                      </children></AnchorPane>
             </content>
           </Tab>

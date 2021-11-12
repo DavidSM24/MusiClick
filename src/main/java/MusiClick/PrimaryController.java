@@ -78,9 +78,16 @@ public class PrimaryController {
 
 	// LIST TAB
 
+	ReproductionList repro;
+	
 	ObservableList<ReproductionList> repros;
 	ObservableList<ReproductionList> userRepros;
 
+	@FXML
+	private Pane black_pane2;
+	@FXML
+	private Pane list_pane;
+	
 	@FXML
 	private Label lab_lt_1;
 	@FXML
@@ -133,6 +140,20 @@ public class PrimaryController {
 	@FXML
 	private TableColumn<ReproductionList,String> col_userRepros_name;
 	
+			//list_pane
+	
+	@FXML
+	private ImageView img_list_info;
+	@FXML
+	private Label lab_listinfo_name;
+	@FXML
+	private TableView<Song> table_list_info_song;
+	@FXML
+	private TableColumn<Song,String> col_list_song_name;
+	@FXML
+	private TableColumn<Song,String> col_list_song_genre;
+	@FXML
+	private TableColumn<Song,String> col_list_song_reproductions;
 	// SEARCHER TAB
 
 	@FXML
@@ -371,6 +392,24 @@ public class PrimaryController {
 			if (table_song.getItems().contains(song)) {
 				table_song.getSelectionModel().select(song);
 			}
+			else {
+				table_song.getSelectionModel().select(null);
+			}
+			
+			if (table_list_info_song.getItems().contains(song)) {
+				table_list_info_song.getSelectionModel().select(song);
+			}
+			else {
+				table_list_info_song.getSelectionModel().select(null);
+
+			}
+			if (table_disc_info_song.getItems().contains(song)) {
+				table_disc_info_song.getSelectionModel().select(song);
+			}
+			else {
+				table_disc_info_song.getSelectionModel().select(null);
+
+			}
 
 			show_Song_Info(song);
 
@@ -481,7 +520,13 @@ public class PrimaryController {
 		if(repros!=null&&repros.size()>0) {
 			col_repros_name.setCellValueFactory(eachrepro -> {
 				SimpleStringProperty v = new SimpleStringProperty();
-				v.setValue(eachrepro.getValue().getName());
+				if(eachrepro.getValue().getType()==1) {
+					v.setValue(eachrepro.getValue().getName()+" (by "+eachrepro.getValue().getCreator().getUsername()+")");
+				}
+				else {
+					v.setValue(eachrepro.getValue().getName());
+				}
+				
 				return v;
 			});
 		}
@@ -491,7 +536,13 @@ public class PrimaryController {
 		if(userRepros!=null&&userRepros.size()>0) {
 			col_userRepros_name.setCellValueFactory(eachUseRepro -> {
 				SimpleStringProperty v = new SimpleStringProperty();
-				v.setValue(eachUseRepro.getValue().getName());
+				if(eachUseRepro.getValue().getType()==1) {
+					v.setValue(eachUseRepro.getValue().getName()+" (by "+eachUseRepro.getValue().getCreator().getUsername()+")");
+				}
+				else {
+					v.setValue(eachUseRepro.getValue().getName());
+				}
+				
 				return v;
 			});
 		}
@@ -542,6 +593,28 @@ public class PrimaryController {
 		}
 	}
 
+	private void setDetailsAndTableInfoList() {
+		if (repro != null) {
+			col_list_song_name.setCellValueFactory(eachsong -> {
+				SimpleStringProperty v = new SimpleStringProperty();
+				v.setValue(eachsong.getValue().getName());
+				return v;
+			});
+
+			col_list_song_genre.setCellValueFactory(eachsong -> {
+				SimpleStringProperty v = new SimpleStringProperty();
+				v.setValue(eachsong.getValue().getGenre().getName());
+				return v;
+			});
+
+			col_list_song_reproductions.setCellValueFactory(eachsong -> {
+				SimpleStringProperty v = new SimpleStringProperty();
+				v.setValue(eachsong.getValue().getReproductions() + "");
+				return v;
+			});
+		}
+	}
+	
 	@FXML
 	private void goToManagment() throws IOException {
 		try {
@@ -719,12 +792,24 @@ public class PrimaryController {
 			songsToReproduce.add(0, song);
 			songsToReproduceListened = FXCollections.observableArrayList();
 			songsToReproduceListened.addAll(songsToReproduce);
-
+			
 			istr = 0;
 			setSongInPlayer();
 		}
 	}
 
+	@FXML
+	private void select_Song_From_List_Pane() {
+		if(table_list_info_song.getSelectionModel().getSelectedItem()!=null) {
+			
+			if(table_list_info_song.getSelectionModel().getSelectedItem().getId()!=song.getId()) {
+				song=table_list_info_song.getSelectionModel().getSelectedItem();
+				select_Song(song);
+			}
+			
+		}
+	}
+	
 	@FXML
 	private void select_Song(Song s) {
 		if (s != null) {
@@ -792,6 +877,46 @@ public class PrimaryController {
 		}
 	}
 
+	@FXML
+	private void select_List_of_All() {
+		if(table_repros.getSelectionModel().getSelectedItem()!=null) {
+			
+			table_list_info_song.setVisible(true);
+
+			repro=table_repros.getSelectionModel().getSelectedItem();
+			
+			File f=new File(repro.getImage());
+			Image image=new Image("file:"+f.getPath());
+			img_list_info.setImage(image);
+			
+			if(repro.getType()==0) {
+				lab_listinfo_name.setText(repro.getName());
+
+			}
+			else {
+				lab_listinfo_name.setText(repro.getName()+" (by "+repro.getCreator().getUsername()+")");
+			}
+			
+			ObservableList<Song> saux=Converter.song_Converter(repro.getSongs());
+			table_list_info_song.setItems(saux);
+			if(saux.size()<1) {
+				table_list_info_song.setVisible(false);
+			}
+			else {
+				setDetailsAndTableInfoList();
+			}
+			
+			if(table_list_info_song.getItems().contains(song)) {
+				table_list_info_song.getSelectionModel().select(song);
+			}
+			else {
+				table_list_info_song.getSelectionModel().select(null);
+			}
+			
+			open_List_Pane();			
+		}
+	}
+	
 	@FXML
 	private void filter_Songs_Discs_ByName() {
 		if (!txt_filter.getText().matches("")) {
@@ -915,6 +1040,13 @@ public class PrimaryController {
 			setDetailsAndTableInfoDisc();
 			table_disc_info_song.getSelectionModel().select(null);
 
+			if(table_disc_info_song.getItems().contains(song)) {
+				table_disc_info_song.getSelectionModel().select(song);
+			}
+			else {
+				table_list_info_song.getSelectionModel().select(null);
+			}
+			
 			tab_disc_info.getSelectionModel().select(0);
 			black_pane.setVisible(true);
 			disc_pane.setVisible(true);
@@ -937,6 +1069,13 @@ public class PrimaryController {
 		table_disc_info_song.setItems(songs_by_disc);
 		setDetailsAndTableInfoDisc();
 
+		if(table_disc_info_song.getItems().contains(song)) {
+			table_disc_info_song.getSelectionModel().select(song);
+		}
+		else {
+			table_list_info_song.getSelectionModel().select(null);
+		}
+		
 		tab_disc_info.getSelectionModel().select(0);
 		black_pane.setVisible(true);
 		disc_pane.setVisible(true);
@@ -951,6 +1090,25 @@ public class PrimaryController {
 		lab_song_disc.setTextFill(Color.WHITE);
 		black_pane.setVisible(false);
 	}
+	
+	private void open_List_Pane() {
+		
+		if (repro != null) {
+
+			black_pane2.setVisible(true);
+			list_pane.setVisible(true);
+		}
+		
+	}
+	
+	@FXML
+	private void close_List_Pane() {
+
+		table_repros.getSelectionModel().select(null);
+		list_pane.setVisible(false);
+		black_pane2.setVisible(false);
+	}
+	
 
 	@FXML
 	private void goToDisc() {
@@ -1066,6 +1224,67 @@ public class PrimaryController {
 		lab_discinfo_artist.setTextFill(Color.WHITE);
 	}
 
+	@FXML
+	private void select_List_1() {
+		repro=repros.get(0);
+		table_repros.getSelectionModel().select(repro);
+		select_List_of_All();
+	}
+	@FXML
+	private void select_List_2() {
+		repro=repros.get(1);
+		table_repros.getSelectionModel().select(repro);
+		select_List_of_All();
+	}
+	@FXML
+	private void select_List_3() {
+		repro=repros.get(2);
+		table_repros.getSelectionModel().select(repro);
+		select_List_of_All();
+	}
+	@FXML
+	private void select_List_4() {
+		repro=repros.get(3);
+		table_repros.getSelectionModel().select(repro);
+		select_List_of_All();
+	}
+	@FXML
+	private void select_List_5() {
+		repro=repros.get(4);
+		table_repros.getSelectionModel().select(repro);
+		select_List_of_All();
+	}
+	@FXML
+	private void select_List_6() {
+		repro=repros.get(5);
+		table_repros.getSelectionModel().select(repro);
+		select_List_of_All();
+	}
+	@FXML
+	private void select_List_7() {
+		repro=repros.get(6);
+		table_repros.getSelectionModel().select(repro);
+		select_List_of_All();
+	}
+	@FXML
+	private void select_List_8() {
+		repro=repros.get(7);
+		table_repros.getSelectionModel().select(repro);
+		select_List_of_All();	
+	}
+	@FXML
+	private void select_List_9() {
+		repro=repros.get(8);
+		table_repros.getSelectionModel().select(repro);
+		select_List_of_All();
+	}
+	@FXML
+	private void select_List_10() {
+		repro=repros.get(9);
+		table_repros.getSelectionModel().select(repro);
+		select_List_of_All();
+	}
+	
 	@FXML
 	private void goNext() {
 
