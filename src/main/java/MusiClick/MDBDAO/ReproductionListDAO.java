@@ -36,7 +36,9 @@ public class ReproductionListDAO {
 			+ "VALUES (?,?,?,?) "
 			+ "ON DUPLICATE KEY UPDATE id_reproductionList=?,name_reproductionList=?,id_song=?,name_song=?;";
 	private static final String DELETEREPRODUCTIONLIST_SONG_BY_REPRO = "DELETE FROM reproductionlist_song WHERE id_reproductionList IN ";
-
+	private static final String DELETEREPRODUCTIONLIST_USER_BY_REPRO="DELETE FROM reproductionlist_user WHERE id_reproductionList IN ";
+	
+	
 	public static List<ReproductionList> getAll() {
 
 		repro = new ArrayList<ReproductionList>();
@@ -366,6 +368,38 @@ public class ReproductionListDAO {
 			try {
 
 				ps = con.prepareStatement(DELETEREPRODUCTIONLIST_SONG_BY_REPRO + s);
+				rs = ps.executeUpdate();
+
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} finally {
+				try {
+					ps.close();
+				} catch (SQLException e) {
+					// TODO: handle exception
+				}
+			}
+		}
+	}
+	
+	public static void delete_ReproductionList_User_By_Repros(ObservableList<ReproductionList> toDrop) {
+		String s = "(";
+		for (int i = 0; i < toDrop.size(); i++) {
+			s += toDrop.get(i).getId();
+			if (i != toDrop.size() - 1) {
+				s += ",";
+			}
+		}
+		s += ");";
+
+		int rs = 0;
+		Connection con = MDBConexion.getConexion();
+		PreparedStatement ps = null;
+		if (con != null) {
+			try {
+
+				ps = con.prepareStatement(DELETEREPRODUCTIONLIST_USER_BY_REPRO + s);
 				rs = ps.executeUpdate();
 
 			} catch (SQLException e) {

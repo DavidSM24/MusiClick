@@ -557,6 +557,7 @@ public class ManagmentController {
 					}
 					
 					ReproductionListDAO.delete_ReproductionList_Song_By_Repros(toDrop);
+					ReproductionListDAO.delete_ReproductionList_User_By_Repros(toDrop);
 					ReproductionListDAO.delete(toDrop);
 				}
 
