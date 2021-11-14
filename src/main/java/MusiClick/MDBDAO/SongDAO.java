@@ -47,6 +47,8 @@ public class SongDAO {
 	private final static String UPLOADVIEWS = "UPDATE song " + "SET reproductions= reproductions+1 "
 			+ "WHERE song.id=?;";
 
+	private final static String DELETEREPRO_SONG_BY_SONGS= "DELETE FROM reproductionlist_song WHERE id_song IN ";
+	
 	public static List<Song> getAll() {
 		// TODO Auto-generated method stub
 		songs = new ArrayList<Song>();
@@ -421,6 +423,40 @@ public class SongDAO {
 			try {
 
 				ps = con.prepareStatement(DELETE + s);
+				rs = ps.executeUpdate();
+
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} finally {
+				try {
+					ps.close();
+				} catch (SQLException e) {
+					// TODO: handle exception
+				}
+			}
+		}
+	}
+	
+	//cuando se elimina una cancion
+	public static void delete_ReproductionList_Song_by_Song(ObservableList<Song> toDrop) {
+
+		String s = "(";
+		for (int i = 0; i < toDrop.size(); i++) {
+			s += toDrop.get(i).getId();
+			if (i != toDrop.size() - 1) {
+				s += ",";
+			}
+		}
+		s += ");";
+
+		int rs = 0;
+		Connection con = MDBConexion.getConexion();
+		PreparedStatement ps = null;
+		if (con != null) {
+			try {
+
+				ps = con.prepareStatement(DELETEREPRO_SONG_BY_SONGS + s);
 				rs = ps.executeUpdate();
 
 			} catch (SQLException e) {

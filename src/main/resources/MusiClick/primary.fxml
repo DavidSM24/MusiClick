@@ -157,7 +157,7 @@
                             <TableColumn fx:id="col_repros_name" prefWidth="198.66666793823242" text="Listas de Reproducción" />
                           </columns>
                         </TableView>
-                        <TableView fx:id="table_userRepros" layoutX="373.0" layoutY="220.0" prefHeight="95.0" prefWidth="200.0" stylesheets="@../css/tables.css">
+                        <TableView fx:id="table_userRepros" layoutX="373.0" layoutY="220.0" onMouseClicked="#select_List_of_User" prefHeight="95.0" prefWidth="200.0" stylesheets="@../css/tables.css">
                            <columns>
                               <TableColumn fx:id="col_userRepros_name" prefWidth="198.66666793823242" text="Subscripciones" />
                            </columns>
@@ -197,12 +197,13 @@
                                     </TableView>
                                  </children>
                               </GridPane>
-                              <Button layoutX="367.0" layoutY="273.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="2.0" text="+" />
                               <Button fx:id="btn_user12" layoutX="415.0" layoutY="2.0" mnemonicParsing="false" onAction="#close_List_Pane" style="-fx-padding: 0; -fx-background-insets: 0; -fx-background-color: none;" text="X" textFill="WHITE">
                                  <font>
                                     <Font name="Modern No. 20" size="20.0" />
                                  </font>
                               </Button>
+                              <Button fx:id="btn_unsubs" layoutX="367.0" layoutY="273.0" mnemonicParsing="false" onAction="#unsubs" prefHeight="35.0" prefWidth="2.0" text="-" />
+                              <Button fx:id="btn_subs" layoutX="367.0" layoutY="273.0" mnemonicParsing="false" onAction="#subs" prefHeight="35.0" prefWidth="2.0" text="+" />
                            </children>
                         </Pane>
                      </children></AnchorPane>

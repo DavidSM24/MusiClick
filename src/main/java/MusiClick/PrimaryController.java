@@ -24,6 +24,7 @@ import javafx.beans.Observable;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -45,6 +46,7 @@ import javafx.scene.media.MediaView;
 import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import javafx.util.Duration;
 
 public class PrimaryController {
@@ -141,6 +143,11 @@ public class PrimaryController {
 	private TableColumn<ReproductionList,String> col_userRepros_name;
 	
 			//list_pane
+	
+	@FXML
+	private Button btn_subs;
+	@FXML
+	private Button btn_unsubs;
 	
 	@FXML
 	private ImageView img_list_info;
@@ -280,7 +287,7 @@ public class PrimaryController {
 		
 		repros = Converter.repro_Converter(ReproductionListDAO.getAll());
 		userRepros = Converter.repro_Converter(ReproductionListDAO.getByUserSubscriptions(u));
-
+		
 		table_repros.setItems(repros);
 		table_userRepros.setItems(userRepros);
 		
@@ -366,6 +373,13 @@ public class PrimaryController {
 			}
 				break;
 			}
+			List<ReproductionList> toRemove=new ArrayList<ReproductionList>();
+			for(ReproductionList r:repros) {
+				if(r.getCreator().equals(u)&&r.getType()!=0) {
+					toRemove.add(r);
+				}
+			}
+			repros.removeAll(toRemove);
 		}
 	}
 
@@ -437,7 +451,6 @@ public class PrimaryController {
 
 			mp.setOnPaused(new Runnable() {
 				public void run() {
-					System.out.println("onPaused");
 					playButton.setText("►");
 				}
 			});
@@ -634,6 +647,18 @@ public class PrimaryController {
 			// stage2.getIcons().add(image);
 			// stage2.setResizable(false);;
 			stage2.initModality(Modality.APPLICATION_MODAL);
+			stage2.setOnCloseRequest(new EventHandler<WindowEvent>() {
+			       @Override
+			       public void handle(WindowEvent e) {
+			          try {
+						
+					} catch (Exception e2) {
+						// TODO: handle exception
+					}
+			    	  Platform.exit();
+			          System.exit(0);
+			       }
+			    });
 
 			stage2.show();
 
@@ -643,7 +668,6 @@ public class PrimaryController {
 	}
 
 	public void sendSession() {
-		System.out.println("entro a sendSession?");
 		Thread t = new Thread(new Runnable() {
 
 			@Override
@@ -655,7 +679,6 @@ public class PrimaryController {
 						ss.setTime(ts);
 						SesionDAO.guardar(ss);
 						Thread.sleep(1000);
-						// System.out.println("hola");
 					} catch (InterruptedException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -913,6 +936,77 @@ public class PrimaryController {
 				table_list_info_song.getSelectionModel().select(null);
 			}
 			
+			if(!repro.getCreator().equals(u)) {
+				if(!repro.getSubscribed_users().contains(u)) {
+					btn_subs.setVisible(true);
+					btn_unsubs.setVisible(false);
+				}
+				else {
+					btn_subs.setVisible(false);
+					btn_unsubs.setVisible(true);
+				}
+			}
+			else {
+				btn_unsubs.setVisible(false);
+				btn_subs.setVisible(false);
+			}
+			
+			open_List_Pane();			
+		}
+	}
+	
+	@FXML
+	private void select_List_of_User() {
+		
+		if(table_userRepros.getSelectionModel().getSelectedItem()!=null) {
+
+			table_list_info_song.setVisible(true);
+
+			repro=table_userRepros.getSelectionModel().getSelectedItem();
+			
+			File f=new File(repro.getImage());
+			Image image=new Image("file:"+f.getPath());
+			img_list_info.setImage(image);
+			
+			if(repro.getType()==0) {
+				lab_listinfo_name.setText(repro.getName());
+
+			}
+			else {
+				lab_listinfo_name.setText(repro.getName()+" (by "+repro.getCreator().getUsername()+")");
+			}
+			
+			ObservableList<Song> saux=Converter.song_Converter(repro.getSongs());
+			table_list_info_song.setItems(saux);
+			if(saux.size()<1) {
+				table_list_info_song.setVisible(false);
+			}
+			else {
+				setDetailsAndTableInfoList();
+			}
+			
+			if(table_list_info_song.getItems().contains(song)) {
+				table_list_info_song.getSelectionModel().select(song);
+			}
+			else {
+				table_list_info_song.getSelectionModel().select(null);
+			}
+			
+			if(!repro.getCreator().equals(u)) {
+				if(!repro.getSubscribed_users().contains(u)) {
+					btn_subs.setVisible(true);
+					btn_unsubs.setVisible(false);
+				}
+				else {
+					btn_subs.setVisible(false);
+					btn_unsubs.setVisible(true);
+				}
+			}
+			else {
+				btn_unsubs.setVisible(false);
+				btn_subs.setVisible(false);
+			}
+			
 			open_List_Pane();			
 		}
 	}
@@ -1103,8 +1197,9 @@ public class PrimaryController {
 	
 	@FXML
 	private void close_List_Pane() {
-
+		
 		table_repros.getSelectionModel().select(null);
+		table_userRepros.getSelectionModel().select(null);
 		list_pane.setVisible(false);
 		black_pane2.setVisible(false);
 	}
@@ -1322,7 +1417,6 @@ public class PrimaryController {
 		}
 
 		else {
-			System.out.println("entro?");
 
 			istr--;
 			if (istr < 0) {
@@ -1333,4 +1427,26 @@ public class PrimaryController {
 			setSongInPlayer();
 		}
 	}
+	
+	@FXML
+	private void subs() {
+		btn_subs.setVisible(false);
+			
+		repro.getSubscribed_users().add(u);
+		table_userRepros.getItems().add(repro);
+		ReproductionListDAO.subscribe(repro, u);
+		btn_unsubs.setVisible(true);
+	}
+	
+	@FXML
+	private void unsubs() {
+		btn_unsubs.setVisible(false);
+				
+		repro.getSubscribed_users().remove(u);
+		table_userRepros.getItems().remove(repro);
+		ReproductionListDAO.unsubscribe(repro, u);
+		btn_subs.setVisible(true);
+	}
+
+
 }

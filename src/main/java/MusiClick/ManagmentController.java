@@ -7,11 +7,14 @@ import java.util.Optional;
 import MusiClick.MDBDAO.ArtistDAO;
 import MusiClick.MDBDAO.DiscDAO;
 import MusiClick.MDBDAO.GenreDAO;
+import MusiClick.MDBDAO.ReproductionListDAO;
 import MusiClick.MDBDAO.SongDAO;
 import MusiClick.models.Artist;
 import MusiClick.models.Disc;
 import MusiClick.models.Genre;
+import MusiClick.models.ReproductionList;
 import MusiClick.models.Song;
+import MusiClick.models.User;
 import MusiClick.utils.Converter;
 import MusiClick.utils.FileUtilities;
 import MusiClick.utils.MDBConexion;
@@ -154,6 +157,44 @@ public class ManagmentController {
 	@FXML
 	protected DatePicker dat_disc_date;
 
+	// REPROS
+
+	private ObservableList<ReproductionList> repros;
+	ReproductionList repro;
+
+	@FXML
+	private Button btn_add_Repro;
+	@FXML
+	private Button btn_edit_Repro;
+	@FXML
+	private Button btn_delete_Repro;
+	@FXML
+	private Button btn_set_repro_img;
+
+	@FXML
+	private TableView<ReproductionList> table_repro;
+	@FXML
+	private TableColumn<ReproductionList, String> col_repro_id;
+	@FXML
+	private TableColumn<ReproductionList, String> col_repro_name;
+
+	@FXML
+	private TableView<Song> table_repro_song_inside;
+	@FXML
+	private TableColumn<Song, String> col_repro_song_inside_name_artist;
+
+	@FXML
+	private TableView<Song> table_repro_song_outside;
+	@FXML
+	private TableColumn<Song, String> col_repro_song_outside_name_artist;
+
+	@FXML
+	private TextField txt_repro_id;
+	@FXML
+	private TextField txt_repro_name;
+	@FXML
+	private TextField txt_repro_img;
+
 	// MANAGER METHODS
 
 	@FXML
@@ -171,7 +212,6 @@ public class ManagmentController {
 
 		genres = Converter.genre_Converter(GenreDAO.getAll());
 		table_genre.setItems(genres);
-		System.out.println("peto?");
 		setTableAndDetailsInfo();
 		btn_add_Genre.setDisable(false);
 
@@ -199,13 +239,22 @@ public class ManagmentController {
 
 		btn_add_Disc.setDisable(false);
 
-		if (!inizialize) {
-			show_Alert(4);
-		}
+		// set Repros
+
+		repros = Converter.repro_Converter(ReproductionListDAO.getAllDefault());
+		table_repro.setItems(repros);
+
+		setTableAndDetailsInfo();
+		btn_add_Repro.setDisable(false);
 
 		artists.remove(0);
 
 		inizialize = true;
+
+		if (!inizialize) {
+			show_Alert(4);
+		}
+
 	}
 
 	private void setTableAndDetailsInfo() {
@@ -287,6 +336,22 @@ public class ManagmentController {
 				return v;
 			});
 		}
+
+		// repros
+
+		if (repros != null && repros.size() > 0) {
+			col_repro_id.setCellValueFactory(eachrepro -> {
+				SimpleStringProperty v = new SimpleStringProperty();
+				v.setValue(eachrepro.getValue().getId() + "");
+				return v;
+			});
+
+			col_repro_name.setCellValueFactory(eachrepro -> {
+				SimpleStringProperty v = new SimpleStringProperty();
+				v.setValue(eachrepro.getValue().getName());
+				return v;
+			});
+		}
 	}
 
 	@FXML
@@ -354,8 +419,6 @@ public class ManagmentController {
 				for (Artist a2 : artists) {
 
 					if (!a2.getPhoto().matches("[src/main/resources/images/artist/].*")) {
-						System.out.println(a2);
-						System.out.println(a2.getPhoto());
 						FileUtilities.saveFile(a2.getPhoto(),
 								"src/main/resources/images/artist/a" + a2.getId() + a2.getName() + ".jpg");
 
@@ -438,6 +501,8 @@ public class ManagmentController {
 						FileUtilities.removeFile(s.getMedia());
 						FileUtilities.removeFile(s.getPhoto());
 					}
+					
+					SongDAO.delete_ReproductionList_Song_by_Song(toDrop);
 					SongDAO.delete(toDrop);
 				}
 
@@ -466,6 +531,57 @@ public class ManagmentController {
 				SongDAO.deleteAll();
 			}
 
+			// SAVE REPROS
+			
+			if (repros.size() > 0) {
+				// borrar y actualizar
+
+				// borrar no existentes en la db
+				ObservableList<ReproductionList> RinDB = Converter.repro_Converter(ReproductionListDAO.getAll());
+				ObservableList<ReproductionList> toDrop = FXCollections.observableArrayList();
+
+				if (RinDB.size() > 0) {
+					for (ReproductionList r : repros) {
+						for (int i = 0; i < RinDB.size(); i++) {
+							if (!repros.contains(RinDB.get(i))) {
+								toDrop.add(RinDB.get(i));
+							}
+						}
+					}
+				}
+
+				if (toDrop.size() > 0) {
+
+					for (ReproductionList r : toDrop) {
+						FileUtilities.removeFile(r.getImage()); // >------
+					}
+					
+					ReproductionListDAO.delete_ReproductionList_Song_By_Repros(toDrop);
+					ReproductionListDAO.delete(toDrop);
+				}
+
+				// updatear existentes
+				for (ReproductionList r2 : repros) {
+
+					if (r2.getId() != 1) {
+						if (!r2.getImage().matches("[src/main/resources/images/default/].*")) {
+							FileUtilities.saveFile(r2.getImage(),
+									"src/main/resources/images/default/r" + r2.getId() + ".jpg");
+
+							r2.setImage("src/main/resources/images/default/r" + r2.getId() + ".jpg");
+						}
+					}
+
+					ReproductionListDAO.save(r2);
+					ObservableList<ReproductionList> aux= FXCollections.observableArrayList();
+					aux.add(r2);
+					ReproductionListDAO.delete_ReproductionList_Song_By_Repros(aux);
+					ReproductionListDAO.insert_ReproductionList_Song_By_Repro(r2);
+				}
+			} else { // borrar todos
+				ReproductionListDAO.deleteAll();
+			}
+			
 			show_Alert(5);
 			setController();
 		} else {
@@ -482,6 +598,17 @@ public class ManagmentController {
 
 		table_genre.getColumns().get(0).setVisible(false);
 		table_genre.getColumns().get(0).setVisible(true);
+		
+		if(table_repro_song_inside.getColumns().size()>0) {
+			table_repro_song_inside.getColumns().get(0).setVisible(false);
+			table_repro_song_inside.getColumns().get(0).setVisible(true);
+		}
+		
+		
+		if(table_repro_song_outside.getColumns().size()>0) {
+			table_repro_song_outside.getColumns().get(0).setVisible(false);
+			table_repro_song_outside.getColumns().get(0).setVisible(true);
+		}
 	}
 
 	private void show_Alert(int type) {
@@ -656,7 +783,6 @@ public class ManagmentController {
 							}
 						}
 
-						System.out.println(songs);
 						artists.remove(artist);
 						refresh();
 					}
@@ -1041,6 +1167,18 @@ public class ManagmentController {
 	private void delete_Song() {
 		if (inizialize) {
 			if (song != null) {
+				
+				if(repros!=null&&repros.size()>0) {
+					for(ReproductionList r:repros) {
+						if(r.getSongs()!=null&&r.getSongs().size()>0) {
+							if(r.getSongs().contains(song)) {
+								r.getSongs().remove(song);
+							}
+						}
+						
+					}
+				}
+				
 				songs.remove(song);
 				refresh();
 			} else {
@@ -1057,6 +1195,19 @@ public class ManagmentController {
 				txt_song_duration.setText("");
 				com_song_artist.setValue(artists.get(0));
 				com_song_genre.setValue(genres.get(0));
+				
+				if(repros!=null&&table_repro.getSelectionModel().getSelectedItem()!=null) {
+					repro=table_repro.getSelectionModel().getSelectedItem();
+					table_repro.getSelectionModel().select(repro);
+					select_Repro();
+				}
+				else {
+					if(table_repro.getItems().size()>0) {
+						repro=table_repro.getItems().get(0);
+						table_repro.getSelectionModel().select(repro);
+						select_Repro();
+					}
+				}
 			} else {
 				song = songs.get(0);
 				btn_edit_Song.setDisable(false);
@@ -1068,6 +1219,19 @@ public class ManagmentController {
 				txt_song_duration.setText(songs.get(0).getDuration() + "");
 				com_song_artist.setValue(artists.get(0));
 				com_song_genre.setValue(genres.get(0));
+				
+				if(repros!=null&&table_repro.getSelectionModel().getSelectedItem()!=null) {
+					repro=table_repro.getSelectionModel().getSelectedItem();
+					table_repro.getSelectionModel().select(repro);
+					select_Repro();
+				}
+				else {
+					if(table_repro.getItems().size()>0) {
+						repro=table_repro.getItems().get(0);
+						table_repro.getSelectionModel().select(repro);
+						select_Repro();
+					}
+				}
 			}
 		} else {
 			show_Alert(0);
@@ -1250,6 +1414,248 @@ public class ManagmentController {
 			}
 		} else {
 			show_Alert(0);
+		}
+	}
+
+	// REPRO METHODS
+
+	@FXML
+	public void set_repro_Photo() {
+		File file = null;
+		FileChooser filechooser = new FileChooser();
+		filechooser.setTitle("Selecionar imagen...");
+		try {
+			file = filechooser.showOpenDialog(null);
+			if (file != null && file.getPath().matches(".+\\.png") || file.getPath().matches(".+\\.jpg")) {
+				txt_repro_img.setText(file.getPath());
+			} else { // extension incorrecta
+				Alert alert = new Alert(AlertType.INFORMATION);
+				alert.setHeaderText(null);
+				alert.setTitle("Información");
+				alert.setContentText("Formato incorrecto: Debe elegir un tipo de archivo jpg o png.");
+				alert.showAndWait();
+			}
+		} catch (Exception e) {
+			// TODO: handle exception;
+		}
+	}
+	
+	@FXML
+	private void select_Repro() {
+		if (inizialize && repros.size() > 0) {
+			if (table_repro.getSelectionModel().getSelectedItem() != null) {
+
+				repro = this.table_repro.getSelectionModel().getSelectedItem();
+				btn_edit_Repro.setDisable(false);
+				btn_delete_Repro.setDisable(false);
+
+				txt_repro_id.setText(repro.getId() + "");
+				txt_repro_name.setText(repro.getName());
+				txt_repro_img.setText(repro.getImage());
+
+				table_repro_song_inside.setItems(Converter.song_Converter(repro.getSongs()));
+
+				// meter outside
+
+				ObservableList<Song> saux = Converter.song_Converter(SongDAO.getAll());
+				saux.removeAll(repro.getSongs());
+
+				table_repro_song_outside.setItems(saux);
+				
+				insert_Repro_Songs_Info();
+
+			} else {
+				repro = null;
+				btn_edit_Repro.setDisable(true);
+				btn_delete_Repro.setDisable(true);
+				txt_repro_id.setText("");
+				txt_repro_name.setText("");
+				txt_repro_img.setText("");
+				table_repro_song_inside.setItems(FXCollections.observableArrayList());
+				table_repro_song_outside.setItems(FXCollections.observableArrayList());
+				
+				insert_Repro_Songs_Info();
+
+			}
+
+		} else {
+			repro = null;
+			btn_edit_Repro.setDisable(true);
+			btn_delete_Repro.setDisable(true);
+			txt_repro_id.setText("");
+			txt_repro_name.setText("");
+			txt_repro_img.setText("");
+			table_repro_song_inside.setItems(FXCollections.observableArrayList());
+			table_repro_song_outside.setItems(FXCollections.observableArrayList());
+			
+			insert_Repro_Songs_Info();
+
+		}
+	}
+	
+	@FXML
+	private void add_Repro() {
+		if (inizialize) {
+			if (!txt_repro_id.getText().matches("")
+					&& txt_repro_id.getText().matches("[0-9]+")
+					&& !txt_repro_name.getText().matches("")
+					&& !txt_repro_img.getText().matches("")) {
+
+				boolean same_Id = false;
+				for (int i = 0; i < repros.size() && !same_Id; i++) {
+					if (Integer.parseInt(txt_repro_id.getText()) == repros.get(i).getId()) {
+						same_Id = true;
+					}
+				}
+				if (!same_Id) {
+					
+					User aux=new User();
+					aux.setId(1);
+					
+					repro = new ReproductionList(
+							Integer.parseInt(txt_repro_id.getText() + ""), 
+							txt_repro_name.getText(),
+							table_repro_song_inside.getItems(), 
+							aux,
+							FXCollections.observableArrayList(), 
+							0,
+							txt_repro_img.getText());
+
+					repros.add(repro);
+					refresh();
+					
+				} else {
+					show_Alert(1);
+				}
+			}
+		} else {
+			show_Alert(0);
+		}
+	}
+	
+	@FXML
+	private void edit_Repo() {
+		if (repros != null && !txt_repro_id.getText().matches("") && txt_repro_id.getText().matches("[0-9]+")
+				&& !txt_repro_name.getText().matches("") && !txt_repro_img.getText().matches("")) {
+
+			boolean same_Id = false;
+			for (int i = 0; i < repros.size() && !same_Id; i++) {
+				if (Integer.parseInt(txt_repro_id.getText()) == repros.get(i).getId()) {
+					same_Id = true;
+				}
+			}
+			if (!same_Id | Integer.parseInt(txt_repro_id.getText()) == repro.getId()) {
+				int index = repros.indexOf(repro);
+				table_repro.getSelectionModel().getSelectedItem().setId(Integer.parseInt(txt_repro_id.getText()));
+				table_repro.getSelectionModel().getSelectedItem().setName(txt_repro_name.getText());
+				table_repro.getSelectionModel().getSelectedItem().setImage(txt_repro_img.getText());
+				table_repro.getSelectionModel().getSelectedItem().setSongs(table_repro_song_inside.getItems());
+
+				repro = table_repro.getSelectionModel().getSelectedItem();
+				repros.set(index, repro);
+
+				refresh();
+			} else {
+				show_Alert(1);
+			}
+			table_song.getColumns().get(0).setVisible(false);
+			table_song.getColumns().get(0).setVisible(true);
+
+		}
+	}
+	
+	@FXML
+	private void delete_Repro() {
+		if (inizialize) {
+			
+			if (repros.size() <= 0) {
+				repros.remove(table_repro.getSelectionModel().getSelectedItem());
+				repro = null;
+				btn_edit_Repro.setDisable(true);
+				btn_delete_Repro.setDisable(true);
+				txt_repro_id.setText("");
+				txt_repro_name.setText("");
+				txt_repro_img.setText("");
+				
+				table_repro_song_inside.setItems(FXCollections.observableArrayList());
+				table_repro_song_outside.setItems(FXCollections.observableArrayList());
+				insert_Repro_Songs_Info();
+
+			} else {
+				repros.remove(table_repro.getSelectionModel().getSelectedItem());
+				table_repro.getSelectionModel().select(0);
+				select_Repro();
+
+				btn_edit_Disc.setDisable(true);
+				btn_delete_Disc.setDisable(true);
+			}
+		} else {
+			show_Alert(0);
+		}
+	}
+	
+	@FXML
+	private void insert_Repro_Songs_Info() {
+
+		// INSIDE
+
+		if (repro!=null&&repro.getSongs() != null) {
+			col_repro_song_inside_name_artist.setCellValueFactory(eachsong -> {
+				SimpleStringProperty v = new SimpleStringProperty();
+				v.setValue(eachsong.getValue().getArtist().getName() + " / " + eachsong.getValue().getName());
+				return v;
+			});
+		}
+
+		if(songs!=null&&songs.size()>0) {
+			col_repro_song_outside_name_artist.setCellValueFactory(eachsong -> {
+				SimpleStringProperty v = new SimpleStringProperty();
+				v.setValue(eachsong.getValue().getArtist().getName() + " / " + eachsong.getValue().getName());
+				return v;
+			});
+		}
+		
+	}
+	
+	@FXML
+	private void update_Repro_Songs_info() {
+		if(table_repro_song_inside.getColumns().size()>0) {
+			table_repro_song_inside.getColumns().get(0).setVisible(false);
+			table_repro_song_inside.getColumns().get(0).setVisible(true);
+		}
+		
+		
+		if(table_repro_song_outside.getColumns().size()>0) {
+			table_repro_song_outside.getColumns().get(0).setVisible(false);
+			table_repro_song_outside.getColumns().get(0).setVisible(true);
+		}
+	}
+
+	@FXML
+	private void toOut() {
+		if(table_repro_song_inside.getSelectionModel().getSelectedItem()!=null) {
+			Song aux=table_repro_song_inside.getSelectionModel().getSelectedItem();
+			table_repro_song_inside.getItems().remove(aux);
+			if(!table_repro_song_outside.getItems().contains(aux)) {
+				table_repro_song_outside.getItems().add(aux);
+			}
+			
+			update_Repro_Songs_info();
+			
+		}
+	}
+	
+	@FXML
+	private void toIn() {
+		if(table_repro_song_outside.getSelectionModel().getSelectedItem()!=null) {
+			Song aux=table_repro_song_outside.getSelectionModel().getSelectedItem();
+			table_repro_song_outside.getItems().remove(aux);
+			if(!table_repro_song_inside.getItems().contains(aux)) {
+				table_repro_song_inside.getItems().add(aux);
+			}
+			
+			update_Repro_Songs_info();
+			
 		}
 	}
 }
