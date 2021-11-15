@@ -24,6 +24,9 @@ public class ReproductionListDAO {
 	private static final String GETALL = "SELECT id, name, id_user,type,image FROM reproductionList;";
 	private static final String GETALLDEFAULT = "SELECT id, name, id_user,type,image " + "FROM reproductionList "
 			+ "WHERE type=0;";
+	private static final String GETBYCREATOR="SELECT id, name, id_user,type,image "
+			+ "FROM reproductionList "
+			+ "WHERE id_user=?;";
 	private static final String INSERT="INSERT INTO reproductionlist (name,id_user,type,image) "
 			+ "VALUES (?,?,?,?);";
 	private static final String INSERT_UPDATE = "INSERT INTO reproductionlist (id, name, id_user, type, image) "
@@ -82,6 +85,7 @@ public class ReproductionListDAO {
 					rs.close();
 				} catch (SQLException e) {
 					// TODO: handle exception
+					e.printStackTrace();
 				}
 			}
 		}
@@ -139,12 +143,41 @@ public class ReproductionListDAO {
 	}
 
 	public static List<ReproductionList> getByUserCreator(User u){
-		List<ReproductionList> all = ReproductionListDAO.getAll();
-		List<ReproductionList> result=FXCollections.observableArrayList();
-		
-		for (ReproductionList r : all) {
-			if (r.getCreator().equals(u)) {
-				result.add(r);
+		ObservableList<ReproductionList>result = FXCollections.observableArrayList();
+
+		con = MDBConexion.getConexion();
+		if (con != null) {
+			PreparedStatement ps = null;
+			ResultSet rs = null;
+			try {
+				ps = con.prepareStatement(GETBYCREATOR);
+				ps.setInt(1, u.getId());
+				rs = ps.executeQuery();
+				while (rs.next()) {
+
+					ReproductionList f = new ReproductionList();
+					f.setId(rs.getInt("id"));
+					System.out.println(f.getId());
+					User uaux = UserDAO.getUserByReproductionListCreator(f);
+					List<Song> saux = SongDAO.getByReproductionList(f);
+					List<User> lsaux = UserDAO.getByReproductionListSusbcribed(f);
+
+					ReproductionList aux = new ReproductionList(f.getId(), rs.getString("name"), saux, uaux, lsaux,
+							rs.getInt("type"), rs.getString("image"));
+
+					result.add(aux);
+				}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} finally {
+				try {
+					ps.close();
+					rs.close();
+				} catch (SQLException e) {
+					// TODO: handle exception
+					e.printStackTrace();
+				}
 			}
 		}
 

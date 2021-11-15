@@ -274,7 +274,7 @@
                                     <Font size="14.0" />
                                  </font>
                               </Button>
-                              <Button layoutX="177.0" layoutY="273.0" mnemonicParsing="false" onAction="#create_List" prefHeight="35.0" prefWidth="76.0" text="Añadir" />
+                              <Button fx:id="btn_create_list" layoutX="177.0" layoutY="273.0" mnemonicParsing="false" onAction="#create_List" prefHeight="35.0" prefWidth="76.0" text="Añadir" />
                               <Label layoutX="59.0" layoutY="231.0" text="Sin Canciones" textFill="WHITE">
                                  <font>
                                     <Font name="System Bold" size="13.0" />
@@ -557,7 +557,7 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <Button mnemonicParsing="false" stylesheets="@../css/tables.css" text="Modificar" />
+                  <Button mnemonicParsing="false" onAction="#open_modify_User_List" stylesheets="@../css/tables.css" text="Modificar" />
                   <Button mnemonicParsing="false" onAction="#remove_User_List" stylesheets="@../css/tables.css" text="Eliminar" GridPane.columnIndex="1" />
                </children>
             </GridPane>
