@@ -419,8 +419,7 @@ public class ManagmentController {
 				for (Artist a2 : artists) {
 
 					if (!a2.getPhoto().matches("[src/main/resources/images/artist/].*")) {
-						FileUtilities.saveFile(a2.getPhoto(),
-								"src/main/resources/images/artist/a" + a2.getId() + a2.getName() + ".jpg");
+						FileUtilities.saveFile(a2.getPhoto(),"src/main/resources/images/artist/a" + a2.getId() + a2.getName() + ".jpg");
 
 						a2.setPhoto("src/main/resources/images/artist/a" + a2.getId() + a2.getName() + ".jpg");
 					}

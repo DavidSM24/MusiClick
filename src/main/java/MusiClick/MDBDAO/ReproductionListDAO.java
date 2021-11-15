@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,7 +23,8 @@ public class ReproductionListDAO {
 	private static final String GETALL = "SELECT id, name, id_user,type,image FROM reproductionList;";
 	private static final String GETALLDEFAULT = "SELECT id, name, id_user,type,image " + "FROM reproductionList "
 			+ "WHERE type=0;";
-	
+	private static final String INSERT="INSERT INTO reproductionlist (name,id_user,type,image) "
+			+ "VALUES (?,?,?,?);";
 	private static final String INSERT_UPDATE = "INSERT INTO reproductionlist (id, name, id_user, type, image) "
 			+ "VALUES (?,?,?,?,?) " + "ON DUPLICATE KEY UPDATE name=?,id_user=?,type=?,image=?;";
 	private static final String DELETE = "DELETE FROM reproductionlist WHERE id IN ";
@@ -153,6 +155,46 @@ public class ReproductionListDAO {
 		return result;
 	}
 
+	public static int insert(ReproductionList r) {
+		int result=-1;
+		ResultSet rs = null;
+		PreparedStatement ps = null;
+		Connection con = MDBConexion.getConexion();
+
+		if (con != null) {
+			try {
+				ps = con.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS);
+				ps.setString(1, r.getName());
+				ps.setInt(2, r.getCreator().getId());
+				ps.setInt(3, r.getType());
+				ps.setString(4, r.getImage());
+
+				ps.executeUpdate();
+				
+				rs = ps.getGeneratedKeys();
+				if (rs.next()) {
+					result = rs.getInt(1);
+				}
+
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			finally {
+				try {
+					ps.close();
+				} catch (SQLException e) {
+					// TODO: handle exception
+					e.printStackTrace();
+				}
+			}
+
+		}
+		
+		return result;
+	}
+	
 	public static void save(ReproductionList r) {
 		// INSERT o UPDATE
 		// INSERT -> si no existe OK

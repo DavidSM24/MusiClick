@@ -2,6 +2,7 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Slider?>
 <?import javafx.scene.control.Tab?>
@@ -163,7 +164,7 @@
                            </columns>
                         </TableView>
                         <TextField layoutX="250.0" layoutY="235.0" prefHeight="25.0" prefWidth="100.0" />
-                        <Button layoutX="250.0" layoutY="270.0" mnemonicParsing="false" text="Crear Lista" />
+                        <Button layoutX="250.0" layoutY="270.0" mnemonicParsing="false" onAction="#open_Cration_Pane" text="Crear Lista" />
                         <Pane fx:id="black_pane2" opacity="0.85" prefHeight="319.0" prefWidth="600.0" style="-fx-background-color: black;" visible="false" />
                         <Pane fx:id="list_pane" layoutX="90.0" layoutY="3.0" onMouseExited="#close_Options_Pane" prefHeight="315.0" prefWidth="429.0" style="-fx-background-color: #2a2a2a; -fx-background-radius: 5; -fx-effect: dropshadow( gaussian, rgba(0, 0, 0, 0.4), 10, 0.5, 0.0, 0.0 );" visible="false">
                            <children>
@@ -204,6 +205,91 @@
                               </Button>
                               <Button fx:id="btn_unsubs" layoutX="367.0" layoutY="273.0" mnemonicParsing="false" onAction="#unsubs" prefHeight="35.0" prefWidth="2.0" text="-" />
                               <Button fx:id="btn_subs" layoutX="367.0" layoutY="273.0" mnemonicParsing="false" onAction="#subs" prefHeight="35.0" prefWidth="2.0" text="+" />
+                           </children>
+                        </Pane>
+                        <Pane fx:id="creation_pane" layoutX="90.0" layoutY="3.0" onMouseExited="#close_Options_Pane" prefHeight="315.0" prefWidth="429.0" style="-fx-background-color: #2a2a2a; -fx-background-radius: 5; -fx-effect: dropshadow( gaussian, rgba(0, 0, 0, 0.4), 10, 0.5, 0.0, 0.0 );" visible="false">
+                           <children>
+                              <Label layoutX="286.0" layoutY="231.0" text="Sin Canciones" textFill="WHITE">
+                                 <font>
+                                    <Font name="System Bold" size="13.0" />
+                                 </font>
+                              </Label>
+                              <Button layoutX="415.0" layoutY="2.0" mnemonicParsing="false" onAction="#close_Creation_Pane" style="-fx-padding: 0; -fx-background-insets: 0; -fx-background-color: none;" text="X" textFill="WHITE">
+                                 <font>
+                                    <Font name="Modern No. 20" size="20.0" />
+                                 </font>
+                              </Button>
+                              <GridPane gridLinesVisible="true" layoutX="39.0" layoutY="17.0" prefHeight="135.0" prefWidth="176.0">
+                                 <columnConstraints>
+                                    <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                 </columnConstraints>
+                                 <rowConstraints>
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+                                 </rowConstraints>
+                                 <children>
+                                    <ImageView fx:id="img_creation" fitHeight="133.0" fitWidth="178.0" pickOnBounds="true" preserveRatio="true" />
+                                 </children>
+                              </GridPane>
+                              <GridPane layoutX="243.0" layoutY="24.0" prefHeight="112.0" prefWidth="149.0">
+                                 <columnConstraints>
+                                    <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                 </columnConstraints>
+                                 <rowConstraints>
+                                    <RowConstraints maxHeight="54.00001653035481" minHeight="10.0" prefHeight="24.666676839192707" valignment="CENTER" vgrow="SOMETIMES" />
+                                    <RowConstraints maxHeight="59.33333333333334" minHeight="10.0" prefHeight="30.666687011718746" valignment="TOP" vgrow="SOMETIMES" />
+                                    <RowConstraints maxHeight="64.00000762939453" minHeight="10.0" prefHeight="49.99997965494792" valignment="TOP" vgrow="SOMETIMES" />
+                                 </rowConstraints>
+                                 <children>
+                                    <Label text="Nombre" textFill="WHITE">
+                                       <font>
+                                          <Font name="System Bold" size="12.0" />
+                                       </font>
+                                    </Label>
+                                    <TextField fx:id="txt_creation_name" GridPane.rowIndex="1" />
+                                    <Button mnemonicParsing="false" onAction="#select_Image_Creator" text="Seleccionar Imagen" GridPane.rowIndex="2" />
+                                 </children>
+                              </GridPane>
+                              <TableView fx:id="table_creation_outside" layoutX="257.0" layoutY="180.0" prefHeight="121.0" prefWidth="160.0">
+                                 <columns>
+                                    <TableColumn fx:id="col_creation_outside_name" maxWidth="10000.0" minWidth="-1.0" prefWidth="170.0" text="Artista - Canción" />
+                                 </columns>
+                              </TableView>
+                              <Label layoutX="24.0" layoutY="158.0" text="Canciones dentro de la lista" textFill="WHITE">
+                                 <font>
+                                    <Font name="System Bold" size="12.0" />
+                                 </font>
+                              </Label>
+                              <Label layoutX="255.0" layoutY="158.0" text="Canciones fuera de la lista" textFill="WHITE">
+                                 <font>
+                                    <Font name="System Bold" size="12.0" />
+                                 </font>
+                              </Label>
+                              <Button layoutX="186.0" layoutY="187.0" mnemonicParsing="false" onAction="#createToOut" prefHeight="35.0" prefWidth="57.0" text="⮞">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </Button>
+                              <Button layoutX="186.0" layoutY="230.0" mnemonicParsing="false" onAction="#createToIn" prefHeight="35.0" prefWidth="57.0" text="⮜">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </Button>
+                              <Button layoutX="177.0" layoutY="273.0" mnemonicParsing="false" onAction="#create_List" prefHeight="35.0" prefWidth="76.0" text="Añadir" />
+                              <Label layoutX="59.0" layoutY="231.0" text="Sin Canciones" textFill="WHITE">
+                                 <font>
+                                    <Font name="System Bold" size="13.0" />
+                                 </font>
+                              </Label>
+                              <CheckBox fx:id="che_public" layoutX="279.0" layoutY="128.0" mnemonicParsing="false" text="Pública" textFill="WHITE">
+                                 <font>
+                                    <Font name="System Bold" size="12.0" />
+                                 </font>
+                              </CheckBox>
+                              <TableView fx:id="table_creation_inside" layoutX="13.0" layoutY="180.0" prefHeight="121.0" prefWidth="160.0">
+                                 <columns>
+                                    <TableColumn fx:id="col_creation_inside_name" maxWidth="10000.0" minWidth="-1.0" prefWidth="170.0" text="Artista - Canción" />
+                                 </columns>
+                              </TableView>
                            </children>
                         </Pane>
                      </children></AnchorPane>
