@@ -12,6 +12,7 @@ import MusiClick.models.ReproductionList;
 import MusiClick.models.Song;
 import MusiClick.models.User;
 import MusiClick.utils.MDBConexion;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 public class ReproductionListDAO {
@@ -27,18 +28,24 @@ public class ReproductionListDAO {
 			+ "VALUES (?,?,?,?);";
 	private static final String INSERT_UPDATE = "INSERT INTO reproductionlist (id, name, id_user, type, image) "
 			+ "VALUES (?,?,?,?,?) " + "ON DUPLICATE KEY UPDATE name=?,id_user=?,type=?,image=?;";
-	private static final String DELETE = "DELETE FROM reproductionlist WHERE id IN ";
+	private static final String DELETEONE="DELETE FROM reproductionlist WHERE id=?";
+	private static final String DELETELIST = "DELETE FROM reproductionlist WHERE id IN ";
 	private static final String DELETEALL = "DELETE FROM reproductionlist;";
 	private static final String SUBSCRIBE="INSERT INTO reproductionlist_user (id_reproductionList, name_reproductionList, id_user, name_user) "
 			+ "VALUES (?,?,?,?);";
 	private static final String UNSUBSCRIBE= "DELETE FROM reproductionlist_user "
 			+ "WHERE id_reproductionList=? "
 			+ "AND id_user=?;";
+	
 	private static final String INSERTREPRODUCTIONLIST_SONG_BY_REPRO = "INSERT INTO reproductionlist_song (id_reproductionList, name_reproductionList, id_song, name_song) "
 			+ "VALUES (?,?,?,?) "
 			+ "ON DUPLICATE KEY UPDATE id_reproductionList=?,name_reproductionList=?,id_song=?,name_song=?;";
-	private static final String DELETEREPRODUCTIONLIST_SONG_BY_REPRO = "DELETE FROM reproductionlist_song WHERE id_reproductionList IN ";
-	private static final String DELETEREPRODUCTIONLIST_USER_BY_REPRO="DELETE FROM reproductionlist_user WHERE id_reproductionList IN ";
+	
+	private static final String DELETEREPRODUCTIONLIST_SONG_BY_REPRO="DELETE FROM reproductionlist_song WHERE id_reproductionList=?";
+	private static final String DELETEREPRODUCTIONLIST_SONG_BY_REPROS = "DELETE FROM reproductionlist_song WHERE id_reproductionList IN ";
+	
+	private static final String DELETEREPRODUCTIONLIST_USER_BY_REPRO="DELETE FROM reproductionlist_user WHERE id_reproductionList=?;";
+	private static final String DELETEREPRODUCTIONLIST_USER_BY_REPROS="DELETE FROM reproductionlist_user WHERE id_reproductionList IN ";
 	
 	
 	public static List<ReproductionList> getAll() {
@@ -132,11 +139,12 @@ public class ReproductionListDAO {
 	}
 
 	public static List<ReproductionList> getByUserCreator(User u){
-		List<ReproductionList> result = ReproductionListDAO.getAll();
+		List<ReproductionList> all = ReproductionListDAO.getAll();
+		List<ReproductionList> result=FXCollections.observableArrayList();
 		
-		for (ReproductionList r : repro) {
-			if (!r.getCreator().equals(u)) {
-				result.remove(r);
+		for (ReproductionList r : all) {
+			if (r.getCreator().equals(u)) {
+				result.add(r);
 			}
 		}
 
@@ -235,6 +243,30 @@ public class ReproductionListDAO {
 		}
 	}
 
+	public static void delete(ReproductionList r) {
+		int rs = 0;
+		Connection con = MDBConexion.getConexion();
+		PreparedStatement ps = null;
+		if (con != null) {
+			try {
+
+				ps = con.prepareStatement(DELETEONE);
+				ps.setInt(1, r.getId());
+				rs = ps.executeUpdate();
+
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} finally {
+				try {
+					ps.close();
+				} catch (SQLException e) {
+					// TODO: handle exception
+				}
+			}
+		}
+	}
+	
 	public static void delete(ObservableList<ReproductionList> toDrop) {
 		String s = "(";
 		for (int i = 0; i < toDrop.size(); i++) {
@@ -251,7 +283,7 @@ public class ReproductionListDAO {
 		if (con != null) {
 			try {
 
-				ps = con.prepareStatement(DELETE + s);
+				ps = con.prepareStatement(DELETELIST + s);
 				rs = ps.executeUpdate();
 
 			} catch (SQLException e) {
@@ -392,7 +424,31 @@ public class ReproductionListDAO {
 
 	}
 
-	// cuando se elimina un repro
+	public static void delete_ReproductionList_Song_By_Repro(ReproductionList r) {
+
+		int rs = 0;
+		Connection con = MDBConexion.getConexion();
+		PreparedStatement ps = null;
+		if (con != null) {
+			try {
+
+				ps = con.prepareStatement(DELETEREPRODUCTIONLIST_SONG_BY_REPRO);
+				ps.setInt(1, r.getId());
+				rs = ps.executeUpdate();
+
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} finally {
+				try {
+					ps.close();
+				} catch (SQLException e) {
+					// TODO: handle exception
+				}
+			}
+		}
+	}
+	
 	public static void delete_ReproductionList_Song_By_Repros(ObservableList<ReproductionList> toDrop) {
 		String s = "(";
 		for (int i = 0; i < toDrop.size(); i++) {
@@ -409,7 +465,32 @@ public class ReproductionListDAO {
 		if (con != null) {
 			try {
 
-				ps = con.prepareStatement(DELETEREPRODUCTIONLIST_SONG_BY_REPRO + s);
+				ps = con.prepareStatement(DELETEREPRODUCTIONLIST_SONG_BY_REPROS + s);
+				rs = ps.executeUpdate();
+
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} finally {
+				try {
+					ps.close();
+				} catch (SQLException e) {
+					// TODO: handle exception
+				}
+			}
+		}
+	}
+	
+	public static void delete_ReproductionList_User_By_Repro(ReproductionList r) {
+
+		int rs = 0;
+		Connection con = MDBConexion.getConexion();
+		PreparedStatement ps = null;
+		if (con != null) {
+			try {
+
+				ps = con.prepareStatement(DELETEREPRODUCTIONLIST_USER_BY_REPRO);
+				ps.setInt(1, r.getId());
 				rs = ps.executeUpdate();
 
 			} catch (SQLException e) {
@@ -441,7 +522,7 @@ public class ReproductionListDAO {
 		if (con != null) {
 			try {
 
-				ps = con.prepareStatement(DELETEREPRODUCTIONLIST_USER_BY_REPRO + s);
+				ps = con.prepareStatement(DELETEREPRODUCTIONLIST_USER_BY_REPROS + s);
 				rs = ps.executeUpdate();
 
 			} catch (SQLException e) {
@@ -457,4 +538,6 @@ public class ReproductionListDAO {
 		}
 	}
 
+
+	
 }

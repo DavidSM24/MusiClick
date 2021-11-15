@@ -495,7 +495,7 @@
                         <Font name="System Bold Italic" size="14.0" />
                      </font>
                   </Label>
-                  <Button fx:id="btn_close_sesion" mnemonicParsing="false" onMouseEntered="#changeColor_close_Session" onMouseExited="#Default_close_session" style="-fx-padding: 0; -fx-background-insets: 0; -fx-background-color: none;" text="Ver Perfil" textFill="WHITE" GridPane.rowIndex="1">
+                  <Button fx:id="btn_close_sesion" mnemonicParsing="false" onAction="#open_User_List_Pane" onMouseEntered="#changeColor_close_Session" onMouseExited="#Default_close_session" style="-fx-padding: 0; -fx-background-insets: 0; -fx-background-color: none;" text="Ver Listas" textFill="WHITE" GridPane.rowIndex="1">
                      <font>
                         <Font name="Modern No. 20" size="12.0" />
                      </font>
@@ -514,5 +514,54 @@
             <Font name="System Bold" size="12.0" />
          </font>
       </Button>
+      <Pane fx:id="main_black_pane" layoutY="-8.0" opacity="0.85" prefHeight="357.0" prefWidth="608.0" style="-fx-background-color: BLACK;" visible="false" />
+      <Pane fx:id="user_pane" layoutX="90.0" layoutY="33.0" onMouseExited="#close_Options_Pane" prefHeight="315.0" prefWidth="429.0" style="-fx-background-color: #2a2a2a; -fx-background-radius: 5; -fx-effect: dropshadow( gaussian, rgba(0, 0, 0, 0.4), 10, 0.5, 0.0, 0.0 );" visible="false">
+         <children>
+            <Label layoutX="135.0" layoutY="149.0" text="No has creado ninguna Lista" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Label>
+            <Button layoutX="408.0" layoutY="4.0" mnemonicParsing="false" onAction="#close_User_Pane" style="-fx-padding: 0; -fx-background-insets: 0; -fx-background-color: none;" text="X" textFill="WHITE">
+               <font>
+                  <Font name="Modern No. 20" size="20.0" />
+               </font>
+            </Button>
+            <GridPane layoutX="54.0" layoutY="17.0" prefHeight="30.0" prefWidth="321.0">
+               <columnConstraints>
+                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+               </rowConstraints>
+               <children>
+                  <Label prefHeight="25.0" prefWidth="253.0" text="Listas de reproducción de usuario" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="16.0" />
+                     </font>
+                  </Label>
+               </children>
+            </GridPane>
+            <TableView fx:id="table_userpane_list" layoutX="76.0" layoutY="59.0" prefHeight="179.0" prefWidth="277.0" stylesheets="@../css/tables.css">
+              <columns>
+                <TableColumn fx:id="col_userpane_name" prefWidth="232.66664123535156" resizable="false" text="Lista de Reproducción" />
+                  <TableColumn fx:id="col_userpane_subs" prefWidth="44.00006103515625" resizable="false" text="Subs" />
+              </columns>
+            </TableView>
+            <GridPane layoutX="120.0" layoutY="259.0" prefHeight="30.0" prefWidth="190.0">
+              <columnConstraints>
+                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <Button mnemonicParsing="false" stylesheets="@../css/tables.css" text="Modificar" />
+                  <Button mnemonicParsing="false" onAction="#remove_User_List" stylesheets="@../css/tables.css" text="Eliminar" GridPane.columnIndex="1" />
+               </children>
+            </GridPane>
+         </children>
+      </Pane>
    </children>
 </Pane>

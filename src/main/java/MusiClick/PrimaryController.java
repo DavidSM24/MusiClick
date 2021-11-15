@@ -192,6 +192,15 @@ public class PrimaryController {
 	@FXML
 	private TableColumn<Song, String> col_creation_outside_name;
 
+	@FXML
+	private Pane user_pane;
+	@FXML
+	private TableView<ReproductionList> table_userpane_list;
+	@FXML
+	private TableColumn<ReproductionList, String> col_userpane_name;	
+	@FXML
+	private TableColumn<ReproductionList, String> col_userpane_subs;
+
 	// SEARCHER TAB
 
 	@FXML
@@ -675,6 +684,21 @@ public class PrimaryController {
 		}
 	}
 
+	private void setDetailsandTableInfo_UserList_Pane() {
+		
+		col_userpane_name.setCellValueFactory(eachsong -> {
+			SimpleStringProperty v = new SimpleStringProperty();
+			v.setValue(eachsong.getValue().getName());
+			return v;
+		});
+		
+		col_userpane_subs.setCellValueFactory(eachsong -> {
+			SimpleStringProperty v = new SimpleStringProperty();
+			v.setValue(eachsong.getValue().getSubscribed_users().size()+"");
+			return v;
+		});
+	}
+	
 	@FXML
 	private void goToManagment() throws IOException {
 		try {
@@ -1589,12 +1613,12 @@ public class PrimaryController {
 			}
 			ReproductionListDAO.save(r);
 			userRepros.add(r);
-			
+
 			ReproductionListDAO.subscribe(r, u);
-			
+
 			setTableAndDetailsInfo();
-			
-			//guardar relacion
+
+			// guardar relacion
 
 			Alert alert = new Alert(AlertType.INFORMATION);
 			alert.setHeaderText(null);
@@ -1614,28 +1638,25 @@ public class PrimaryController {
 
 	@FXML
 	public void createToOut() {
-		if(table_creation_inside.getSelectionModel().getSelectedItem()!=null) {
+		if (table_creation_inside.getSelectionModel().getSelectedItem() != null) {
 			Song aux = table_creation_inside.getSelectionModel().getSelectedItem();
 			table_creation_inside.getItems().remove(aux);
 			if (!table_creation_outside.getItems().contains(aux)) {
 				table_creation_outside.getItems().add(aux);
 			}
 
-			
-			if(table_creation_inside.getItems().size()>0) {
+			if (table_creation_inside.getItems().size() > 0) {
 				table_creation_inside.setVisible(true);
-			}
-			else {
+			} else {
 				table_creation_inside.setVisible(false);
 			}
-			if(table_creation_outside.getItems().size()>0) {
+			if (table_creation_outside.getItems().size() > 0) {
 				table_creation_outside.setVisible(true);
-			}
-			else {
+			} else {
 				table_creation_outside.setVisible(false);
 			}
 		}
-		
+
 	}
 
 	@FXML
@@ -1647,22 +1668,19 @@ public class PrimaryController {
 				table_creation_inside.getItems().add(aux);
 			}
 
-
-			if(table_creation_inside.getItems().size()>0) {
+			if (table_creation_inside.getItems().size() > 0) {
 				table_creation_inside.setVisible(true);
-			}
-			else {
+			} else {
 				table_creation_inside.setVisible(false);
 			}
-			if(table_creation_outside.getItems().size()>0) {
+			if (table_creation_outside.getItems().size() > 0) {
 				table_creation_outside.setVisible(true);
-			}
-			else {
+			} else {
 				table_creation_outside.setVisible(false);
 			}
 		}
 	}
-	
+
 	@FXML
 	private void select_Image_Creator() {
 		File file = null;
@@ -1671,9 +1689,9 @@ public class PrimaryController {
 		try {
 			file = filechooser.showOpenDialog(null);
 			if (file != null && file.getPath().matches(".+\\.png") || file.getPath().matches(".+\\.jpg")) {
-				str_image=file.getPath();
-				
-				Image i= new Image("file:"+file.getPath());
+				str_image = file.getPath();
+
+				Image i = new Image("file:" + file.getPath());
 				img_creation.setImage(i);
 			} else { // extension incorrecta
 				Alert alert = new Alert(AlertType.INFORMATION);
@@ -1684,25 +1702,94 @@ public class PrimaryController {
 			}
 		} catch (Exception e) {
 			// TODO: handle exception;
-			str_image="src/main/resources/images/default/default.jpg";
-			File f=new File(str_image);
-			Image i= new Image("file:"+f.getPath());
+			str_image = "src/main/resources/images/default/default.jpg";
+			File f = new File(str_image);
+			Image i = new Image("file:" + f.getPath());
 			img_creation.setImage(i);
 		}
 	}
-	
-	private void update_Inside_Outside_Info(){
-		if(table_creation_inside.getColumns().size()>0) {
+
+	private void update_Inside_Outside_Info() {
+		if (table_creation_inside.getColumns().size() > 0) {
 			table_creation_inside.getColumns().get(0).setVisible(false);
 			table_creation_inside.getColumns().get(0).setVisible(true);
 		}
-		
-		
-		if(table_creation_outside.getColumns()	.size()>0) {
+
+		if (table_creation_outside.getColumns().size() > 0) {
 			table_creation_outside.getColumns().get(0).setVisible(false);
 			table_creation_outside.getColumns().get(0).setVisible(true);
 		}
 	}
-
 	
+	@FXML
+	private void open_User_List_Pane(){
+		
+		close_Options_Pane();
+		close_Creation_Pane();
+		close_Disc_Pane();
+		close_List_Pane();
+		
+		ObservableList<ReproductionList> list_of_user=Converter.repro_Converter(ReproductionListDAO.getByUserCreator(u));
+		table_userpane_list.setItems(list_of_user);
+		setDetailsandTableInfo_UserList_Pane();
+		
+		if(table_userpane_list.getItems().size()>0) {
+			table_userpane_list.setVisible(true);
+		}
+		
+		black_pane.setVisible(true);
+		black_pane2.setVisible(true);
+		
+		user_pane.setVisible(true);
+		
+	}
+	
+	@FXML
+	private void close_User_Pane() {
+		black_pane.setVisible(false);
+		black_pane2.setVisible(false);
+		
+		user_pane.setVisible(false);
+	}
+	
+	@FXML
+	private void remove_User_List() {
+		if(table_userpane_list.getSelectionModel().getSelectedItem()!=null) {
+			
+			Alert alert = new Alert(AlertType.CONFIRMATION);
+			alert.setHeaderText(null);
+			alert.setTitle("Confirmación");
+			alert.setContentText(" ¿Desea eliminar esta lista definitivamente?");
+
+			Optional<ButtonType> result = alert.showAndWait();
+			if (result.get() == ButtonType.OK) {
+				repro=table_userpane_list.getSelectionModel().getSelectedItem();
+				if(!repro.getImage().matches("src/main/resources/images/default/default.jpg")) {
+					FileUtilities.removeFile(repro.getImage());
+				}
+				
+				ReproductionListDAO.delete_ReproductionList_Song_By_Repro(repro);
+				ReproductionListDAO.delete_ReproductionList_User_By_Repro(repro);
+
+				ReproductionListDAO.delete(repro);
+				table_userpane_list.getItems().remove(repro);
+				table_userRepros.getItems().remove(repro);
+				table_repros.getItems().remove(repro);
+				
+				if(table_userpane_list.getItems().size()<1) {
+					table_userpane_list.setVisible(false);
+				}
+				
+				Alert alert2 = new Alert(AlertType.INFORMATION);
+				alert2.setHeaderText(null);
+				alert2.setTitle("Información");
+				alert2.setContentText("Se ha eliminado la lista correctamente.");
+				alert2.show();
+			}
+			
+			
+			
+		}
+	}
+
 }
