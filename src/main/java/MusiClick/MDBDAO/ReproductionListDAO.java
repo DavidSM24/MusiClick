@@ -300,7 +300,7 @@ public class ReproductionListDAO {
 		}
 	}
 	
-	public static void delete(ObservableList<ReproductionList> toDrop) {
+	public static void delete(List<ReproductionList> toDrop) {
 		String s = "(";
 		for (int i = 0; i < toDrop.size(); i++) {
 			s += toDrop.get(i).getId();
@@ -482,7 +482,7 @@ public class ReproductionListDAO {
 		}
 	}
 	
-	public static void delete_ReproductionList_Song_By_Repros(ObservableList<ReproductionList> toDrop) {
+	public static void delete_ReproductionList_Song_By_Repros(List<ReproductionList> toDrop) {
 		String s = "(";
 		for (int i = 0; i < toDrop.size(); i++) {
 			s += toDrop.get(i).getId();
@@ -539,7 +539,7 @@ public class ReproductionListDAO {
 		}
 	}
 	
-	public static void delete_ReproductionList_User_By_Repros(ObservableList<ReproductionList> toDrop) {
+	public static void delete_ReproductionList_User_By_Repros(List<ReproductionList> toDrop) {
 		String s = "(";
 		for (int i = 0; i < toDrop.size(); i++) {
 			s += toDrop.get(i).getId();

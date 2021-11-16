@@ -18,6 +18,7 @@ import MusiClick.models.User;
 import MusiClick.utils.Converter;
 import MusiClick.utils.FileUtilities;
 import MusiClick.utils.MDBConexion;
+import MusiClick.utils.Unconverter;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -383,7 +384,7 @@ public class ManagmentController {
 				}
 
 				if (toDrop.size() > 0) {
-					GenreDAO.delete(toDrop);
+					GenreDAO.delete(Unconverter.genre_UnConverter(toDrop));
 				}
 
 				// updatear existentes
@@ -418,7 +419,7 @@ public class ManagmentController {
 						FileUtilities.removeFile(a.getPhoto()); // >------
 					}
 
-					ArtistDAO.delete(toDrop);
+					ArtistDAO.delete(Unconverter.artist_UnConverter(toDrop));
 				}
 
 				// updatear existentes
@@ -462,7 +463,7 @@ public class ManagmentController {
 						FileUtilities.removeFile(d.getPhoto()); // >------
 					}
 
-					DiscDAO.delete(toDrop);
+					DiscDAO.delete(Unconverter.disc_Converter(toDrop));
 				}
 
 				// updatear existentes
@@ -508,8 +509,8 @@ public class ManagmentController {
 						FileUtilities.removeFile(s.getPhoto());
 					}
 
-					SongDAO.delete_ReproductionList_Song_by_Song(toDrop);
-					SongDAO.delete(toDrop);
+					SongDAO.delete_ReproductionList_Song_by_Song(Unconverter.song_Converter(toDrop));
+					SongDAO.delete(Unconverter.song_Converter(toDrop));
 				}
 
 				for (Song s2 : songs) {
@@ -562,8 +563,8 @@ public class ManagmentController {
 						FileUtilities.removeFile(r.getImage()); // >------
 					}
 
-					ReproductionListDAO.delete_ReproductionList_Song_By_Repros(toDrop);
-					ReproductionListDAO.delete_ReproductionList_User_By_Repros(toDrop);
+					ReproductionListDAO.delete_ReproductionList_Song_By_Repros(Unconverter.repro_Converter(toDrop));
+					ReproductionListDAO.delete_ReproductionList_User_By_Repros(Unconverter.repro_Converter(toDrop));
 					ReproductionListDAO.delete(toDrop);
 				}
 
@@ -582,7 +583,7 @@ public class ManagmentController {
 					ReproductionListDAO.save(r2);
 					ObservableList<ReproductionList> aux = FXCollections.observableArrayList();
 					aux.add(r2);
-					ReproductionListDAO.delete_ReproductionList_Song_By_Repros(aux);
+					ReproductionListDAO.delete_ReproductionList_Song_By_Repros(Unconverter.repro_Converter(aux));
 					ReproductionListDAO.insert_ReproductionList_Song_By_Repro(r2);
 				}
 			} else { // borrar todos

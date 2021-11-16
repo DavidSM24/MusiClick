@@ -405,7 +405,7 @@ public class SongDAO {
 		}
 	}
 
-	public static void delete(ObservableList<Song> toDrop) {
+	public static void delete(List<Song> toDrop) {
 
 		String s = "(";
 		for (int i = 0; i < toDrop.size(); i++) {
@@ -439,7 +439,7 @@ public class SongDAO {
 	}
 	
 	//cuando se elimina una cancion
-	public static void delete_ReproductionList_Song_by_Song(ObservableList<Song> toDrop) {
+	public static void delete_ReproductionList_Song_by_Song(List<Song> toDrop) {
 
 		String s = "(";
 		for (int i = 0; i < toDrop.size(); i++) {

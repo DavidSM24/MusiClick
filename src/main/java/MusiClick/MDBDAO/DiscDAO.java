@@ -286,7 +286,7 @@ public class DiscDAO {
 		}
 	}
 
-	public static void delete(ObservableList<Disc> toDrop) {
+	public static void delete(List<Disc> toDrop) {
 
 		String s = "(";
 		for (int i = 0; i < toDrop.size(); i++) {

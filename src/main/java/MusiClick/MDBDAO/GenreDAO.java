@@ -157,7 +157,7 @@ public class GenreDAO extends Genre { // extends Sede implements SedeDAO
 				}
 	}
 	
-	public static void delete(ObservableList<Genre> toDrop) {
+	public static void delete(List<Genre> toDrop) {
 		String s="(";
 		for(int i=0;i<toDrop.size();i++) {
 			s+=toDrop.get(i).getId();

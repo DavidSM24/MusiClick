@@ -162,7 +162,7 @@ public class ArtistDAO {
 				}
 	}
 	
-	public static void delete(ObservableList<Artist> toDrop) {
+	public static void delete(List<Artist> toDrop) {
 		
 		String s="(";
 		for(int i=0;i<toDrop.size();i++) {

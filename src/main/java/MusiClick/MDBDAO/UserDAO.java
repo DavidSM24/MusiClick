@@ -15,7 +15,7 @@ import javafx.collections.ObservableList;
 
 public class UserDAO {
 
-	public static ObservableList<User> users= FXCollections.observableArrayList();
+	public static List<User> users= FXCollections.observableArrayList();
 	private static Connection con = null;
 	
 	private static final String GETALL="SELECT id,mail,username,password,usercode,confirmed FROM user";
