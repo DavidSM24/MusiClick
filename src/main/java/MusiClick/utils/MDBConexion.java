@@ -39,6 +39,10 @@ public class MDBConexion {
 	 * Debe ir cargado desde un xml externo
 	 */
 
+	/**
+	 * 
+	 * @return una conexión a una bbdd
+	 */
 	public static Connection getConexion() {
 		if (con == null) {
 			try {
@@ -51,7 +55,10 @@ public class MDBConexion {
 		}
 		return con;
 	}
-
+	
+	/**
+	 * Cierra los recursos de una conexión abierta
+	 */
 	public static void cerrar() {
 		if (con != null) {
 			try {
@@ -62,6 +69,9 @@ public class MDBConexion {
 		}
 	}
 
+	/**
+	 * Lee la información para conectarse a una bbdd
+	 */
 	public static void loadServerInfo() {
 
 		try {
@@ -91,6 +101,9 @@ public class MDBConexion {
 		}
 	}
 
+	/**
+	 * guarda un archivo xml con la información de una bbdd
+	 */
 	public static void saveServerInfo() {
 
 		try {

@@ -4,7 +4,10 @@ import MusiClick.MDBDAO.UserDAO;
 
 public class CodeGenerator {
 	
-
+	/**
+	 * 
+	 * @return un código único para un usuario
+	 */
 	public static String getCode() {
 		String result=null;
 		

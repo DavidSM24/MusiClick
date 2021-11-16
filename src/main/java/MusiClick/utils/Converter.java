@@ -12,6 +12,11 @@ import javafx.collections.ObservableList;
 
 public class Converter {
 	
+	/**
+	 * 
+	 * @param lista de géneros
+	 * @return observablelist de géneros
+	 */
 	public static ObservableList<Genre> genre_Converter (List<Genre> list){
 		
 		ObservableList<Genre> result=FXCollections.observableArrayList();
@@ -26,6 +31,11 @@ public class Converter {
 		
 	}
 	
+	/**
+	 * 
+	 * @param lista de artista
+	 * @return observablelist de artista
+	 */
 	public static ObservableList<Artist> artist_Converter (List<Artist> list){
 		
 		ObservableList<Artist> result=FXCollections.observableArrayList();
@@ -40,6 +50,11 @@ public class Converter {
 		
 	}
 	
+	/**
+	 * 
+	 * @param lista de canciones
+	 * @return observablelist de canciones
+	 */
 	public static ObservableList<Song> song_Converter (List<Song> list){
 		
 		ObservableList<Song> result=FXCollections.observableArrayList();
@@ -54,6 +69,11 @@ public class Converter {
 		
 	}
 	
+	/**
+	 * 
+	 * @param lista de discos
+	 * @return observablelist de discos
+	 */
 	public static ObservableList<Disc> disc_Converter (List<Disc> list){
 		
 		ObservableList<Disc> result=FXCollections.observableArrayList();
@@ -68,6 +88,11 @@ public class Converter {
 		
 	}
 	
+	/**
+	 * 
+	 * @param lista de repros
+	 * @return observablelist de repros
+	 */
 	public static ObservableList<ReproductionList> repro_Converter (List<ReproductionList> list){
 		
 		ObservableList<ReproductionList> result=FXCollections.observableArrayList();

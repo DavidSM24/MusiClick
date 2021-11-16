@@ -12,6 +12,11 @@ import javafx.collections.ObservableList;
 
 public class Unconverter {
 
+	/**
+	 * 
+	 * @param list lista de géneros
+	 * @return observablelist de géneros
+	 */
 	public static List<Genre> genre_UnConverter(ObservableList<Genre> list) {
 
 		List<Genre> result = new ArrayList<Genre>();
@@ -26,6 +31,11 @@ public class Unconverter {
 
 	}
 
+	/**
+	 * 
+	 * @param list lista de artistas
+	 * @return observablelist de artistas
+	 */
 	public static List<Artist> artist_UnConverter(ObservableList<Artist> list) {
 
 		List<Artist> result = new ArrayList<Artist>();
@@ -40,6 +50,11 @@ public class Unconverter {
 
 	}
 
+	/**
+	 * 
+	 * @param list lista de canciones
+	 * @return observablelist de canciones
+	 */
 	public static List<Song> song_Converter(ObservableList<Song> list) {
 
 		List<Song> result = new ArrayList<Song>();
@@ -54,6 +69,11 @@ public class Unconverter {
 
 	}
 
+	/**
+	 * 
+	 * @param list lista de discos
+	 * @return observablelist de discos
+	 */
 	public static List<Disc> disc_Converter(ObservableList<Disc> list) {
 
 		List<Disc> result = new ArrayList<Disc>();
@@ -68,6 +88,11 @@ public class Unconverter {
 
 	}
 
+	/**
+	 * 
+	 * @param list lista de repros
+	 * @return observablelist de repros
+	 */
 	public static List<ReproductionList> repro_Converter(ObservableList<ReproductionList> list) {
 
 		List<ReproductionList> result = new ArrayList<ReproductionList>();

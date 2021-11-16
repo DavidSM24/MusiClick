@@ -11,7 +11,13 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
 public class MailSender {
-	public static void sendMail(String destinatario, String asunto, String cuerpo) {
+/**
+ * 	
+ * @param destinatario correo de la persona que recivirá el email
+ * @param asunto asunto del correo
+ * @param cuerpo cuerpo del correo
+ */
+public static void sendMail(String destinatario, String asunto, String cuerpo) {
 		//Sesión
 		
 		Properties props = new Properties();

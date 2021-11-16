@@ -10,6 +10,12 @@ import java.io.OutputStream;
 
 public class FileUtilities {
 	
+	/**
+	 * 
+	 * @param ficheroOriginal el fichero original a copiar
+	 * @param ficheroCopia la ruta donde se creará el fichero copia
+	 * @throws IOException excepción por File
+	 */
 	public static void saveFile(String ficheroOriginal, String ficheroCopia) throws IOException {
 		File f = new File(ficheroOriginal);
 		InputStream is = new FileInputStream(f);
@@ -24,6 +30,10 @@ public class FileUtilities {
 
 	}
 	
+	/**
+	 * 
+	 * @param url la dirección del archivo a eliminar
+	 */
 	public static void removeFile(String url) {
 		File f = new File(url);
 		f.delete();
