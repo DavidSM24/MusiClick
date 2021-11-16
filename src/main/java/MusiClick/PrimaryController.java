@@ -88,7 +88,6 @@ public class PrimaryController {
 	// LIST TAB
 
 	ReproductionList repro;
-
 	ObservableList<ReproductionList> repros;
 	ObservableList<ReproductionList> userRepros;
 
@@ -97,6 +96,9 @@ public class PrimaryController {
 	@FXML
 	private Pane list_pane;
 
+	@FXML
+	TextField txt_filter_list;
+	
 	@FXML
 	private Label lab_lt_1;
 	@FXML
@@ -1953,7 +1955,61 @@ public class PrimaryController {
 	
 	}
 	
+	@FXML
 	private void filter_Lists() {
+		
+		if(!txt_filter_list.getText().matches("")) {
+			
+			ObservableList<ReproductionList> filter_lists_all=FXCollections.observableArrayList();
+			ObservableList<ReproductionList> filter_lists_subscribed=FXCollections.observableArrayList();
+			
+			for(ReproductionList r:repros) {
+				if(r.getName().toLowerCase().contains(txt_filter_list.getText().toLowerCase())) {
+					filter_lists_all.add(r);
+				}
+			}
+			
+			for(ReproductionList r:userRepros) {
+				if(r.getName().toLowerCase().contains(txt_filter_list.getText().toLowerCase())) {
+					filter_lists_subscribed.add(r);
+				}
+			}
+			
+			table_repros.setItems(filter_lists_all);
+			if(filter_lists_all.size()<1) {
+				table_repros.setVisible(false);
+			}
+			else {
+				table_repros.setVisible(true);
+			}
+			table_userRepros.setItems(filter_lists_subscribed);
+			if(filter_lists_subscribed.size()<1) {
+				table_userRepros.setVisible(false);
+			}
+			else {
+				table_userRepros.setVisible(true);
+			}
+			setTableAndDetailsInfo();
+
+		}
+		else {
+			table_repros.setItems(repros);
+			if(repros.size()<1) {
+				table_repros.setVisible(false);
+			}
+			else {
+				table_repros.setVisible(true);
+			}
+			table_userRepros.setItems(userRepros);
+			if(userRepros.size()<1) {
+				table_userRepros.setVisible(false);
+			}
+			else {
+				table_userRepros.setVisible(true);
+			}
+			setTableAndDetailsInfo();
+		}
+		
 		
 	}
 	

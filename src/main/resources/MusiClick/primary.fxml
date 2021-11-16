@@ -163,7 +163,7 @@
                               <TableColumn fx:id="col_userRepros_name" prefWidth="198.66666793823242" text="Subscripciones" />
                            </columns>
                         </TableView>
-                        <TextField layoutX="250.0" layoutY="235.0" prefHeight="25.0" prefWidth="100.0" />
+                        <TextField fx:id="txt_filter_list" layoutX="250.0" layoutY="235.0" onKeyReleased="#filter_Lists" prefHeight="25.0" prefWidth="100.0" />
                         <Button layoutX="250.0" layoutY="270.0" mnemonicParsing="false" onAction="#open_Cration_Pane" text="Crear Lista" />
                         <Pane fx:id="black_pane2" opacity="0.85" prefHeight="319.0" prefWidth="600.0" style="-fx-background-color: black;" visible="false" />
                         <Pane fx:id="list_pane" layoutX="90.0" layoutY="3.0" onMouseExited="#close_Options_Pane" prefHeight="315.0" prefWidth="429.0" style="-fx-background-color: #2a2a2a; -fx-background-radius: 5; -fx-effect: dropshadow( gaussian, rgba(0, 0, 0, 0.4), 10, 0.5, 0.0, 0.0 );" visible="false">
