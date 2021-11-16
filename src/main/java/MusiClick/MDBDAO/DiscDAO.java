@@ -20,6 +20,7 @@ import javafx.collections.ObservableList;
 
 public class DiscDAO {
 
+	//SENTENCIAS SQL
 	private static final String GETALL = "SELECT id, name, date,photo, reproductions, id_artist FROM disc;";
 	private static final String GETBYID = "SELECT id, name, date,photo, reproductions, id_artist " + "FROM disc "
 			+ "WHERE id=?;";
@@ -38,10 +39,16 @@ public class DiscDAO {
 	private final static String UPLOADVIEWS = "UPDATE disc " + "SET reproductions= reproductions+1 "
 			+ "WHERE disc.id=?;";
 
+	//lista de discos
 	public static List<Disc> discs = new ArrayList<Disc>();
-
+	
+	//conexion
 	private static Connection con = null;
 
+	/**
+	 * 
+	 * @return devuelve todos los discos
+	 */
 	public static List<Disc> getAll() { // los devuelve vacios
 
 		discs = new ArrayList<Disc>();
@@ -83,6 +90,11 @@ public class DiscDAO {
 		return discs;
 	}
 
+	/**
+	 * 
+	 * @param id recibe el id del disco a buscar
+	 * @return devuelve el disco
+	 */
 	public static Disc getById(int id) {
 		Disc result = new Disc();
 
@@ -117,6 +129,11 @@ public class DiscDAO {
 		return result;
 	}
 
+	/**
+	 * 
+	 * @param name recibe el nombre del disco para buscar
+	 * @return devuelve la lista de discos que coincidan con el nombre
+	 */
 	public static List<Disc> getByName(String name) {
 		List<Disc> result = new ArrayList<Disc>();
 
@@ -154,6 +171,11 @@ public class DiscDAO {
 		return result;
 	}
 
+	/**
+	 * 
+	 * @param a recibe un artista principal para buscar los discos de ese artista
+	 * @return los discos de ese artista
+	 */
 	public static List<Disc> getByArtist(Artist a) {
 		List<Disc> result = FXCollections.observableArrayList();
 
@@ -196,6 +218,12 @@ public class DiscDAO {
 		return result;
 	}
 
+	/**
+	 * Para filtrado
+	 * 
+	 * @param name recibe un nombre de artista
+	 * @return devuelve todos los discos cuyo artista contenga ese nombre
+	 */
 	public static List<Disc> getByArtistName(String name) {
 		List<Disc> result = new ArrayList<Disc>();
 
@@ -233,12 +261,22 @@ public class DiscDAO {
 		return result;
 	}
 
+	/**
+	 * Inserta la canción recivida en el disco recivido.
+	 * 
+	 * @param s es una canción a insertar en un disco
+	 * @param d es el disco donde se insertará una canción
+	 */
 	public static void insertSong(Song s, Disc d) {
 		if (s != null && d != null && d.getSongs() != null) {
 			d.getSongs().add(s);
 		}
 	}
 
+	/**
+	 * 
+	 * @param d recibe un disco a guardar en la bbdd
+	 */
 	public static void save(Disc d) {
 		// INSERT o UPDATE
 		// INSERT -> si no existe OK
@@ -286,6 +324,10 @@ public class DiscDAO {
 		}
 	}
 
+	/**
+	 * 
+	 * @param toDrop recibe una lista de discos a eliminar de la bbdd
+	 */
 	public static void delete(List<Disc> toDrop) {
 
 		String s = "(";
@@ -319,6 +361,9 @@ public class DiscDAO {
 		}
 	}
 
+	/**
+	 * elimina todos los registros de disc en la bbdd
+	 */
 	public static void deleteAll() {
 		int rs = 0;
 		Connection con = MDBConexion.getConexion();
@@ -342,6 +387,10 @@ public class DiscDAO {
 		}
 	}
 
+	/**
+	 * hace una consula a la bbdd para aumentar la reproducción de un disco
+	 * @param d el disco al cual se le aumentará las reproducciones en 1
+	 */
 	public static void upload_Views(Disc d) {
 		int rs = 0;
 		Connection con = MDBConexion.getConexion();

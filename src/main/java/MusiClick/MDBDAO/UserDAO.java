@@ -15,9 +15,13 @@ import javafx.collections.ObservableList;
 
 public class UserDAO {
 
+	//lista de usuarios
 	public static List<User> users= FXCollections.observableArrayList();
+	
+	//conexión
 	private static Connection con = null;
 	
+	// SENTENCIAS SQL
 	private static final String GETALL="SELECT id,mail,username,password,usercode,confirmed FROM user";
 	private final static String INSERT_UPDATE="INSERT INTO user (id, mail, username, password, usercode,confirmed) "
 			+ "VALUES (?,?,?,?,?,?) "
@@ -32,6 +36,9 @@ public class UserDAO {
 			+ "INNER JOIN user u on u.id=ru.id_user "
 			+ "WHERE r.id=?";
 	
+	/**
+	 * Añade todos los usuarios de la bbdd
+	 */
 	public static void loadAllUsers() {
 		Connection con = MDBConexion.getConexion();
 		if (con != null) {
@@ -62,6 +69,10 @@ public class UserDAO {
 		}
 	}
 	
+	/**
+	 * 
+	 * @return Devuelve todos los usuarios
+	 */
 	public static List<User> getAllUsersAsList() {
 		List<User> result=new ArrayList();
 		
@@ -73,6 +84,10 @@ public class UserDAO {
 		return result;
 	}
 	
+	/**
+	 * Inserta/Updatea un usuario en la bbdd
+	 * @param u el usuario a insertar/updatear
+	 */
 	public static void guardar(User u) {
 		// INSERT o UPDATE
 		//INSERT -> si no existe OK
@@ -118,6 +133,11 @@ public class UserDAO {
 		}
 	}
 	
+	/**
+	 * 
+	 * @param name un nombre de usuario
+	 * @return el usuario con ese único nombre
+	 */
 	public static User getUserByName(String name){
 		User result=null;
 		
@@ -130,6 +150,11 @@ public class UserDAO {
 		return result;
 	}
 	
+	/**
+	 * 
+	 * @param mail un email
+	 * @return el usuario con ese único email
+	 */
 	public static User getUserByMail(String mail){
 		User result=null;
 		
@@ -142,6 +167,11 @@ public class UserDAO {
 		return result;
 	}
 	
+	/**
+	 * 
+	 * @param code un códiºgo
+	 * @return el usuario con ese único código
+	 */
 	public static User getUserByUserCode(String code){
 		User result=null;
 		
@@ -154,6 +184,11 @@ public class UserDAO {
 		return result;
 	}
 	
+	/**
+	 * 
+	 * @param aux una lista de reproducción
+	 * @return el usuario creador de la lista recivida
+	 */
 	public static User getUserByReproductionListCreator(ReproductionList aux) {
 
 		User result = new User();
@@ -195,6 +230,11 @@ public class UserDAO {
 		return result;
 	}
 	
+	/**
+	 * 
+	 * @param f una lista de reproducción
+	 * @return lista de usuarios suscritos a esa lista
+	 */
 	public static List<User> getByReproductionListSusbcribed(ReproductionList f) {
 
 		List<User> result = new ArrayList<User>();
@@ -238,6 +278,10 @@ public class UserDAO {
 		return result;
 	}
 	
+	/**
+	 * 
+	 * @return un nuevo id para la bbdd
+	 */
 	public static int getNewId() {
 		//calcula el id mas alto de todos y suma 1
 		

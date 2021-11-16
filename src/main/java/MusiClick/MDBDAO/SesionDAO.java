@@ -12,6 +12,8 @@ import MusiClick.utils.MDBConexion;
 import javafx.collections.FXCollections;
 
 public class SesionDAO {
+	
+	// SENTENCIAS SQL
 	private static final String ACTIVATEEVENTS = "SET GLOBAL event_scheduler = ON";
 	private static final String GETSession = "SELECT id, id_user, time FROM session WHERE session.id_user= ";
 	private static final String GETNEWID= "SELECT id FROM session ORDER BY id DESC LIMIT 1";
@@ -19,6 +21,9 @@ public class SesionDAO {
 			+ "VALUES (?,?,?) "
 			+ "ON DUPLICATE KEY UPDATE id_user=?,time=?";
 
+	/**
+	 * Activa el manejo de eventos de la bbdd
+	 */
 	public static void activateEvents() {
 		Connection con = MDBConexion.getConexion();
 		if (con != null) {
@@ -33,7 +38,12 @@ public class SesionDAO {
 			}
 		}
 	}
-		
+	
+	/**
+	 * 
+	 * @param u un usuario a cotejar su estado online
+	 * @return si el usuario está actualmente conectado
+	 */
 	public static boolean isConnected(User u) {
 
 		boolean result = false;
@@ -70,10 +80,12 @@ public class SesionDAO {
 		return result;
 	}
 	
+	/**
+	 * Inserta una sesión en la bbdd
+	 * @param s la sesión con la informacióni del usuario a conectar
+	 */
 	public static void guardar(Sesion s) {
-		// INSERT o UPDATE
-				//INSERT -> si no existe OK
-				//En caso de ERROR -> hago un update
+
 				int rs=0;
 				Connection con = MDBConexion.getConexion();
 				
@@ -95,6 +107,10 @@ public class SesionDAO {
 				}
 	}
 	
+	/**
+	 * Devuelve un posible id para la creación de una sesión
+	 * @return el id generado
+	 */
 	public static int getNewId() {
 		
 		int result=0;

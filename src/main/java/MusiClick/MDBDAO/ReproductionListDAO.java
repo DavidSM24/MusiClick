@@ -17,10 +17,13 @@ import javafx.collections.ObservableList;
 
 public class ReproductionListDAO {
 
+	//lista de repros
 	public static List<ReproductionList> repro = new ArrayList<ReproductionList>();
 
+	//conexion
 	private static Connection con = null;
 
+	//SENTENCIAS SQL
 	private static final String GETALL = "SELECT id, name, id_user,type,image FROM reproductionList;";
 	private static final String GETALLDEFAULT = "SELECT id, name, id_user,type,image " + "FROM reproductionList "
 			+ "WHERE type=0;";
@@ -50,7 +53,10 @@ public class ReproductionListDAO {
 	private static final String DELETEREPRODUCTIONLIST_USER_BY_REPRO="DELETE FROM reproductionlist_user WHERE id_reproductionList=?;";
 	private static final String DELETEREPRODUCTIONLIST_USER_BY_REPROS="DELETE FROM reproductionlist_user WHERE id_reproductionList IN ";
 	
-	
+	/**
+	 * 
+	 * @return devuelve todas las listas de reproducción
+	 */
 	public static List<ReproductionList> getAll() {
 
 		repro = new ArrayList<ReproductionList>();
@@ -93,6 +99,10 @@ public class ReproductionListDAO {
 		return repro;
 	}
 
+	/**
+	 * 
+	 * @return devuelve todas las listas de reproducción por defecto
+	 */
 	public static List<ReproductionList> getAllDefault() {
 
 		repro = new ArrayList<ReproductionList>();
@@ -142,6 +152,11 @@ public class ReproductionListDAO {
 		return repro;
 	}
 
+	/**
+	 * 
+	 * @param u el usuario creador de las listas
+	 * @return devuelve aquellas listas creadas por el usuario recivido
+	 */
 	public static List<ReproductionList> getByUserCreator(User u){
 		ObservableList<ReproductionList>result = FXCollections.observableArrayList();
 
@@ -184,6 +199,11 @@ public class ReproductionListDAO {
 		return result;
 	}
 	
+	/**
+	 * 
+	 * @param u el usuario suscrito a las listas
+	 * @return devuelve aquellas listas a las que está suscrito el usuario
+	 */
 	public static List<ReproductionList> getByUserSubscriptions(User u) { // <-- return rls if user is subcribed
 		List<ReproductionList> result = new ArrayList<ReproductionList>();
 
@@ -196,6 +216,12 @@ public class ReproductionListDAO {
 		return result;
 	}
 
+	/**
+	 * Solo inserta una lista en la bbdd, no updatea, y devuelve el id generado
+	 * 
+	 * @param r la lista a insertar
+	 * @return devuelve el id generado de la lista insertada
+	 */
 	public static int insert(ReproductionList r) {
 		int result=-1;
 		ResultSet rs = null;
@@ -236,6 +262,11 @@ public class ReproductionListDAO {
 		return result;
 	}
 	
+	/**
+	 * Inserta/updatea una lista
+	 * 
+	 * @param r la lista a insertar/updatear
+	 */
 	public static void save(ReproductionList r) {
 		// INSERT o UPDATE
 		// INSERT -> si no existe OK
@@ -276,6 +307,11 @@ public class ReproductionListDAO {
 		}
 	}
 
+	/**
+	 * Elimina una sola lista de la bbdd
+	 * 
+	 * @param r la lista a eliminar
+	 */
 	public static void delete(ReproductionList r) {
 		int rs = 0;
 		Connection con = MDBConexion.getConexion();
@@ -300,6 +336,11 @@ public class ReproductionListDAO {
 		}
 	}
 	
+	/**
+	 * Elimina una serie de listas de la bbdd
+	 * 
+	 * @param toDrop las listas que se eliminarán
+	 */
 	public static void delete(List<ReproductionList> toDrop) {
 		String s = "(";
 		for (int i = 0; i < toDrop.size(); i++) {
@@ -332,6 +373,9 @@ public class ReproductionListDAO {
 		}
 	}
 
+	/**
+	 * Elimina todas los los registros de la tabla reproductionlist
+	 */
 	public static void deleteAll() {
 
 		int rs = 0;
@@ -356,6 +400,12 @@ public class ReproductionListDAO {
 		}
 	}
 
+	/**
+	 * Inserta una suscripción en la bbdd para el usuario u en la lista r
+	 * 
+	 * @param r la lista a la que se suscriben
+	 * @param u el usuario que se va a suscribir
+	 */
 	public static void subscribe(ReproductionList r, User u) {
 
 		int rs = 0;
@@ -388,6 +438,12 @@ public class ReproductionListDAO {
 		}
 	}
 	
+	/**
+	 * Elimina una suscripción en la bbdd para el usuario u en la lista r
+	 * 
+	 * @param r la lista a la que se dessuscriben
+	 * @param u el usuario que se va a desuscribir
+	 */
 	public static void unsubscribe(ReproductionList r, User u) {
 
 		int rs = 0;
@@ -414,6 +470,11 @@ public class ReproductionListDAO {
 		}
 	}
 
+	/**
+	 * Inserta todas las relaciones entre canciones y una lista
+	 * 
+	 * @param r la lista a la que se le crearán la relación con sus canciones
+	 */
 	public static void insert_ReproductionList_Song_By_Repro(ReproductionList r) {
 
 		if (r != null && r.getSongs() != null && r.getSongs().size() > 0) {
@@ -457,6 +518,11 @@ public class ReproductionListDAO {
 
 	}
 
+	/**
+	 * Dada una lista, elimina todos sus registros de reproductionlist_song
+	 * 
+	 * @param r la lista que se eliminará
+	 */
 	public static void delete_ReproductionList_Song_By_Repro(ReproductionList r) {
 
 		int rs = 0;
@@ -482,6 +548,12 @@ public class ReproductionListDAO {
 		}
 	}
 	
+	/**
+	 * Dada una lista de listas de reproducción, se eliminarán todos los registros que contengan
+	 * el id de esta lista en la tabla reproductionlist_song
+	 * 
+	 * @param toDrop la lista que se eliminará
+	 */
 	public static void delete_ReproductionList_Song_By_Repros(List<ReproductionList> toDrop) {
 		String s = "(";
 		for (int i = 0; i < toDrop.size(); i++) {
@@ -514,6 +586,11 @@ public class ReproductionListDAO {
 		}
 	}
 	
+	/**
+	 * Dada una lista se eliminan todos sus registros de reproductionlist_user
+	 * 
+	 * @param r la lista a eliminar
+	 */
 	public static void delete_ReproductionList_User_By_Repro(ReproductionList r) {
 
 		int rs = 0;
@@ -539,6 +616,12 @@ public class ReproductionListDAO {
 		}
 	}
 	
+	/**
+	 * Dada una lista, se eliminan todos los registros que contengan su id de la tabla
+	 * reproductionlist_user
+	 * 
+	 * @param toDrop la lista de repros a eliminar
+	 */
 	public static void delete_ReproductionList_User_By_Repros(List<ReproductionList> toDrop) {
 		String s = "(";
 		for (int i = 0; i < toDrop.size(); i++) {

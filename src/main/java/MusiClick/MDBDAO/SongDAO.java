@@ -18,10 +18,13 @@ import javafx.collections.ObservableList;
 
 public class SongDAO {
 
+	//lista de canciones
 	public static List<Song> songs = new ArrayList<Song>();
 
+	//conexión a la bbdd
 	private static Connection con = null;
 
+	// SENTENCIAS SQL
 	private static final String GETALL = "SELECT id, name, id_artist,photo, url , duration, reproductions, id_genre, id_disc "
 			+ "FROM song;";
 	private static final String GETBYID = "SELECT id, name, id_artist,photo, url , duration, reproductions, id_genre, id_disc "
@@ -46,9 +49,12 @@ public class SongDAO {
 	private final static String DELETEALL = "DELETE FROM song;";
 	private final static String UPLOADVIEWS = "UPDATE song " + "SET reproductions= reproductions+1 "
 			+ "WHERE song.id=?;";
-
 	private final static String DELETEREPRO_SONG_BY_SONGS= "DELETE FROM reproductionlist_song WHERE id_song IN ";
 	
+	/**
+	 * 
+	 * @return todas las canciones de la bbdd
+	 */
 	public static List<Song> getAll() {
 		// TODO Auto-generated method stub
 		songs = new ArrayList<Song>();
@@ -101,6 +107,11 @@ public class SongDAO {
 		return songs;
 	}
 
+	/**
+	 * 
+	 * @param id el id para buscar una canción
+	 * @return la canción con ese id
+	 */
 	public static Song getById(int id) {
 		Song result = new Song();
 
@@ -134,6 +145,11 @@ public class SongDAO {
 		return result;
 	}
 
+	/**
+	 * 
+	 * @param a un artista para buscar sus canciones
+	 * @return las canciones del artista recivido
+	 */
 	public static List<Song> getByArtistId(Artist a) {
 		List<Song> result = new ArrayList<Song>();
 		if (songs != null && songs.size() > 0) {
@@ -147,6 +163,13 @@ public class SongDAO {
 
 	}
 
+	/**
+	 * 
+	 * Solo devuelve canciones cuyo artista contenga el nombre recivido
+	 * 
+	 * @param name nombre del artista a filtrar
+	 * @return lista de canciones cuyo artista contiene el nombre
+	 */
 	public static List<Song> getByArtistName(String name) {
 		List<Song> result = new ArrayList<Song>();
 		if (songs != null && songs.size() > 0) {
@@ -160,6 +183,11 @@ public class SongDAO {
 
 	}
 
+	/**
+	 * 
+	 * @param g un género de canción
+	 * @return una lista de canciones que tengan ese género asignado
+	 */
 	public static List<Song> getByGenre(Genre g) {
 		List<Song> result = new ArrayList<Song>();
 		if (songs != null && songs.size() > 0) {
@@ -173,6 +201,11 @@ public class SongDAO {
 
 	}
 
+	/**
+	 * 
+	 * @param name un nombre de canción
+	 * @return aquellas canciones que contengan el nombre
+	 */
 	public static List<Song> getByName(String name) {
 		// TODO Auto-generated method stub
 		List<Song> result = new ArrayList<Song>();
@@ -209,6 +242,11 @@ public class SongDAO {
 		return result;
 	}
 
+	/**
+	 * 
+	 * @param d un disco
+	 * @return aquellas canciones pertenecientes al disco recivido
+	 */
 	public static List<Song> getByDisc(Disc d) {
 
 		List<Song> result = new ArrayList<Song>();
@@ -246,6 +284,11 @@ public class SongDAO {
 
 	}
 
+	/**
+	 * 
+	 * @param name un nombre de un disco
+	 * @return aquellas canciones cuyo nombre del disco contenga el nombre recivido
+	 */
 	public static List<Song> getByDisc(String name) {
 		List<Song> result = new ArrayList<Song>();
 
@@ -281,6 +324,11 @@ public class SongDAO {
 		return result;
 	}
 
+	/**
+	 * 
+	 * @param r un repro
+	 * @return aquellas canciones pertenecientes a la lista recivida
+	 */
 	public static List<Song> getByReproductionList(ReproductionList r) {
 		List<Song> result = new ArrayList<Song>();
 
@@ -317,6 +365,10 @@ public class SongDAO {
 		return result;
 	}
 
+	/**
+	 * 
+	 * @return devuelve un número de canciones obtenidas aleatoriamente
+	 */
 	public static List<Song> getRandomly() {
 		List<Song> result = new ArrayList<Song>();
 
@@ -352,6 +404,10 @@ public class SongDAO {
 		return result;
 	}
 	
+	/**
+	 * 
+	 * @param s inserta/updatea la canción recivida en la bbdd
+	 */
 	public static void save(Song s) {
 		// INSERT o UPDATE
 		// INSERT -> si no existe OK
@@ -405,6 +461,11 @@ public class SongDAO {
 		}
 	}
 
+	/**
+	 * Elimina una lista de canciones de la bbdd
+	 * 
+	 * @param la lista de canciones a eliminar
+	 */
 	public static void delete(List<Song> toDrop) {
 
 		String s = "(";
@@ -438,7 +499,10 @@ public class SongDAO {
 		}
 	}
 	
-	//cuando se elimina una cancion
+	/**
+	 * 
+	 * @param toDrop lista de canciones a eliminar de la relación reproductionlist_song en la bbdd
+	 */
 	public static void delete_ReproductionList_Song_by_Song(List<Song> toDrop) {
 
 		String s = "(";
@@ -472,6 +536,11 @@ public class SongDAO {
 		}
 	}
 
+	/**
+	 * Elimina una serie de canciones dado un artista
+	 * 
+	 * @param a el artista de las cancioens
+	 */
 	public static void deleteByArtist(Artist a) {
 		for (int i = 0; i < songs.size(); i++) {
 			if (songs.get(i).getArtist().getId() == a.getId()) {
@@ -480,6 +549,9 @@ public class SongDAO {
 		}
 	}
 
+	/**
+	 * Elimina todos los registros de song en la bbdd
+	 */
 	public static void deleteAll() {
 
 		int rs = 0;
@@ -504,6 +576,10 @@ public class SongDAO {
 		}
 	}
 
+	/**
+	 * Aumenta las visitas en 1 de una canción
+	 * @param s la canción que obtendrá una visita
+	 */
 	public static void upload_Views(Song s) {
 		int rs = 0;
 		Connection con = MDBConexion.getConexion();

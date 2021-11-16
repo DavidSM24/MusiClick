@@ -12,11 +12,13 @@ import javafx.collections.ObservableList;
 
 public class GenreDAO extends Genre { // extends Sede implements SedeDAO
 
-	public static 
-	List<Genre> genres = new ArrayList<Genre>();
+	//lista de generos
+	public static List<Genre> genres = new ArrayList<Genre>();
 
+	//conexión a la bbdd
 	private static Connection con = null;
 
+	//SENTENCIAS SQL
 	private static final String GETALL = "SELECT id, name FROM genre;";
 	private static final String GETBYID = "SELECT id, name FROM genre WHERE id=?;";
 	private static final String GETBYNAME = "SELECT id, name FROM genre WHERE name LIKE ?;";
@@ -26,6 +28,10 @@ public class GenreDAO extends Genre { // extends Sede implements SedeDAO
 	private final static String DELETE ="DELETE FROM genre WHERE id IN ";
 	private final static String DELETEALL ="DELETE FROM genre;";
 
+	/**
+	 * 
+	 * @return Devuelve todos los géneros
+	 */
 	public static List<Genre> getAll() {
 		// TODO Auto-generated method stub
 		genres = new ArrayList<Genre>();
@@ -55,6 +61,11 @@ public class GenreDAO extends Genre { // extends Sede implements SedeDAO
 		return genres;
 	}
 
+	/**
+	 * 
+	 * @param id recive el id para buscar un género en la bbdd
+	 * @return devuelve el género con el id recivido
+	 */
 	public static Genre getById(int id) {
 		Genre result = new Genre();
 
@@ -84,8 +95,12 @@ public class GenreDAO extends Genre { // extends Sede implements SedeDAO
 		return result;
 	}
 
-	// exclusive methods
 
+	/**
+	 * 
+	 * @param name recibe un nombre para buscar todos los géneros con ese nombre
+	 * @return todos los nombres con ese género
+	 */
 	public static List<Genre> getByName(String name) {
 		// TODO Auto-generated method stub
 		List<Genre> result = new ArrayList<Genre>();
@@ -116,6 +131,11 @@ public class GenreDAO extends Genre { // extends Sede implements SedeDAO
 		return result;
 	}
 	
+	/**
+	 * Inserta o updatea el género g en la bbdd
+	 * 
+	 * @param g el género a insertar
+	 */
 	public static void save(Genre g) {
 		// INSERT o UPDATE
 				//INSERT -> si no existe OK
@@ -157,6 +177,11 @@ public class GenreDAO extends Genre { // extends Sede implements SedeDAO
 				}
 	}
 	
+	/**
+	 * Elimina los géneros recividos por parámetro
+	 * 
+	 * @param toDrop recive una lista de géneros a eliminar
+	 */
 	public static void delete(List<Genre> toDrop) {
 		String s="(";
 		for(int i=0;i<toDrop.size();i++) {
@@ -189,6 +214,10 @@ public class GenreDAO extends Genre { // extends Sede implements SedeDAO
 			}
 		}
 	}
+	
+	/**
+	 * Elimina todos los registros de la tabla genre en la bbdd
+	 */
 	public static void deleteAll() {
 		int rs=0;
 		Connection con = MDBConexion.getConexion();

@@ -15,10 +15,13 @@ import javafx.collections.ObservableList;
 
 public class ArtistDAO {
 
+	//lista estatica de artistas
 	public static List<Artist> artists = new ArrayList<Artist>();
 
+	//conexion al servidor
 	private static Connection con = null;
 
+	//SENTENCIAS SQL PARA LA GESTIÓN DE LA BBDD
 	private static final String GETALL = "SELECT id, name, description,photo FROM artist;";
 	private static final String GETBYID = "SELECT id, name,description, photo FROM artist WHERE id=?;";
 	private static final String GETBYNAME = "SELECT id, name,description, photo FROM artist WHERE name LIKE ?;";
@@ -29,6 +32,10 @@ public class ArtistDAO {
 	//DELETE FROM `artist` WHERE id NOT LIKE (0);
 	private final static String DELETEALL ="DELETE FROM artist;";
 	
+	/**
+	 * 
+	 * @return la lista completa de artistas
+	 */
 	public static List<Artist> getAll() {
 		// TODO Auto-generated method stub
 		artists = new ArrayList<Artist>();
@@ -58,6 +65,11 @@ public class ArtistDAO {
 		return artists;
 	}
 
+	/**
+	 * 
+	 * @param id recibe el id para buscar
+	 * @return devuelve el artista con ese id
+	 */
 	public static Artist getById(int id) {
 		Artist result = new Artist();
 
@@ -87,6 +99,10 @@ public class ArtistDAO {
 		return result;
 	}
 	
+	/**
+	 * @param id recibe el name para buscar
+	 * @return devuelve lista de artistas con ese nombre
+	 */
 	public static List<Artist> getByName(String name) {
 		// TODO Auto-generated method stub
 		List<Artist> result = new ArrayList<Artist>();
@@ -117,7 +133,10 @@ public class ArtistDAO {
 		return result;
 	}
 
-	
+	/**
+	 * 
+	 * @param a recive el artista para insertar/updatear
+	 */
 	public static void save(Artist a) {
 		// INSERT o UPDATE
 				//INSERT -> si no existe OK
@@ -162,6 +181,10 @@ public class ArtistDAO {
 				}
 	}
 	
+	/**
+	 * 
+	 * @param toDrop recive la lista de artistas a eliminar
+	 */
 	public static void delete(List<Artist> toDrop) {
 		
 		String s="(";
@@ -196,7 +219,9 @@ public class ArtistDAO {
 		}
 	}
 
-	
+	/**
+	 * elimina todos los registros de artista
+	 */
 	public static void deleteAll() {
 		int rs=0;
 		Connection con = MDBConexion.getConexion();
