@@ -198,6 +198,9 @@ public class ManagmentController {
 
 	// MANAGER METHODS
 
+	/**
+	 * Inicializa el controlador
+	 */
 	@FXML
 	public void setController() { // <----- metodo charge
 		MDBConexion.loadServerInfo();
@@ -361,6 +364,11 @@ public class ManagmentController {
 		}
 	}
 
+	/**
+	 * Guarda toda la información a la BBDD
+	 * 
+	 * @throws IOException
+	 */
 	@FXML
 	private void save_to_BD() throws IOException {
 		if (inizialize) {
@@ -646,6 +654,9 @@ public class ManagmentController {
 
 	// ARTIST METHODS
 
+	/**
+	 * Busca un archivo de imagen y lo setea en el artist_image
+	 */
 	@FXML
 	public void set_artist_Photo() {
 		File file = null;
@@ -667,6 +678,9 @@ public class ManagmentController {
 		}
 	}
 
+	/**
+	 * Selecciona un artista de la tabla
+	 */
 	@FXML
 	private void select_Artist() {
 		if (inizialize && artists.size() > 0) {
@@ -700,6 +714,9 @@ public class ManagmentController {
 		}
 	}
 
+	/**
+	 * Coteja los datos del formulario y si son correctos añade el artista a la lista
+	 */
 	@FXML
 	private void add_Artist() {
 		if (inizialize) {
@@ -728,6 +745,9 @@ public class ManagmentController {
 		}
 	}
 
+	/**
+	 * Coteja los datos del formulario y si son correctos modifica el artista seleccionado
+	 */
 	@FXML
 	private void edit_Artist() {
 		try {
@@ -765,6 +785,9 @@ public class ManagmentController {
 
 	}
 
+	/**
+	 * Elimina un artista
+	 */
 	@FXML
 	private void delete_Artist() {
 
@@ -824,6 +847,9 @@ public class ManagmentController {
 
 	// GENRE METHODS
 
+	/**
+	 * Selecciona un género de la tabla
+	 */
 	@FXML
 	private void select_Genre() {
 		if (inizialize && genres.size() > 0) {
@@ -851,6 +877,9 @@ public class ManagmentController {
 		}
 	}
 
+	/**
+	 * Coteja los datos del formulario y si son correctos añade el genero a la lista
+	 */
 	@FXML
 	private void add_Genre() {
 		if (inizialize) {
@@ -877,6 +906,9 @@ public class ManagmentController {
 		}
 	}
 
+	/**
+	 * Coteja los datos del formulario y si son correctos modifica el género seleccionado
+	 */
 	@FXML
 	private void edit_Genre() {
 
@@ -904,6 +936,9 @@ public class ManagmentController {
 		}
 	}
 
+	/**
+	 * Elimina el género seleccionado de la lista
+	 */
 	@FXML
 	private void delete_Genre() {
 
@@ -987,6 +1022,9 @@ public class ManagmentController {
 
 	// SONG METHODS
 
+	/**
+	 * Selecciona una imagen y la setea en song_photo
+	 */
 	@FXML
 	public void set_song_Photo() {
 		File file = null;
@@ -1008,6 +1046,9 @@ public class ManagmentController {
 		}
 	}
 
+	/**
+	 * Selecciona un archivo mp3 y lo setea en song_media
+	 */
 	@FXML
 	public void set_song_Media() {
 		File file = null;
@@ -1029,6 +1070,9 @@ public class ManagmentController {
 		}
 	}
 
+	/**
+	 * Selecciona una canción de la tabla
+	 */
 	@FXML
 	private void select_Song() {
 		if (inizialize && songs.size() > 0) {
@@ -1090,6 +1134,9 @@ public class ManagmentController {
 		}
 	}
 
+	/**
+	 * Coteja los datos del formulario y si son correctos añade la canción a la lista
+	 */
 	@FXML
 	private void add_Song() {
 		if (inizialize) {
@@ -1129,6 +1176,9 @@ public class ManagmentController {
 		}
 	}
 
+	/**
+	 * Coteja los datos del formulario y si son correctos modifica la canción seleccionada
+	 */
 	@FXML
 	private void edit_Song() {
 
@@ -1170,6 +1220,9 @@ public class ManagmentController {
 		}
 	}
 
+	/**
+	 * Elimina la canción seleccionada
+	 */
 	@FXML
 	private void delete_Song() {
 		if (inizialize) {
@@ -1245,6 +1298,9 @@ public class ManagmentController {
 
 	// DISC METHODS
 
+	/**
+	 * Selecciona un archivo de imagen y lo setea en disc_photo
+	 */
 	@FXML
 	public void set_disc_Photo() {
 		File file = null;
@@ -1266,6 +1322,9 @@ public class ManagmentController {
 		}
 	}
 
+	/**
+	 * Selecciona un disco de la tabla
+	 */
 	@FXML
 	private void select_Disc() {
 		if (inizialize && discs.size() > 0) {
@@ -1314,6 +1373,9 @@ public class ManagmentController {
 		}
 	}
 
+	/**
+	 * Coteja los datos del formulario y si son correctos añade el disco a la lista
+	 */
 	@FXML
 	private void add_Disc() {
 		if (inizialize) {
@@ -1347,6 +1409,9 @@ public class ManagmentController {
 		}
 	}
 
+	/**
+	 * Coteja los datos del formulario y si son correctos modifica el disco seleccionado
+	 */
 	@FXML
 	private void edit_Disc() {
 		if (disc != null && !txt_disc_id.getText().matches("") && txt_disc_id.getText().matches("[0-9]+")
@@ -1379,6 +1444,9 @@ public class ManagmentController {
 		}
 	}
 
+	/**
+	 * Elimina el disco seleccionado
+	 */
 	@FXML
 	private void delte_Disc() {
 		if (inizialize) {
@@ -1424,6 +1492,9 @@ public class ManagmentController {
 
 	// REPRO METHODS
 
+	/**
+	 * Selecciona un archivo de imagen y lo setea en repro_photo
+	 */
 	@FXML
 	public void set_repro_Photo() {
 		File file = null;
@@ -1445,6 +1516,9 @@ public class ManagmentController {
 		}
 	}
 
+	/**
+	 * Selecciona un repro de la tabla
+	 */
 	@FXML
 	private void select_Repro() {
 		if (inizialize && repros.size() > 0) {
@@ -1498,6 +1572,9 @@ public class ManagmentController {
 		}
 	}
 
+	/**
+	 * Coteja los datos del formulario y si son correctos añade el repro a la lista
+	 */
 	@FXML
 	private void add_Repro() {
 		if (inizialize) {
@@ -1531,6 +1608,9 @@ public class ManagmentController {
 		}
 	}
 
+	/**
+	 * Coteja los datos del formulario y si son correctos modifica el repro seleccionado
+	 */
 	@FXML
 	private void edit_Repo() {
 		if (repros != null && !txt_repro_id.getText().matches("") && txt_repro_id.getText().matches("[0-9]+")
@@ -1562,6 +1642,9 @@ public class ManagmentController {
 		}
 	}
 
+	/**
+	 * Elimina el repro seleccionado
+	 */
 	@FXML
 	private void delete_Repro() {
 		if (inizialize) {
@@ -1592,6 +1675,9 @@ public class ManagmentController {
 		}
 	}
 
+	/**
+	 * Inserta las tablas para la distribucióin de canciones en el creador de repro
+	 */
 	@FXML
 	private void insert_Repro_Songs_Info() {
 
@@ -1615,6 +1701,9 @@ public class ManagmentController {
 
 	}
 
+	/**
+	 * Updatea las tablas para la distribucióin de canciones en el creador de repro
+	 */
 	@FXML
 	private void update_Repro_Songs_info() {
 		if (table_repro_song_inside.getColumns().size() > 0) {
@@ -1628,6 +1717,9 @@ public class ManagmentController {
 		}
 	}
 
+	/**
+	 * Quita una canción dentro de un repro
+	 */
 	@FXML
 	private void toOut() {
 		if (table_repro_song_inside.getSelectionModel().getSelectedItem() != null) {
@@ -1642,6 +1734,9 @@ public class ManagmentController {
 		}
 	}
 
+	/**
+	 * Añade una canción a un repro
+	 */
 	@FXML
 	private void toIn() {
 		if (table_repro_song_outside.getSelectionModel().getSelectedItem() != null) {

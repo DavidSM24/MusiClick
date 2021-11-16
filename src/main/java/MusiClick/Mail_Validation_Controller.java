@@ -49,6 +49,12 @@ public class Mail_Validation_Controller {
 	
 	//methods
 	
+	/**
+	 * Inicializa el controlador
+	 * 
+	 * @param code código del usuario enviado
+	 * @param user usuario que ha recivido el código
+	 */
 	@FXML
 	public void setController(String code, User user) {
 		this.code=code;
@@ -56,6 +62,9 @@ public class Mail_Validation_Controller {
 		lab_mail.setText(user.getMail());
 	}
 	
+	/**
+	 * Genera un nuevo código y se lo envia al correo del usuario para que lo confirme
+	 */
 	@FXML
 	private void resend() {
 		if(code!=null) {
@@ -87,6 +96,9 @@ public class Mail_Validation_Controller {
 		}
 	}
 	
+	/**
+	 * Confirma si el codigo escrito es correcto, y si es así, se logea
+	 */
 	@FXML
 	private void confirm() {
 		if(code!=null) {
@@ -150,6 +162,9 @@ public class Mail_Validation_Controller {
 		}	
 	}
 	
+	/**
+	 * Cancela la validación y regresa al login
+	 */
 	@FXML
 	private void cancel() {
 		Stage stage = (Stage) this.btn_cancel.getScene().getWindow();

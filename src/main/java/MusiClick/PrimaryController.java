@@ -301,6 +301,12 @@ public class PrimaryController {
 	@FXML
 	private Button btn_managment;
 
+	/**
+	 * Inicializa el controlador
+	 * 
+	 * @param u el usuario de esta sesión
+	 * @param ss la sesión
+	 */
 	@FXML
 	public void setController(User u, Sesion ss) {
 		this.ss = ss;
@@ -427,6 +433,9 @@ public class PrimaryController {
 		}
 	}
 
+	/**
+	 * Setea una lista de canciones en el reproductor
+	 */
 	public void setSongInPlayer() {
 
 		try {
@@ -703,6 +712,11 @@ public class PrimaryController {
 		});
 	}
 	
+	/**
+	 * Abre el manager tool
+	 * 
+	 * @throws IOException
+	 */
 	@FXML
 	private void goToManagment() throws IOException {
 		try {
@@ -741,6 +755,9 @@ public class PrimaryController {
 		}
 	}
 
+	/**
+	 * Envia información de la sesión a la bbdd (CONCURRENTE)
+	 */
 	public void sendSession() {
 		Thread t = new Thread(new Runnable() {
 
@@ -763,6 +780,9 @@ public class PrimaryController {
 		t.start();
 	}
 
+	/*
+	 * Pausa/Reanuda la reproducción
+	 */
 	@FXML
 	private void play_pause() {
 
@@ -792,6 +812,9 @@ public class PrimaryController {
 
 	}
 
+	/**
+	 * Updatea el conteo de tiempo en el label del reproductor
+	 */
 	protected void updateValues() {
 		if (playTime != null && timeSlider != null && volumeSlider != null) {
 			Platform.runLater(new Runnable() {
@@ -811,6 +834,13 @@ public class PrimaryController {
 		}
 	}
 
+	/**
+	 * Convierte el tiempo de reproducción
+	 * 
+	 * @param elapsed duración elapsed
+	 * @param duration duración actual
+	 * @return un string con la conversión
+	 */
 	private static String formatTime(Duration elapsed, Duration duration) {
 		int intElapsed = (int) Math.floor(elapsed.toSeconds());
 		int elapsedHours = intElapsed / (60 * 60);
@@ -844,6 +874,9 @@ public class PrimaryController {
 		}
 	}
 
+	/**
+	 * Selecciona una canción de la talba songs
+	 */
 	@FXML
 	private void select_Song() {
 		if (songs != null && songs.size() > 0 && table_song.getSelectionModel().getSelectedItem() != null
@@ -895,6 +928,9 @@ public class PrimaryController {
 		}
 	}
 
+	/**
+	 * Seleciona una canción de la list_pane
+	 */
 	@FXML
 	private void select_Song_From_List_Pane() {
 		if (table_list_info_song.getSelectionModel().getSelectedItem() != null) {
@@ -907,6 +943,10 @@ public class PrimaryController {
 		}
 	}
 
+	/**
+	 * Selecciona una canción pasada por parámetro
+	 * @param s la canción a seleccionar
+	 */
 	@FXML
 	private void select_Song(Song s) {
 		if (s != null) {
@@ -960,6 +1000,11 @@ public class PrimaryController {
 		}
 	}
 
+	/**
+	 * Muestra en searcher_tab la información de la canción recivida por parámetro
+	 * 
+	 * @param s la canción a mostrar
+	 */
 	private void show_Song_Info(Song s) {
 		File f = new File(song.getPhoto());
 		Image face = new Image("file:" + f.getPath());
@@ -974,6 +1019,9 @@ public class PrimaryController {
 		}
 	}
 
+	/**
+	 * Selecciona una lista desde la tabla repros
+	 */
 	@FXML
 	private void select_List_of_All() {
 		if (table_repros.getSelectionModel().getSelectedItem() != null) {
@@ -1024,6 +1072,9 @@ public class PrimaryController {
 		}
 	}
 
+	/**
+	 * Selecciona una lista desde la tabla userRepros
+	 */
 	@FXML
 	private void select_List_of_User() {
 
@@ -1075,6 +1126,11 @@ public class PrimaryController {
 		}
 	}
 
+	/**
+	 * filtra canciones y ciscos por nombre de canción,disco y artista
+	 * Setea las canciones y discos en las tablas correspondientes
+	 * Si no hay filtro, setea todas las canciones y discos
+	 */
 	@FXML
 	private void filter_Songs_Discs_ByName() {
 		if (!txt_filter.getText().matches("")) {
@@ -1121,6 +1177,9 @@ public class PrimaryController {
 		}
 	}
 
+	/**
+	 * muestra información sobre un artista seleccionado desde la canción en reproduccióin
+	 */
 	@FXML
 	private void open_Artist_Pane() {
 		if (song != null) {
@@ -1148,6 +1207,10 @@ public class PrimaryController {
 
 	}
 
+	/**
+	 * Muestra infomración sobre un artista recivido por parámetro
+	 * @param a el artista a mostrar
+	 */
 	@FXML
 	private void open_Artist_Pane(Artist a) { // from discs
 
@@ -1182,6 +1245,9 @@ public class PrimaryController {
 		black_pane.setVisible(false);
 	}
 
+	/**
+	 * muestra información sobre un disco seleccionado desde la canción en reproduccióin
+	 */
 	@FXML
 	private void open_Disc_Pane() {
 		if (song != null) {
@@ -1210,6 +1276,10 @@ public class PrimaryController {
 		}
 	}
 
+	/**
+	 * Muestra infomración sobre un disco recivido por parámetro
+	 * @param a el disco a mostrar
+	 */
 	@FXML
 	private void open_Disc_Pane(Disc d) {
 
@@ -1247,6 +1317,9 @@ public class PrimaryController {
 		black_pane.setVisible(false);
 	}
 
+	/**
+	 * muestra información sobre una lista seleccionada desde la tabla repros o userRepros
+	 */
 	private void open_List_Pane() {
 
 		if (repro != null) {
@@ -1266,6 +1339,8 @@ public class PrimaryController {
 		black_pane2.setVisible(false);
 	}
 
+	//TRANSACCIONES ENTRE PANELES
+	
 	@FXML
 	private void goToDisc() {
 		close_Artist_Pane();
@@ -1307,6 +1382,11 @@ public class PrimaryController {
 		}
 	}
 
+	////////////////////////////
+	
+	/**
+	 * Muestra el pane de opciones de usuario
+	 */
 	@FXML
 	private void open_Options_Pane() {
 		options_Pane.setVisible(true);
@@ -1320,6 +1400,9 @@ public class PrimaryController {
 		options_Pane.setVisible(false);
 	}
 
+	/**
+	 * Muestra el panel de creación/modificación de listas
+	 */
 	@FXML
 	private void open_Cration_Pane() {
 		if(editing) { //editar
@@ -1423,6 +1506,8 @@ public class PrimaryController {
 		editing=false;
 	}
 
+	// COLOR EFFECTS
+	
 	@FXML
 	private void changeColorUserName() {
 		btn_user.setTextFill(Color.CORNFLOWERBLUE);
@@ -1483,6 +1568,10 @@ public class PrimaryController {
 		lab_discinfo_artist.setTextFill(Color.WHITE);
 	}
 
+	/**                                                          **
+	 * SETEO DE ACCESOS RÁPIDOS PARA LAS LISTAS DE REPRODUCCIÓN   *
+	 **                                                          **/
+	
 	@FXML
 	private void select_List_1() {
 		repro = repros.get(0);
@@ -1553,6 +1642,11 @@ public class PrimaryController {
 		select_List_of_All();
 	}
 
+	////////////////////
+	
+	/**
+	 * Salta a la siguiente canción
+	 */
 	@FXML
 	private void goNext() {
 
@@ -1584,6 +1678,9 @@ public class PrimaryController {
 		
 	}
 
+	/**
+	 * Salta a la canción anterior
+	 */
 	@FXML
 	private void goPrev() {
 
@@ -1612,6 +1709,9 @@ public class PrimaryController {
 		}	
 	}
 
+	/**
+	 * Suscribe al usuario actual a la lista seleccionada
+	 */
 	@FXML
 	private void subs() {
 		btn_subs.setVisible(false);
@@ -1628,6 +1728,9 @@ public class PrimaryController {
 		}
 	}
 
+	/**
+	 * Desuscribe al usuario actual de la lista seleccionada
+	 */
 	@FXML
 	private void unsubs() {
 		btn_unsubs.setVisible(false);
@@ -1643,6 +1746,11 @@ public class PrimaryController {
 		}
 	}
 
+	/**
+	 * Coteja los datos del formulario y crea/modifica una lista
+	 * 
+	 * @throws IOException
+	 */
 	@FXML
 	private void create_List() throws IOException {
 
@@ -1779,6 +1887,9 @@ public class PrimaryController {
 		}
 	}
 
+	/**
+	 * Quita una canción de la lista que se está creando/modificando
+	 */
 	@FXML
 	public void createToOut() {
 		if (table_creation_inside.getSelectionModel().getSelectedItem() != null) {
@@ -1802,6 +1913,9 @@ public class PrimaryController {
 
 	}
 
+	/**
+	 * Añade una cancion a la lista que se está creando/modificando
+	 */
 	@FXML
 	private void createToIn() {
 		if (table_creation_outside.getSelectionModel().getSelectedItem() != null) {
@@ -1824,6 +1938,9 @@ public class PrimaryController {
 		}
 	}
 
+	/**
+	 * Selecciona una imagen para la lista que se está creando/modificando
+	 */
 	@FXML
 	private void select_Image_Creator() {
 		File file = null;
@@ -1851,19 +1968,9 @@ public class PrimaryController {
 			img_creation.setImage(i);
 		}
 	}
-
-	private void update_Inside_Outside_Info() {
-		if (table_creation_inside.getColumns().size() > 0) {
-			table_creation_inside.getColumns().get(0).setVisible(false);
-			table_creation_inside.getColumns().get(0).setVisible(true);
-		}
-
-		if (table_creation_outside.getColumns().size() > 0) {
-			table_creation_outside.getColumns().get(0).setVisible(false);
-			table_creation_outside.getColumns().get(0).setVisible(true);
-		}
-	}
-	
+	/**
+	 * Abre el panel de gestión de listas del usuario actual
+	 */
 	@FXML
 	private void open_User_List_Pane(){
 		
@@ -1900,6 +2007,9 @@ public class PrimaryController {
 		user_pane.setVisible(false);
 	}
 	
+	/**
+	 * Elimina una lista creada por el usuario
+	 */
 	@FXML
 	private void remove_User_List() {
 		if(table_userpane_list.getSelectionModel().getSelectedItem()!=null) {
@@ -1942,6 +2052,9 @@ public class PrimaryController {
 		}
 	}
 
+	/**
+	 * Abre el Creator Pane para MODIFICAR una lista
+	 */
 	@FXML
 	private void open_modify_User_List() {
 		if(table_userpane_list.getSelectionModel().getSelectedItem()!=null) {
@@ -1954,6 +2067,9 @@ public class PrimaryController {
 	
 	}
 	
+	/**
+	 * Filtra listas por nombre
+	 */
 	@FXML
 	private void filter_Lists() {
 		

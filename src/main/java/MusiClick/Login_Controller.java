@@ -52,6 +52,9 @@ public class Login_Controller {
 	@FXML
 	protected CheckBox che_showPassword;
 
+	/**
+	 * Comprueba los datos del usuario y si son correctos se logea
+	 */
 	@FXML
 	public void login() {
 
@@ -211,6 +214,9 @@ public class Login_Controller {
 		}
 	}
 
+	/**
+	 * Acceso a la creación de usuario
+	 */
 	@FXML
 	public void create() {
 		
@@ -255,6 +261,9 @@ public class Login_Controller {
 		btn_txt_create_user.setUnderline(true);
 	}
 
+	/**
+	 * Envia un email con la contraseña olvidada de un usuario
+	 */
 	@FXML
 	public void forgot() {
 		

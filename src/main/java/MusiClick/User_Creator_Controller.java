@@ -48,6 +48,9 @@ public class User_Creator_Controller {
 	@FXML
 	CheckBox che_showPasswords;
 	
+	/**
+	 * Coteja los datos del formulario y si son correctos crea un usuario
+	 */
 	@FXML
 	private void create() {
 		
@@ -180,6 +183,9 @@ public class User_Creator_Controller {
 		
 	}
 	
+	/**
+	 * Cancela la operación y vuelve al login
+	 */
 	@FXML
 	public void cancel() {
 		Stage stage = (Stage) this.btn_cancel.getScene().getWindow();
