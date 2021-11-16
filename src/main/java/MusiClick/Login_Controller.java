@@ -141,7 +141,7 @@ public class Login_Controller {
 								Scene scene= new Scene(root);
 								Stage stage2= new Stage();
 								stage2.setScene(scene);
-								Image image= new Image("file:src/main/resources/images/icons/icon_app.jpg");
+								Image image= new Image("file:src/main/resources/images/user.png");
 								stage2.setTitle("Validación de Correo Electrónico");
 								stage2.getIcons().add(image);
 								stage2.setResizable(false);;
@@ -176,9 +176,9 @@ public class Login_Controller {
 							Scene scene= new Scene(root);
 							Stage stage2= new Stage();
 							stage2.setScene(scene);
-							//Image image= new Image("file:src/main/resources/images/icons/icon_app.jpg");
+							Image image= new Image("file:src/main/resources/images/main_icon.png");
 							stage2.setTitle("MusiClick");
-							//stage2.getIcons().add(image);
+							stage2.getIcons().add(image);
 							stage2.setResizable(false);;
 							stage2.initModality(Modality.APPLICATION_MODAL);
 							stage2.setOnCloseRequest(new EventHandler<WindowEvent>() {
@@ -225,8 +225,8 @@ public class Login_Controller {
 			Scene scene= new Scene(root);
 			Stage stage2= new Stage();
 			stage2.setScene(scene);
-			Image image= new Image("file:src/main/resources/images/icons/icon_app.jpg");
-			stage2.setTitle("Creación de Usuario");
+			Image image= new Image("file:src/main/resources/images/user.png");
+			stage2.setTitle("Creación de ");
 			stage2.getIcons().add(image);
 			stage2.setResizable(false);;
 			stage2.initModality(Modality.APPLICATION_MODAL);

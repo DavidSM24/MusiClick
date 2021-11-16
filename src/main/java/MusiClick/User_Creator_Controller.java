@@ -154,7 +154,7 @@ public class User_Creator_Controller {
 							Scene scene= new Scene(root);
 							Stage stage2= new Stage();
 							stage2.setScene(scene);
-							Image image= new Image("file:src/main/resources/images/icons/icon_app.jpg");
+							Image image= new Image("file:src/main/resources/images/user.png");
 							stage2.setTitle("Validación de Correo Electrónico");
 							stage2.getIcons().add(image);
 							stage2.setResizable(false);;

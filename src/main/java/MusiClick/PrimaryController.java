@@ -713,14 +713,13 @@ public class PrimaryController {
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("managment.fxml"));
 			Parent root = loader.load();
 			ManagmentController managment_controller = loader.getController();
-			// managment_controller.setController();
 			Scene scene = new Scene(root);
 			Stage stage2 = new Stage();
 			stage2.setScene(scene);
-			// Image image= new Image("file:src/main/resources/images/icons/icon_app.jpg");
+			Image image= new Image("file:src/main/resources/images/manager.png");
 			stage2.setTitle("MusiClick Managment Tool");
-			// stage2.getIcons().add(image);
-			// stage2.setResizable(false);;
+			stage2.getIcons().add(image);
+			stage2.setResizable(false);;
 			stage2.initModality(Modality.APPLICATION_MODAL);
 			stage2.setOnCloseRequest(new EventHandler<WindowEvent>() {
 				@Override
