@@ -1555,49 +1555,60 @@ public class PrimaryController {
 	@FXML
 	private void goNext() {
 
-		if (songsToReproduceListened.size() < 1) {
-			mp.stop();
-			mp = null;
-			songsToReproduce = Converter.song_Converter(SongDAO.getRandomly());
-			songsToReproduceListened.addAll(songsToReproduce);
-			istr = 0;
-			setSongInPlayer();
-		}
-
-		else {
-
-			istr++;
-			if (istr >= songsToReproduce.size()) {
+		try {
+			if (songsToReproduceListened.size() < 1) {
+				mp.stop();
+				mp = null;
+				songsToReproduce = Converter.song_Converter(SongDAO.getRandomly());
+				songsToReproduceListened.addAll(songsToReproduce);
 				istr = 0;
+				setSongInPlayer();
 			}
-			mp.stop();
-			mp = null;
-			setSongInPlayer();
+
+			else {
+
+				istr++;
+				if (istr >= songsToReproduce.size()) {
+					istr = 0;
+				}
+				mp.stop();
+				mp = null;
+				setSongInPlayer();
+			}
 		}
+		catch (Exception e) {
+			// TODO: handle exception
+		}
+		
+		
 	}
 
 	@FXML
 	private void goPrev() {
 
-		if (songsToReproduceListened.size() < 1) {
-			mp.stop();
-			mp = null;
-			songsToReproduce = Converter.song_Converter(SongDAO.getRandomly());
-			songsToReproduceListened.addAll(songsToReproduce);
-			istr = 0;
-			setSongInPlayer();
-		}
-
-		else {
-
-			istr--;
-			if (istr < 0) {
-				istr = songsToReproduce.size() - 1;
+		try {
+			if (songsToReproduceListened.size() < 1) {
+				mp.stop();
+				mp = null;
+				songsToReproduce = Converter.song_Converter(SongDAO.getRandomly());
+				songsToReproduceListened.addAll(songsToReproduce);
+				istr = 0;
+				setSongInPlayer();
 			}
-			mp.stop();
-			mp = null;
-			setSongInPlayer();
-		}
+
+			else {
+
+				istr--;
+				if (istr < 0) {
+					istr = songsToReproduce.size() - 1;
+				}
+				mp.stop();
+				mp = null;
+				setSongInPlayer();
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+		}	
 	}
 
 	@FXML
@@ -1940,6 +1951,10 @@ public class PrimaryController {
 			open_Cration_Pane();
 		}
 	
+	}
+	
+	private void filter_Lists() {
+		
 	}
 	
 }

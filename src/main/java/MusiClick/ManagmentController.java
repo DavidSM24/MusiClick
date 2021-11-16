@@ -241,7 +241,7 @@ public class ManagmentController {
 
 		// set Repros
 
-		repros = Converter.repro_Converter(ReproductionListDAO.getAllDefault());
+		repros = Converter.repro_Converter(ReproductionListDAO.getAll());
 		table_repro.setItems(repros);
 
 		setTableAndDetailsInfo();
@@ -348,7 +348,13 @@ public class ManagmentController {
 
 			col_repro_name.setCellValueFactory(eachrepro -> {
 				SimpleStringProperty v = new SimpleStringProperty();
-				v.setValue(eachrepro.getValue().getName());
+				if(eachrepro.getValue().getType()!=0) {
+					v.setValue(eachrepro.getValue().getName()+" (NOT DEFAULT)");
+				}
+				else {
+					v.setValue(eachrepro.getValue().getName());
+				}
+				
 				return v;
 			});
 		}
@@ -419,7 +425,8 @@ public class ManagmentController {
 				for (Artist a2 : artists) {
 
 					if (!a2.getPhoto().matches("[src/main/resources/images/artist/].*")) {
-						FileUtilities.saveFile(a2.getPhoto(),"src/main/resources/images/artist/a" + a2.getId() + a2.getName() + ".jpg");
+						FileUtilities.saveFile(a2.getPhoto(),
+								"src/main/resources/images/artist/a" + a2.getId() + a2.getName() + ".jpg");
 
 						a2.setPhoto("src/main/resources/images/artist/a" + a2.getId() + a2.getName() + ".jpg");
 					}
@@ -500,7 +507,7 @@ public class ManagmentController {
 						FileUtilities.removeFile(s.getMedia());
 						FileUtilities.removeFile(s.getPhoto());
 					}
-					
+
 					SongDAO.delete_ReproductionList_Song_by_Song(toDrop);
 					SongDAO.delete(toDrop);
 				}
@@ -531,7 +538,7 @@ public class ManagmentController {
 			}
 
 			// SAVE REPROS
-			
+
 			if (repros.size() > 0) {
 				// borrar y actualizar
 
@@ -554,7 +561,7 @@ public class ManagmentController {
 					for (ReproductionList r : toDrop) {
 						FileUtilities.removeFile(r.getImage()); // >------
 					}
-					
+
 					ReproductionListDAO.delete_ReproductionList_Song_By_Repros(toDrop);
 					ReproductionListDAO.delete_ReproductionList_User_By_Repros(toDrop);
 					ReproductionListDAO.delete(toDrop);
@@ -573,7 +580,7 @@ public class ManagmentController {
 					}
 
 					ReproductionListDAO.save(r2);
-					ObservableList<ReproductionList> aux= FXCollections.observableArrayList();
+					ObservableList<ReproductionList> aux = FXCollections.observableArrayList();
 					aux.add(r2);
 					ReproductionListDAO.delete_ReproductionList_Song_By_Repros(aux);
 					ReproductionListDAO.insert_ReproductionList_Song_By_Repro(r2);
@@ -581,7 +588,7 @@ public class ManagmentController {
 			} else { // borrar todos
 				ReproductionListDAO.deleteAll();
 			}
-			
+
 			show_Alert(5);
 			setController();
 		} else {
@@ -598,14 +605,13 @@ public class ManagmentController {
 
 		table_genre.getColumns().get(0).setVisible(false);
 		table_genre.getColumns().get(0).setVisible(true);
-		
-		if(table_repro_song_inside.getColumns().size()>0) {
+
+		if (table_repro_song_inside.getColumns().size() > 0) {
 			table_repro_song_inside.getColumns().get(0).setVisible(false);
 			table_repro_song_inside.getColumns().get(0).setVisible(true);
 		}
-		
-		
-		if(table_repro_song_outside.getColumns().size()>0) {
+
+		if (table_repro_song_outside.getColumns().size() > 0) {
 			table_repro_song_outside.getColumns().get(0).setVisible(false);
 			table_repro_song_outside.getColumns().get(0).setVisible(true);
 		}
@@ -1167,18 +1173,18 @@ public class ManagmentController {
 	private void delete_Song() {
 		if (inizialize) {
 			if (song != null) {
-				
-				if(repros!=null&&repros.size()>0) {
-					for(ReproductionList r:repros) {
-						if(r.getSongs()!=null&&r.getSongs().size()>0) {
-							if(r.getSongs().contains(song)) {
+
+				if (repros != null && repros.size() > 0) {
+					for (ReproductionList r : repros) {
+						if (r.getSongs() != null && r.getSongs().size() > 0) {
+							if (r.getSongs().contains(song)) {
 								r.getSongs().remove(song);
 							}
 						}
-						
+
 					}
 				}
-				
+
 				songs.remove(song);
 				refresh();
 			} else {
@@ -1195,15 +1201,14 @@ public class ManagmentController {
 				txt_song_duration.setText("");
 				com_song_artist.setValue(artists.get(0));
 				com_song_genre.setValue(genres.get(0));
-				
-				if(repros!=null&&table_repro.getSelectionModel().getSelectedItem()!=null) {
-					repro=table_repro.getSelectionModel().getSelectedItem();
+
+				if (repros != null && table_repro.getSelectionModel().getSelectedItem() != null) {
+					repro = table_repro.getSelectionModel().getSelectedItem();
 					table_repro.getSelectionModel().select(repro);
 					select_Repro();
-				}
-				else {
-					if(table_repro.getItems().size()>0) {
-						repro=table_repro.getItems().get(0);
+				} else {
+					if (table_repro.getItems().size() > 0) {
+						repro = table_repro.getItems().get(0);
 						table_repro.getSelectionModel().select(repro);
 						select_Repro();
 					}
@@ -1219,15 +1224,14 @@ public class ManagmentController {
 				txt_song_duration.setText(songs.get(0).getDuration() + "");
 				com_song_artist.setValue(artists.get(0));
 				com_song_genre.setValue(genres.get(0));
-				
-				if(repros!=null&&table_repro.getSelectionModel().getSelectedItem()!=null) {
-					repro=table_repro.getSelectionModel().getSelectedItem();
+
+				if (repros != null && table_repro.getSelectionModel().getSelectedItem() != null) {
+					repro = table_repro.getSelectionModel().getSelectedItem();
 					table_repro.getSelectionModel().select(repro);
 					select_Repro();
-				}
-				else {
-					if(table_repro.getItems().size()>0) {
-						repro=table_repro.getItems().get(0);
+				} else {
+					if (table_repro.getItems().size() > 0) {
+						repro = table_repro.getItems().get(0);
 						table_repro.getSelectionModel().select(repro);
 						select_Repro();
 					}
@@ -1439,12 +1443,12 @@ public class ManagmentController {
 			// TODO: handle exception;
 		}
 	}
-	
+
 	@FXML
 	private void select_Repro() {
 		if (inizialize && repros.size() > 0) {
-			if (table_repro.getSelectionModel().getSelectedItem() != null) {
-
+			if (table_repro.getSelectionModel().getSelectedItem() != null
+					&& table_repro.getSelectionModel().getSelectedItem().getType() == 0) {
 				repro = this.table_repro.getSelectionModel().getSelectedItem();
 				btn_edit_Repro.setDisable(false);
 				btn_delete_Repro.setDisable(false);
@@ -1461,7 +1465,7 @@ public class ManagmentController {
 				saux.removeAll(repro.getSongs());
 
 				table_repro_song_outside.setItems(saux);
-				
+
 				insert_Repro_Songs_Info();
 
 			} else {
@@ -1473,7 +1477,7 @@ public class ManagmentController {
 				txt_repro_img.setText("");
 				table_repro_song_inside.setItems(FXCollections.observableArrayList());
 				table_repro_song_outside.setItems(FXCollections.observableArrayList());
-				
+
 				insert_Repro_Songs_Info();
 
 			}
@@ -1487,19 +1491,17 @@ public class ManagmentController {
 			txt_repro_img.setText("");
 			table_repro_song_inside.setItems(FXCollections.observableArrayList());
 			table_repro_song_outside.setItems(FXCollections.observableArrayList());
-			
+
 			insert_Repro_Songs_Info();
 
 		}
 	}
-	
+
 	@FXML
 	private void add_Repro() {
 		if (inizialize) {
-			if (!txt_repro_id.getText().matches("")
-					&& txt_repro_id.getText().matches("[0-9]+")
-					&& !txt_repro_name.getText().matches("")
-					&& !txt_repro_img.getText().matches("")) {
+			if (!txt_repro_id.getText().matches("") && txt_repro_id.getText().matches("[0-9]+")
+					&& !txt_repro_name.getText().matches("") && !txt_repro_img.getText().matches("")) {
 
 				boolean same_Id = false;
 				for (int i = 0; i < repros.size() && !same_Id; i++) {
@@ -1508,22 +1510,17 @@ public class ManagmentController {
 					}
 				}
 				if (!same_Id) {
-					
-					User aux=new User();
+
+					User aux = new User();
 					aux.setId(1);
-					
-					repro = new ReproductionList(
-							Integer.parseInt(txt_repro_id.getText() + ""), 
-							txt_repro_name.getText(),
-							table_repro_song_inside.getItems(), 
-							aux,
-							FXCollections.observableArrayList(), 
-							0,
-							txt_repro_img.getText());
+
+					repro = new ReproductionList(Integer.parseInt(txt_repro_id.getText() + ""),
+							txt_repro_name.getText(), table_repro_song_inside.getItems(), aux,
+							FXCollections.observableArrayList(), 0, txt_repro_img.getText());
 
 					repros.add(repro);
 					refresh();
-					
+
 				} else {
 					show_Alert(1);
 				}
@@ -1532,7 +1529,7 @@ public class ManagmentController {
 			show_Alert(0);
 		}
 	}
-	
+
 	@FXML
 	private void edit_Repo() {
 		if (repros != null && !txt_repro_id.getText().matches("") && txt_repro_id.getText().matches("[0-9]+")
@@ -1563,11 +1560,11 @@ public class ManagmentController {
 
 		}
 	}
-	
+
 	@FXML
 	private void delete_Repro() {
 		if (inizialize) {
-			
+
 			if (repros.size() <= 0) {
 				repros.remove(table_repro.getSelectionModel().getSelectedItem());
 				repro = null;
@@ -1576,7 +1573,7 @@ public class ManagmentController {
 				txt_repro_id.setText("");
 				txt_repro_name.setText("");
 				txt_repro_img.setText("");
-				
+
 				table_repro_song_inside.setItems(FXCollections.observableArrayList());
 				table_repro_song_outside.setItems(FXCollections.observableArrayList());
 				insert_Repro_Songs_Info();
@@ -1593,13 +1590,13 @@ public class ManagmentController {
 			show_Alert(0);
 		}
 	}
-	
+
 	@FXML
 	private void insert_Repro_Songs_Info() {
 
 		// INSIDE
 
-		if (repro!=null&&repro.getSongs() != null) {
+		if (repro != null && repro.getSongs() != null) {
 			col_repro_song_inside_name_artist.setCellValueFactory(eachsong -> {
 				SimpleStringProperty v = new SimpleStringProperty();
 				v.setValue(eachsong.getValue().getArtist().getName() + " / " + eachsong.getValue().getName());
@@ -1607,25 +1604,24 @@ public class ManagmentController {
 			});
 		}
 
-		if(songs!=null&&songs.size()>0) {
+		if (songs != null && songs.size() > 0) {
 			col_repro_song_outside_name_artist.setCellValueFactory(eachsong -> {
 				SimpleStringProperty v = new SimpleStringProperty();
 				v.setValue(eachsong.getValue().getArtist().getName() + " / " + eachsong.getValue().getName());
 				return v;
 			});
 		}
-		
+
 	}
-	
+
 	@FXML
 	private void update_Repro_Songs_info() {
-		if(table_repro_song_inside.getColumns().size()>0) {
+		if (table_repro_song_inside.getColumns().size() > 0) {
 			table_repro_song_inside.getColumns().get(0).setVisible(false);
 			table_repro_song_inside.getColumns().get(0).setVisible(true);
 		}
-		
-		
-		if(table_repro_song_outside.getColumns().size()>0) {
+
+		if (table_repro_song_outside.getColumns().size() > 0) {
 			table_repro_song_outside.getColumns().get(0).setVisible(false);
 			table_repro_song_outside.getColumns().get(0).setVisible(true);
 		}
@@ -1633,29 +1629,29 @@ public class ManagmentController {
 
 	@FXML
 	private void toOut() {
-		if(table_repro_song_inside.getSelectionModel().getSelectedItem()!=null) {
-			Song aux=table_repro_song_inside.getSelectionModel().getSelectedItem();
+		if (table_repro_song_inside.getSelectionModel().getSelectedItem() != null) {
+			Song aux = table_repro_song_inside.getSelectionModel().getSelectedItem();
 			table_repro_song_inside.getItems().remove(aux);
-			if(!table_repro_song_outside.getItems().contains(aux)) {
+			if (!table_repro_song_outside.getItems().contains(aux)) {
 				table_repro_song_outside.getItems().add(aux);
 			}
-			
+
 			update_Repro_Songs_info();
-			
+
 		}
 	}
-	
+
 	@FXML
 	private void toIn() {
-		if(table_repro_song_outside.getSelectionModel().getSelectedItem()!=null) {
-			Song aux=table_repro_song_outside.getSelectionModel().getSelectedItem();
+		if (table_repro_song_outside.getSelectionModel().getSelectedItem() != null) {
+			Song aux = table_repro_song_outside.getSelectionModel().getSelectedItem();
 			table_repro_song_outside.getItems().remove(aux);
-			if(!table_repro_song_inside.getItems().contains(aux)) {
+			if (!table_repro_song_inside.getItems().contains(aux)) {
 				table_repro_song_inside.getItems().add(aux);
 			}
-			
+
 			update_Repro_Songs_info();
-			
+
 		}
 	}
 }
