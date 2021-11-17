@@ -44,6 +44,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.Border;
+import javafx.scene.layout.BorderStroke;
 import javafx.scene.layout.Pane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -60,6 +62,7 @@ public class PrimaryController {
 
 	// PRIMARY
 	int istr;
+	boolean vmode=false;
 	ObservableList<Song> songsToReproduce;
 	ObservableList<Song> songsToReproduceListened;
 	ObservableList<Song> listened;
@@ -73,6 +76,8 @@ public class PrimaryController {
 
 	User u = null;
 
+	@FXML
+	private ImageView img_btn_mode;
 	@FXML
 	private Button btn_close_sesion;
 	@FXML
@@ -430,6 +435,9 @@ public class PrimaryController {
 				}
 			}
 			repros.removeAll(toRemove);
+			
+			Image img= new Image("file:src/main/resources/images/mmode.png");
+			img_btn_mode.setImage(img);
 		}
 	}
 
@@ -446,6 +454,24 @@ public class PrimaryController {
 			Media media = new Media(filestring.toURI().toString());
 			mp = new MediaPlayer(media);
 			mp.stop();
+			
+			if(filestring.getPath().matches(".+\\.mp4")) {
+				if(vmode) {
+					img_btn_mode.setVisible(true);
+					mediaView.setVisible(true);
+					img_song.setVisible(false);
+				}
+				else {
+					img_btn_mode.setVisible(true);
+					mediaView.setVisible(false);
+					img_song.setVisible(true);
+				}
+				
+			}else {
+				img_btn_mode.setVisible(false);
+				mediaView.setVisible(false);
+				img_song.setVisible(true);
+			}
 
 			if (!listened.contains(song)) {
 				listened.add(song);
@@ -2128,4 +2154,26 @@ public class PrimaryController {
 		
 	}
 	
+	@FXML
+	private void change_mode() {
+		if(!vmode) { //poner video
+			img_btn_mode.setDisable(true);	
+			img_song.setVisible(false);
+			mediaView.setVisible(true);
+			vmode=true;
+			Image img=new Image("file:src/main/resources/images/vmode.png");
+			img_btn_mode.setImage(img);
+			img_btn_mode.setDisable(false);
+		}
+		else { //quitar video
+			img_btn_mode.setDisable(true);			
+			mediaView.setVisible(false);
+			img_song.setVisible(true);
+			vmode=false;
+			Image img=new Image("file:src/main/resources/images/mmode.png");
+			img_btn_mode.setImage(img);
+			img_btn_mode.setDisable(false);
+					
+		}
+	}
 }

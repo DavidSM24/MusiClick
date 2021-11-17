@@ -21,7 +21,6 @@
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-image: url('file:src/main/resources/images/primary_background.jpg');" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="MusiClick.PrimaryController">
    <children>
-      <MediaView fx:id="mediaView" fitHeight="200.0" fitWidth="200.0" layoutX="200.0" layoutY="100.0" />
       <GridPane layoutX="170.0" layoutY="355.0" prefHeight="38.0" prefWidth="419.0">
          <columnConstraints>
             <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="448.00000381469727" minWidth="10.0" prefWidth="349.3333193461101" />
@@ -312,6 +311,7 @@
                           </rowConstraints>
                            <children>
                               <ImageView fx:id="img_song" fitHeight="188.0" fitWidth="275.0" pickOnBounds="true" preserveRatio="true" />
+                              <MediaView fx:id="mediaView" fitHeight="200.0" fitWidth="200.0" smooth="false" />
                               <Label fx:id="lab_song_name" text="Label" GridPane.rowIndex="1">
                                  <font>
                                     <Font name="System Bold" size="13.0" />
@@ -451,6 +451,7 @@
                               </Button>
                            </children>
                         </Pane>
+                        <ImageView fx:id="img_btn_mode" fitHeight="20.0" fitWidth="57.0" layoutX="365.0" layoutY="6.0" onMouseClicked="#change_mode" pickOnBounds="true" visible="false" />
                      </children></AnchorPane>
             </content>
           </Tab>

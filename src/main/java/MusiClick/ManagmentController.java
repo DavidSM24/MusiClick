@@ -523,10 +523,19 @@ public class ManagmentController {
 
 				for (Song s2 : songs) {
 
+					String extension="";
+					
+					if(s2.getMedia().matches(".*//.mp3")) {
+						extension=".mp3";
+					}
+					else {
+						extension=".mp4";
+					}
+					
 					if (!s2.getMedia().matches("[src/main/resources/mp3/].*")) {
 						FileUtilities.saveFile(s2.getMedia(),
-								"src/main/resources/mp3/s" + s2.getId() + s2.getName() + ".mp3");
-						s2.setMedia("src/main/resources/mp3/s" + s2.getId() + s2.getName() + ".mp3");
+								"src/main/resources/mp3/s" + s2.getId() + s2.getName() + extension);
+						s2.setMedia("src/main/resources/mp3/s" + s2.getId() + s2.getName() + extension);
 					}
 
 					if (!s2.getPhoto().matches("[src/main/resources/images/song/].*")) {
@@ -1056,7 +1065,8 @@ public class ManagmentController {
 		filechooser.setTitle("Selecionar archivo mp3...");
 		try {
 			file = filechooser.showOpenDialog(null);
-			if (file != null && file.getPath().matches(".+\\.mp3")) {
+			if ((file != null && file.getPath().matches(".+\\.mp3"))
+				|(file != null && file.getPath().matches(".+\\.mp4"))) {
 				txt_song_media.setText(file.getPath());
 			} else { // extension incorrecta
 				Alert alert = new Alert(AlertType.INFORMATION);
