@@ -25,5 +25,6 @@ hs_err_pid*
 # Other #
 *.jpg
 *.mp3
+*.mp4
 *.png
 *.wav
